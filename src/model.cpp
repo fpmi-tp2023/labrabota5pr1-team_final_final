@@ -9,10 +9,10 @@ Model::Model(const std::string &dbFileName)
 bool Model::connectDB()
 {
     int openResult;
-    openResult = sqlite3_open(dbFileName.c_str(), &db);
+    openResult = sqlite3_open_v2(dbFileName.c_str(), &db, SQLITE_OPEN_READWRITE, NULL);
     if (openResult)
     {
-        std::cerr << sqlite3_errmsg(db);
+        std::cerr << sqlite3_errmsg(db) << "\n";
         return false;
     }
     return true;
