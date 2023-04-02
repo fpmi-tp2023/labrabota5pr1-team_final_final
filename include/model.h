@@ -25,7 +25,7 @@ public:
     //checks if login exists in db
     bool existingLogin(const std::string& login) const;
 
-    //gets passwordHash by login
+    //gets password hash by login
     std::string getPasswordHash(const std::string& login) const;
 
     //gets role by login
