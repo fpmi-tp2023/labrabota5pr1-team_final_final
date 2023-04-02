@@ -1,12 +1,22 @@
 CFLAGS = -lsqlite3 -Iinclude
-obj = obj/main.o obj/controller.o obj/model.o
+TESTFLAGS = -lsqlite3 -lgtest -lgtest_main -Iinclude
+CC = g++
+main_obj = obj/main.o
+obj = obj/controller.o obj/model.o
+test_obj = obj/db_test.o
 run: build
 	./bin/main
+test: build_test
+	./bin/test_main
+build_test: $(test_obj)
+	$(CC) $(obj) $(test_obj) -o bin/test_main $(TESTFLAGS)
 build: dirs $(obj)
-	g++ $(obj) -o bin/main $(CFLAGS)
+	$(CC) $(main_obj) $(obj) -o bin/main $(CFLAGS)
 dirs:
 	mkdir -p obj bin
+obj/%.o: test/%.cc
+	$(CC) -c $< -o $@ $(TESTFLAGS)
 obj/%.o: src/%.cpp
-	g++ -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $@ $(CFLAGS)
 clean:
 	rm bin/* || rm obj/*
