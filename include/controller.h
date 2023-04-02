@@ -9,13 +9,21 @@ private:
     Model *dbModel = nullptr;
 public:
     Controller();
-    //connects a db by given dbName
+    
+    // connects a db by given dbName
     bool connectDB(const std::string& dbName);
-    //valid responses are sign-in and sign-up
+
+    // valid responses are sign-in and sign-up
     bool validResponseAuth(const std::string& response) const;
-    //checks if provided login exists
+
+    // checks if provided login exists
     bool existingLogin(const std::string& login) const;
-    //checks if password hashes match for given login
+
+    // checks if password hashes match for given login
     bool correctPassword(const std::string& login, const std::string& password) const;
+
+    // gets role by login
+    bool getRole(const std::string& role) const;
+
     ~Controller();
 };
