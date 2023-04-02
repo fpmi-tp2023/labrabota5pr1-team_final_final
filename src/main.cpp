@@ -23,7 +23,7 @@ int main()
         std::cin >> response;
         while (response != "quit" && !ctrl.validResponseAuth(response)) // waiting for valid response
         {
-            std::cout << "No such option as " << response << ". Enter sign-in or sign-up\n";
+            std::cout << "No such option as " << response << ". Enter sign-in or sign-up or quit\n";
             std::cin >> response;
         }
 
@@ -76,6 +76,14 @@ int main()
             }
 
             // correct password was entered
+            authorized = true;
+        }
+        else if (response == "sign-up")
+        {
+        }
+
+        if (authorized)
+        {
             std::cout << "Welcome: " << login << "\n";
             std::string menuMessage;
             role = ctrl.getRole(login);
@@ -93,9 +101,6 @@ int main()
                     break;
                 }
             }
-        }
-        else if (response == "sign-up")
-        {
         }
     }
     return 0;
