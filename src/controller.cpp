@@ -23,6 +23,24 @@ bool Controller::validResponseAuth(const std::string& response) const
         return false;
     }
 }
+
+bool Controller::existingLogin(const std::string& login) const
+{
+    return dbModel->existingLogin(login);
+}
+
+bool Controller::correctPassword(const std::string& login, const std::string& password) const
+{
+    std::string dbPasswordHash = dbModel->getPasswordHash(login);
+    std::string providedPasswordHash = hashSha256(password);
+    return (providedPasswordHash == dbPasswordHash);
+}
+
+std::string Controller::getRole(const std::string& login) const
+{
+    return dbModel->getRole(login);
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
