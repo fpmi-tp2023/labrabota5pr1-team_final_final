@@ -3,10 +3,10 @@ obj = obj/main.o obj/controller.o obj/model.o
 run: build
 	./bin/main
 build: dirs $(obj)
-	g++ $(CFLAGS) $(obj) -o bin/main
+	g++ $(obj) -o bin/main $(CFLAGS)
 dirs:
 	mkdir -p obj bin
 obj/%.o: src/%.cpp
-	g++ $(CFLAGS) -c $< -o $@
+	g++ -c $< -o $@ $(CFLAGS)
 clean:
 	rm bin/* || rm obj/*
