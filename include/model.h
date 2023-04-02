@@ -7,7 +7,9 @@ class Model
 private:
     std::string dbFileName;
     sqlite3 *db = nullptr;
-    static int existingLogin_Callback(void*, int, char**, char**);
+    
+    // invoked by sqlite during existingLogin method,
+    static int existingLogin_Callback(void* optionalArgument, int numberOfColumns, char** data, char** headers);
 public:
     Model(const std::string& dbFileName);
 
