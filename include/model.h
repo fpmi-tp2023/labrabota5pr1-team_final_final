@@ -7,6 +7,7 @@ class Model
 private:
     std::string dbFileName;
     sqlite3 *db = nullptr;
+    static int existingLogin_Callback(void*, int, char**, char**);
 public:
     Model(const std::string& dbFileName);
 
@@ -21,6 +22,6 @@ public:
 
     //gets role by login
     std::string getRole(const std::string& login) const;
-    
+
     ~Model();
 };
