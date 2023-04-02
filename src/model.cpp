@@ -18,6 +18,40 @@ bool Model::connectDB()
     return true;
 }
 
+int Model::existingLogin_Callback(void *exists, int numberOfColumns, char **data, char **headers)
+{
+    bool &ok = *(bool*)exists;
+    if (data != NULL)
+    {
+        ok = true;
+    }
+    else
+    {
+        ok = false;
+    }
+    return 0;
+}
+
+bool Model::existingLogin(const std::string &login) const
+{
+    std::string sqlExistingLoginQuery =
+        "SELECT login"
+        "FROM login"
+        "WHERE login = " +
+        login;
+    bool exists = false;
+    int queryResult = sqlite3_exec(db, sqlExistingLoginQuery.c_str(), existingLogin_Callback, &exists, NULL);
+    if (queryResult != SQLITE_OK)
+    {
+        std::cerr << "error on retreiving data from db, fname = existingLogin\n";
+        return false;
+    }
+    else
+    {
+        return exists;
+    }
+}
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
