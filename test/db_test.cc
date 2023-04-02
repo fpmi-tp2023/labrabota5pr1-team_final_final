@@ -27,3 +27,17 @@ TEST(TestResponceAuth, TestOther)
     EXPECT_FALSE(ctrl.validResponseAuth("sign in"));
     EXPECT_FALSE(ctrl.validResponseAuth("sign off"));
 }
+
+TEST(TestExistingLogin, TestAdmin)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.existingLogin("admin"));
+}
+
+TEST(TestGetRole, TestAdminRole)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_EQ(ctrl.getRole("admin"), std::string("admin"));
+}
