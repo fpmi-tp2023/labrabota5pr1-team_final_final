@@ -6,7 +6,7 @@ class Controller
 {
 private:
     std::string dbName;
-    Model *dbModel;
+    Model *dbModel = nullptr;
 public:
     Controller();
     bool connectDB(const std::string& dbName);
