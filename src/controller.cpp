@@ -14,7 +14,7 @@ bool Controller::connectDB(const std::string& dbName)
 
 Controller::~Controller()
 {
-    if (dbModel)
+    if (dbModel)  //check if pointer is not null
     {
         delete dbModel;
         dbModel = nullptr;
