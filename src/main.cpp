@@ -36,7 +36,6 @@ int main()
         {
             std::cout << "Login: ";
             std::cin >> login;
-            std::cout << std::endl;
 
             while (login != "cancel" && (login.empty() || !ctrl.existingLogin(login))) // optional quit or waiting for valid login
             {
@@ -56,13 +55,22 @@ int main()
 
             std::cout << "Password: ";
             std::cin >> password;
-            while(!ctrl.correctPassword(login, password))
+            while(wrongPasswordAttempts > 0 && !ctrl.correctPassword(login, password))
             {
                 --wrongPasswordAttempts;
-                std::cout << "Incorrect password. Try again\n";
+                std::cout << "Incorrect password. Try again or type cancel\n";
                 std::cout << "Password: ";
                 std::cin >> password;
+                if (password == "cancel")
+                {
+                    break;
+                }
                 std::cout << std::endl;
+            }
+
+            if (password == "cancel")
+            {
+                continue;
             }
 
             if (wrongPasswordAttempts == 0) // all attempts exhausted but correct password was never received
@@ -91,13 +99,16 @@ int main()
             {
                 while(true) // main admin menu cycle
                 {
+                    authorized = false;
                     break;
+
                 }
             }
             else if (role == "user")
             {
                 while(true) // main user menu cycle
                 {
+                    authorized = false;
                     break;
                 }
             }
