@@ -23,7 +23,7 @@ public:
     bool correctPassword(const std::string& login, const std::string& password) const;
 
     // gets role by login
-    std::string getRole(const std::string& role) const;
+    std::string getRole(const std::string& login) const;
 
     ~Controller();
 };
