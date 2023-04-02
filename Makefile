@@ -8,7 +8,7 @@ run: build
 	./bin/main
 test: build_test
 	./bin/test_main
-build_test: $(test_obj)
+build_test: $(test_obj) $(obj)
 	$(CC) $(obj) $(test_obj) -o bin/test_main $(TESTFLAGS)
 build: dirs $(obj) $(main_obj)
 	$(CC) $(main_obj) $(obj) -o bin/main $(CFLAGS)
