@@ -1,5 +1,5 @@
 CFLAGS = -lsqlite3 -Iinclude
-obj = obj/main.o
+obj = obj/main.o obj/controller.o obj/model.o
 run: build
 	cd bin && ./main
 build: dirs $(obj)
@@ -7,6 +7,6 @@ build: dirs $(obj)
 dirs:
 	mkdir -p obj bin
 obj/%.o: src/%.cpp
-	g++ -c $< -o $@
+	g++ $(CFLAGS) -c $< -o $@
 clean:
 	rm bin/* || rm obj/*
