@@ -6,8 +6,6 @@ int main()
     bool authorized = false;
     const std::string dbFileName = "RecordStore.db";
     Controller ctrl;
-    std::string response;
-    std::string login;
 
     if (!ctrl.connectDB(dbFileName))
     {
@@ -15,30 +13,39 @@ int main()
         return 1;
     }
 
-    while (true)
+    while (true) //main authorization cycle
     {
-        std::cout << "You are currently unauthorized. Enter sign-in or sign-up\n";
+        std::string response;
+        std::string login;
+        std::string role;
+
+        std::cout << "You are currently unauthorized. Enter sign-in or sign-up or quit\n";
         std::cin >> response;
-        while (!ctrl.validResponseAuth(response)) // waiting for valid response
+        while (response != "quit" && !ctrl.validResponseAuth(response)) // waiting for valid response
         {
             std::cout << "No such option as " << response << ". Enter sign-in or sign-up\n";
             std::cin >> response;
         }
 
-        if (response == "sign-in")
+        if (response == "quit") // quit option
+        {
+            break;
+        }
+
+        if (response == "sign-in") // sign-in option
         {
             std::cout << "Login: ";
             std::cin >> login;
             std::cout << std::endl;
 
-            while (login != "quit" && (login.empty() || !ctrl.existingLogin(login))) // optional quit or waiting for valid login
+            while (login != "cancel" && (login.empty() || !ctrl.existingLogin(login))) // optional quit or waiting for valid login
             {
                 std::cout << "There is no such login\n";
-                std::cout << "Enter quit or existing login\n";
+                std::cout << "Enter cancel or existing login\n";
                 std::cin >> login;
             }
 
-            if (login == "quit") // option quit
+            if (login == "cancel") // option cancel
             {
                 continue; // return to autorization choice stage
             } 
@@ -55,6 +62,7 @@ int main()
                 std::cout << "Incorrect password. Try again\n";
                 std::cout << "Password: ";
                 std::cin >> password;
+                std::cout << std::endl;
             }
 
             if (wrongPasswordAttempts == 0) // all attempts exhausted but correct password was never received
@@ -68,8 +76,23 @@ int main()
             }
 
             // correct password was entered
-            
-            
+            std::cout << "Welcome: " << login << "\n";
+            std::string menuMessage;
+            role = ctrl.getRole(login);
+            if (role == "admin")
+            {
+                while(true) // main admin menu cycle
+                {
+                    break;
+                }
+            }
+            else if (role == "user")
+            {
+                while(true) // main user menu cycle
+                {
+                    break;
+                }
+            }
         }
         else if (response == "sign-up")
         {
