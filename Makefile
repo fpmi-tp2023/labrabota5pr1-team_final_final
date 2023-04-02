@@ -10,7 +10,7 @@ test: build_test
 	./bin/test_main
 build_test: $(test_obj)
 	$(CC) $(obj) $(test_obj) -o bin/test_main $(TESTFLAGS)
-build: dirs $(obj)
+build: dirs $(obj) $(main_obj)
 	$(CC) $(main_obj) $(obj) -o bin/main $(CFLAGS)
 dirs:
 	mkdir -p obj bin
@@ -19,4 +19,4 @@ obj/%.o: test/%.cc
 obj/%.o: src/%.cpp
 	$(CC) -c $< -o $@ $(CFLAGS)
 clean:
-	rm bin/* || rm obj/*
+	rm bin/* obj/*
