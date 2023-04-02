@@ -3,15 +3,19 @@
 
 int main()
 {
+    bool authorized = false;
     const std::string dbFileName = "RecordStore.db";
     Controller ctrl;
-    if (ctrl.connectDB(dbFileName))
+    if (!ctrl.connectDB(dbFileName))
     {
-        std::cout << "Database opened\n";
+        std::cerr << "Something went wrong when opening the database\n";
+        return 1;
     }
-    else
+    std::string response;
+    while (!ctrl.validResponseAuth(response))
     {
-        std::cout << "Something went wrong\n";
+        std::cout << "You are currently unauthorized. Options are sign-in or sign-up";
+        std::cin >> response;
     }
     return 0;
 }
