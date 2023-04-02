@@ -2,7 +2,7 @@
 
 ### Данила Кривонос
 
-https://github.com/bleyzzi/pages-course
+[](https://github.com/bleyzzi/pages-course)
 
 ### Денис Борычев
 
