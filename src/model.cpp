@@ -35,15 +35,15 @@ int Model::existingLogin_Callback(void *exists, int numberOfColumns, char **data
 bool Model::existingLogin(const std::string &login) const
 {
     std::string sqlExistingLoginQuery =
-        "SELECT login"
-        "FROM login"
-        "WHERE login = " +
-        login + ";";
+        "SELECT login\n"
+        "FROM login\n"
+        "WHERE login = '" +
+        login + "';";
     bool exists = false; // callback function will put here the result
     int queryResult = sqlite3_exec(db, sqlExistingLoginQuery.c_str(), existingLogin_Callback, &exists, NULL);
     if (queryResult != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = existingLogin\n";
+        std::cerr << "Error on retreiving data from db, fname = existingLogin: " << sqlite3_errmsg(db) << "\n";
         return false;
     }
     else
@@ -54,7 +54,7 @@ bool Model::existingLogin(const std::string &login) const
 
 int Model::getPasswordHash_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
-    char *&passwordHash = *(char **)first_arg; // by assigning this variable c-style string we can pass it outside
+    std::string &passwordHash = *(std::string*)first_arg; // by assigning this variable c-style string we can pass it outside
     passwordHash = data[0];
     return 0;
 }
@@ -62,46 +62,46 @@ int Model::getPasswordHash_Callback(void *first_arg, int numberOfColumns, char *
 std::string Model::getPasswordHash(const std::string &login) const
 {
     std::string sqlGetPasswordHashQuery =
-        "SELECT password"
-        "FROM login"
-        "WHERE login = " +
-        login + ";";
-    char *passwordHash; // callback function will place here the result
+        "SELECT hash\n"
+        "FROM login\n"
+        "WHERE login = '" +
+        login + "';";
+    std::string passwordHash; // callback function will place here the result
     int queryResult = sqlite3_exec(db, sqlGetPasswordHashQuery.c_str(), getPasswordHash_Callback, &passwordHash, NULL);
     if (queryResult != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = getPasswordHash\n";
+        std::cerr << "Error on retreiving data from db, fname = getPasswordHash: " << sqlite3_errmsg(db) << "\n";
         return std::string();
     }
     else
     {
-        return std::string(passwordHash);
+        return passwordHash;
     }
 }
 
 int Model::getRole_Callback(void* first_arg, int numberOfColumns, char** data, char** headers)
 {
-    char *&role = *(char **)first_arg; // by assigning this variable some value we can pass it outside
+    std::string &role = *(std::string *)first_arg; // by assigning this variable some value we can pass it outside
     role = data[0];
     return 0;
 }
 std::string Model::getRole(const std::string &login) const
 {
     std::string sqlGetRoleQuery =
-        "SELECT role"
-        "FROM login INNER JOIN role USING(role_id)"
-        "WHERE login = " +
-        login + ";";
-    char* role; // callback function will place answer here
+        "SELECT type\n"
+        "FROM login INNER JOIN role USING(role_id)\n"
+        "WHERE login = '" +
+        login + "';";
+    std::string role; // callback function will place answer here
     int result = sqlite3_exec(db, sqlGetRoleQuery.c_str(), getRole_Callback, &role, 0);
     if (result != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = getRole\n";
+        std::cerr << "Error on retreiving data from db, fname = getRole: " << sqlite3_errmsg(db) << "\n";
         return std::string();
     }
     else
     {
-        return std::string(role);
+        return role;
     }
 }
 Model::~Model()
