@@ -1,5 +1,5 @@
-CFLAGS = -lsqlite3 -Iinclude
-TESTFLAGS = -lsqlite3 -lgtest -lgtest_main -Iinclude
+CFLAGS = -lsqlite3 -Iinclude -lssl
+TESTFLAGS = -lsqlite3 -lgtest -lgtest_main -lssl -Iinclude
 CC = g++
 main_obj = obj/main.o
 obj = obj/controller.o obj/model.o
