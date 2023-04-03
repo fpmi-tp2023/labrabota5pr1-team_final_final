@@ -25,5 +25,8 @@ public:
     // gets role by login
     std::string getRole(const std::string& login) const;
 
+    // gets hash from password via sha256
+    std::string hashPassword(const std::string& password) const;
+
     ~Controller();
 };
