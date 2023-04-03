@@ -41,3 +41,16 @@ TEST(TestGetRole, TestAdminRole)
     ctrl.connectDB("RecordStore.db");
     EXPECT_EQ(ctrl.getRole("admin"), std::string("admin"));
 }
+
+TEST(TestHashPassword, TestAdminPassword)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_EQ(ctrl.hashPassword("admin"), "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918");
+}
+
+TEST(TestHashPassword, TestHashCorrectness)
+{
+    Controller ctrl;
+    EXPECT_NE(ctrl.hashPassword("abacaba"), ctrl.hashPassword("bacabaca"));
+}
