@@ -30,6 +30,9 @@ public:
 
     // returns true if passwords match
     bool passwordsMatch(const std::string& password, const std::string& confirmedPassword) const;
+
+    // adds new login, password into database
+    void newLogin(const std::string& login, const std::string& password) const;
     
     ~Controller();
 };
