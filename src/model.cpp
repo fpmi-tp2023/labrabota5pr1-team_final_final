@@ -104,6 +104,23 @@ std::string Model::getRole(const std::string &login) const
         return role;
     }
 }
+
+int Model::addLogin_Callback(void* option, int numberOfColumns, char** data, char** headers)
+{
+    return 0;
+}
+void Model::addLogin(const std::string& login, const std::string& hashedPassword) const
+{
+    std::string sqlAddLoginQuery = 
+    "INSERT INTO login(login, hash, role_id) VALUES\n"
+    "('" + login + "', '" + hashedPassword + "', 1);";
+    int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), addLogin_Callback, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = addLogin: " << sqlite3_errmsg(db) << "\n";
+    }
+}
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
