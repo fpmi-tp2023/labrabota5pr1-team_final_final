@@ -113,13 +113,22 @@ int main()
                 std::cin >> password;
                 std::cout << "Confirm: ";
                 std::cin >> confirmedPassword;
-                while(!ctrl.passwordsMatch(password, confirmedPassword)) // wait for passwords to match
+                while(password != "cancel" && !ctrl.passwordsMatch(password, confirmedPassword)) // wait for cancel or passwords to match
                 {
                     std::cout << "Your password doesn't match. Try again on enter cancel\n";
                     std::cout << "Password: ";
                     std::cin >> password;
+                    if (password == "cancel")
+                    {
+                        break;
+                    }
                     std::cout << "Confirm: ";
                     std::cin >> confirmedPassword;
+                }
+
+                if (password == "cancel") // cancel option
+                {
+                    continue; // back to main authorization cycle
                 }
 
                 // now passwords match
