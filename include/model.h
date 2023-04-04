@@ -18,11 +18,13 @@ private:
     static int getRole_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
     // invoked by sqlite during addLogin methid
-    static int addLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+    // it appears it doesn't get invoked at all so it can be commented
+    //static int addLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
     // invoked by sqlite during deleteLogin method
-    static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
-    
+    // it appears it doesn't get invoked at all so it can be commented
+    //static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 

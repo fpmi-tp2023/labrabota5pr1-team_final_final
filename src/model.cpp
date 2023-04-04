@@ -105,32 +105,35 @@ std::string Model::getRole(const std::string &login) const
     }
 }
 
-int Model::addLogin_Callback(void* option, int numberOfColumns, char** data, char** headers)
+/*int Model::addLogin_Callback(void* option, int numberOfColumns, char** data, char** headers)
 {
     return 0;
-}
+}*/
+
 void Model::addLogin(const std::string& login, const std::string& hashedPassword) const
 {
     std::string sqlAddLoginQuery = 
     "INSERT INTO login(login, hash, role_id) VALUES\n"
     "('" + login + "', '" + hashedPassword + "', 1);";
-    int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), addLogin_Callback, 0, 0);
+    //int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), addLogin_Callback, 0, 0);
+    int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), 0, 0, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on retreiving data from db, fname = addLogin: " << sqlite3_errmsg(db) << "\n";
     }
 }
 
-int Model::deleteLogin_Callback(void *optional, int numberOfColumns, char** data, char** headers)
+/*int Model::deleteLogin_Callback(void *optional, int numberOfColumns, char** data, char** headers)
 {
     return 0;
-}
+}*/
 bool Model::deleteLogin(const std::string& login) const
 {
     std::string sqlDeleteQuery = 
     "DELETE FROM login\n"
     "WHERE login = '" + login + "';";
-    int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), deleteLogin_Callback, 0, 0);
+    //int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), deleteLogin_Callback, 0, 0);
+    int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), 0, 0, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on deleting from db, fname = deleteLogin: " << sqlite3_errmsg(db) << "\n";
