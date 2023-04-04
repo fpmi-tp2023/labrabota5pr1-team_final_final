@@ -93,7 +93,7 @@ int main()
                 std::cout << "Enter your desired login or cancel\n";
                 std::cout << "Login: ";
                 std::cin >> login;
-                while(login != "cancel" && ctrl.existingLogin(login)) // wait for cancel or new login
+                while (login != "cancel" && ctrl.existingLogin(login)) // wait for cancel or new login
                 {
                     std::cout << "Your login is already taken, try another one or enter cancel\n";
                     std::cout << "Login:";
@@ -113,7 +113,7 @@ int main()
                 std::cin >> password;
                 std::cout << "Confirm: ";
                 std::cin >> confirmedPassword;
-                while(password != "cancel" && !ctrl.passwordsMatch(password, confirmedPassword)) // wait for cancel or passwords to match
+                while (password != "cancel" && !ctrl.passwordsMatch(password, confirmedPassword)) // wait for cancel or passwords to match
                 {
                     std::cout << "Your password doesn't match. Try again on enter cancel\n";
                     std::cout << "Password: ";
@@ -139,28 +139,35 @@ int main()
         if (authorized)
         {
             std::cout << "Welcome: " << login << "\n";
-            std::string menuMessage;
+            std::string menuAdminMessage =
+                "Main menu. To choose a command enter the corresponding number:\n"
+                "0. See this message\n"
+                "1. Get information on quantity of sold and left in stock records of every record\n"
+                "2. Get information on quantity of sold copies and the cost of given record for given period\n"
+                "3. Get all the information of the most sold record\n"
+                "4. Get the quantity of sold copies of the most popular artist\n"
+                "5. Insert new values into tables\n"
+                "6. Update tables\n"
+                "7. Delete tables\n"
+                "8. Get information on delivered and sold copies of every record for given period\n"
+                "9. Get information on sales of given record for given period";
             role = ctrl.getRole(login);
             if (role == "admin")
             {
                 while (true) // main admin menu cycle
                 {
-                    authorized = false;
-                    break;
                 }
             }
             else if (role == "user")
             {
-                while (true) // main user menu cycle
+                while(true) // main user menu cycle
                 {
-                    authorized = false;
-                    break;
+
                 }
             }
             else
             {
                 authorized = false;
-                break;
             }
         }
     }
