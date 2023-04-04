@@ -174,59 +174,59 @@ int main()
                     std::cin >> request;
                     if (request == 0)
                     {
-                        // 0. See this message
+                        // [admin menu] 0. See this message
                         std::cout << menuAdminMessage;
                     }
                     else if (request == 1)
                     {
-                        // 1. Quit
+                        // [admin menu] 1. Quit
                         break;
                     }
                     else if (request == 2)
                     {
-                        // 2. Logout
+                        // [admin menu] 2. Logout
                         authorized = false;
                         continue;
                     }
                     else if (request == 3)
                     {
-                        // 3. Get information on quantity of sold and left in stock records of every record
+                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
                     }
                     else if (request == 4)
                     {
-                        // 4. Get information on quantity of sold copies and the cost of given record for given period
+                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
                     }
                     else if (request == 5)
                     {
-                        // 5. Get all the information of the most sold record
+                        // [admin menu] 5. Get all the information of the most sold record
                     }
                     else if (request == 6)
                     {
-                        // 6. Get the quantity of sold copies of the most popular artist
+                        // [admin menu] 6. Get the quantity of sold copies of the most popular artist
                     }
                     else if (request == 7)
                     {
-                        // 7. Insert new values into tables
+                        // [admin menu] 7. Insert new values into tables
                     }
                     else if (request == 8)
                     {
-                        // 8. Update tables
+                        // [admin menu] 8. Update tables
                     }
                     else if (request == 9)
                     {
-                        // 9. Delete tables
+                        // [admin menu] 9. Delete tables
                     }
                     else if (request == 10)
                     {
-                        // 10. Get information on delivered and sold copies of every record for given period
+                        // [admin menu] 10. Get information on delivered and sold copies of every record for given period
                     }
                     else if (request == 11)
                     {
-                        // 11. Get information on sales of given record for given period
+                        // [admin menu] 11. Get information on sales of given record for given period
                     }
                     else
                     {
-                        // unrecognized option, printing the menu
+                        // [admin menu] unrecognized option, printing the menu
                         std::cout << menuAdminMessage;
                     }
                     std::cout << "\n";
@@ -234,8 +234,47 @@ int main()
             }
             else if (role == "user")
             {
+                int request = 0;
+
+                std::cout << menuUserMessage;
                 while (true) // main user menu cycle
                 {
+                    std::cout << requestPrompt;
+                    std::cin >> request;
+                    if (request == 0)
+                    {
+                        // [user menu] 0. See this message
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (request == 1)
+                    {
+                        // [user menu] 1. Quit
+                        break;
+                    }
+                    else if (request == 2)
+                    {
+                        // [user menu] 2. Logout
+                        authorized = false;
+                        continue;
+                    }
+                    else if (request == 3)
+                    {
+                        // [user menu] 3. Get all the information of the most sold record
+                    }
+                    else if (request == 4)
+                    {
+                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
+                    }
+                    else if (request == 5)
+                    {
+                        // [user menu] 5. Get information on sales of given record for given period
+                    }
+                    else
+                    {
+                        // unrecognized option, printing the menu
+                        std::cout << menuUserMessage;
+                    }
+                    std::cout << "\n";
                 }
             }
             else
