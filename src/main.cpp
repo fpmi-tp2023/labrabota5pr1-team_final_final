@@ -180,7 +180,7 @@ int main()
                     else if (request == 1)
                     {
                         // [admin menu] 1. Quit
-                        break;
+                        return 0;
                     }
                     else if (request == 2)
                     {
@@ -249,7 +249,7 @@ int main()
                     else if (request == 1)
                     {
                         // [user menu] 1. Quit
-                        break;
+                        return 0;
                     }
                     else if (request == 2)
                     {
