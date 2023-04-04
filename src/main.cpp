@@ -157,6 +157,11 @@ int main()
                     break;
                 }
             }
+            else
+            {
+                authorized = false;
+                break;
+            }
         }
     }
     return 0;
