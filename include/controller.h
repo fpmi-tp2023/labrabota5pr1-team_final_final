@@ -28,5 +28,8 @@ public:
     // returns hash from password via sha256
     std::string hashPassword(const std::string& password) const;
 
+    // returns true if passwords match
+    bool passwordsMatch(const std::string& password, const std::string& confirmedPassword) const;
+    
     ~Controller();
 };
