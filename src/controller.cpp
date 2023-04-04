@@ -91,7 +91,7 @@ bool Controller::passwordsMatch(const std::string& password, const std::string& 
 void Controller::newLogin(const std::string& login, const std::string& password) const
 {
     std::string hashedPassword = hashPassword(password);
-    dbModel.addLogin(login, hashedPassword);
+    dbModel->addLogin(login, hashedPassword);
 }
 
 Controller::~Controller()
