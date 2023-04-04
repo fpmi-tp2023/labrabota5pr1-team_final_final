@@ -13,7 +13,7 @@ public:
     // connects a db by given dbName
     bool connectDB(const std::string& dbName);
 
-    // valid responses are sign-in and sign-up
+    // checks if responce is valid. Valid responses are sign-in and sign-up
     bool validResponseAuth(const std::string& response) const;
 
     // checks if provided login exists
@@ -22,8 +22,20 @@ public:
     // checks if password hashes match for given login
     bool correctPassword(const std::string& login, const std::string& password) const;
 
-    // gets role by login
+    // returns role by login
     std::string getRole(const std::string& login) const;
 
+    // returns hash from password via sha256
+    std::string hashPassword(const std::string& password) const;
+
+    // returns true if passwords match
+    bool passwordsMatch(const std::string& password, const std::string& confirmedPassword) const;
+
+    // adds new login, password into database
+    void newLogin(const std::string& login, const std::string& password) const;
+
+    // deletes login with password from database, used only for tests!!!
+    bool deleteLogin(const std::string& login, const std::string& password) const;
+    
     ~Controller();
 };
