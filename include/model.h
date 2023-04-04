@@ -14,22 +14,28 @@ private:
     // invoked by sqlite during getPasswordHash method
     static int getPasswordHash_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
-    //invoked by sqlite during getRole method
+    // invoked by sqlite during getRole method
     static int getRole_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
+    // invoked by sqlite during addLogin methid
+    static int addLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 public:
     Model(const std::string& dbFileName);
 
-    //connects db by dbFileName
+    // connects db by dbFileName
     bool connectDB();
 
-    //checks if login exists in db
+    // checks if login exists in db
     bool existingLogin(const std::string& login) const;
 
-    //gets password hash by login
+    // gets password hash by login
     std::string getPasswordHash(const std::string& login) const;
 
-    //gets role by login
+    // gets role by login
     std::string getRole(const std::string& login) const;
+
+    // adds new login into database
+    void addLogin(const std::string& login, const std::string& hashedPassword) const;
 
     ~Model();
 };
