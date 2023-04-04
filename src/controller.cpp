@@ -94,6 +94,20 @@ void Controller::newLogin(const std::string& login, const std::string& password)
     dbModel->addLogin(login, hashedPassword);
 }
 
+
+bool Controller::deleteLogin(const std::string& login, const std::string& password) const
+{
+    // if login exists, passwod match and it's not admin
+    if (login != "admin" && existingLogin(login) && correctPassword(login, password)) 
+    {
+        return dbModel->deleteLogin(login);
+    }
+    else
+    {
+        return false;
+    }
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
