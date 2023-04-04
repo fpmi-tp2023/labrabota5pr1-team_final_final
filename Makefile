@@ -7,6 +7,8 @@ obj = obj/controller.o obj/model.o
 test_obj = obj/db_test.o
 run: build
 	./bin/main
+report: test
+	lcov -c --directory obj --output-file coverage.info; genhtml coverage.info -o cov; rm coverage.info; firefox cov/index.html
 test: build_test
 	./bin/test_main
 build_test: dirs $(test_obj) $(obj)
@@ -20,4 +22,4 @@ obj/%.o: test/%.cc
 obj/%.o: src/%.cpp
 	$(CC) $(COVFLAGS) -c $< -o $@ $(CFLAGS)
 clean:
-	rm bin/* obj/*
+	rm bin/* obj/*; rm -r cov
