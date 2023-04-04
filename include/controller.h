@@ -34,5 +34,8 @@ public:
     // adds new login, password into database
     void newLogin(const std::string& login, const std::string& password) const;
 
+    // deletes login with password from database, used only for tests!!!
+    bool deleteLogin(const std::string& login, const std::string& password) const;
+    
     ~Controller();
 };
