@@ -47,7 +47,12 @@ std::string Controller::getRole(const std::string& login) const
 
 std::string Controller::hashPassword(const std::string& password) const
 {
-    EVP_MD_CTX* context = EVP_MD_CTX_new();
+    /* 
+        EVP is openssl high-level interface i use for digest(hash) a password
+        It requires EVP_DigestInit, EVP_DigestUpdate and EVP_DigestFinal
+        The result is put into hashed variable
+    */
+    EVP_MD_CTX* context = EVP_MD_CTX_new(); 
 
     std::string hashed;
 
@@ -77,6 +82,8 @@ std::string Controller::hashPassword(const std::string& password) const
     }
     return hashed;
 }
+
+
 
 Controller::~Controller()
 {
