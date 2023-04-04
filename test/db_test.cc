@@ -54,3 +54,18 @@ TEST(TestHashPassword, TestHashCorrectness)
     Controller ctrl;
     EXPECT_NE(ctrl.hashPassword("abacaba"), ctrl.hashPassword("bacabaca"));
 }
+
+TEST(TestCorrectPassword, TestAdminCorrect)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.correctPassword("admin", "admin"));
+}
+
+TEST(TestCorectPassword, TestAdminIncorrect)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_FALSE(ctrl.correctPassword("admin", "abacaba"));
+    EXPECT_FALSE(ctrl.correctPassword("admin", "bacabaca"));
+}
