@@ -151,11 +151,18 @@ int main()
                 "7. Delete tables\n"
                 "8. Get information on delivered and sold copies of every record for given period\n"
                 "9. Get information on sales of given record for given period";
+            std::string menuUserMessage = 
+                "Main menu. To choose a command enter the corresponding number:\n"
+                "0. See this message\n"
+                "1. Get all the information of the most sold record\n"
+                "2. Get the quantity of sold copies of the most popular artist\n"
+                "3. Get information on sales of given record for given period";
             role = ctrl.getRole(login);
             if (role == "admin")
             {
                 while (true) // main admin menu cycle
                 {
+
                 }
             }
             else if (role == "user")
