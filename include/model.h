@@ -19,6 +19,10 @@ private:
 
     // invoked by sqlite during addLogin methid
     static int addLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
+    // invoked by sqlite during deleteLogin method
+    static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+    
 public:
     Model(const std::string& dbFileName);
 
@@ -36,6 +40,9 @@ public:
 
     // adds new login into database
     void addLogin(const std::string& login, const std::string& hashedPassword) const;
+
+    // deletes login from database
+    bool deleteLogin(const std::string& login) const;
 
     ~Model();
 };
