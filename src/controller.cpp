@@ -88,6 +88,12 @@ bool Controller::passwordsMatch(const std::string& password, const std::string& 
     return (password == confirmedPassword);
 }
 
+void Controller::newLogin(const std::string& login, const std::string& password) const
+{
+    std::string hashedPassword = hashPassword(password);
+    dbModel.addLogin(login, hashedPassword);
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
