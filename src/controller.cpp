@@ -83,7 +83,10 @@ std::string Controller::hashPassword(const std::string& password) const
     return hashed;
 }
 
-
+bool Controller::passwordsMatch(const std::string& password, const std::string& confirmedPassword) const
+{
+    return (password == confirmedPassword);
+}
 
 Controller::~Controller()
 {
