@@ -153,7 +153,7 @@ int main()
                 "9. Delete tables\n"
                 "10. Get information on delivered and sold copies of every record for given period\n"
                 "11. Get information on sales of given record for given period\n";
-            std::string menuUserMessage = 
+            std::string menuUserMessage =
                 "Main menu. To choose a command enter the corresponding number:\n"
                 "0. See this message\n"
                 "1. Quit\n"
@@ -161,22 +161,86 @@ int main()
                 "3. Get all the information of the most sold record\n"
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
+            std::string requestPrompt = "Enter your request number: ";
             role = ctrl.getRole(login);
             if (role == "admin")
             {
+                int request = 0;
+
+                std::cout << menuAdminMessage;
                 while (true) // main admin menu cycle
                 {
+                    std::cout << requestPrompt;
+                    std::cin >> request;
+                    if (request == 0)
+                    {
+                        // 0. See this message
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (request == 1)
+                    {
+                        // 1. Quit
+                        break;
+                    }
+                    else if (request == 2)
+                    {
+                        // 2. Logout
+                        authorized = false;
+                        continue;
+                    }
+                    else if (request == 3)
+                    {
+                        // 3. Get information on quantity of sold and left in stock records of every record
+                    }
+                    else if (request == 4)
+                    {
+                        // 4. Get information on quantity of sold copies and the cost of given record for given period
+                    }
+                    else if (request == 5)
+                    {
+                        // 5. Get all the information of the most sold record
+                    }
+                    else if (request == 6)
+                    {
+                        // 6. Get the quantity of sold copies of the most popular artist
+                    }
+                    else if (request == 7)
+                    {
+                        // 7. Insert new values into tables
+                    }
+                    else if (request == 8)
+                    {
+                        // 8. Update tables
+                    }
+                    else if (request == 9)
+                    {
+                        // 9. Delete tables
+                    }
+                    else if (request == 10)
+                    {
+                        // 10. Get information on delivered and sold copies of every record for given period
+                    }
+                    else if (request == 11)
+                    {
+                        // 11. Get information on sales of given record for given period
+                    }
+                    else
+                    {
+                        // unrecognized option, printing the menu
+                        std::cout << menuAdminMessage;
+                    }
+                    std::cout << "\n";
                 }
             }
             else if (role == "user")
             {
-                while(true) // main user menu cycle
+                while (true) // main user menu cycle
                 {
-
                 }
             }
             else
             {
+                // undefined role = logout
                 authorized = false;
             }
         }
