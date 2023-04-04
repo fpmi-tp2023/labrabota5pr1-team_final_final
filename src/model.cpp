@@ -121,6 +121,27 @@ void Model::addLogin(const std::string& login, const std::string& hashedPassword
     }
 }
 
+int Model::deleteLogin_Callback(void *optional, int numberOfColumns, char** data, char** headers)
+{
+    return 0;
+}
+bool Model::deleteLogin(const std::string& login) const
+{
+    std::string sqlDeleteQuery = 
+    "DELETE FROM login\n"
+    "WHERE login = '" + login + "';";
+    int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), deleteLogin_Callback, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on deleting from db, fname = deleteLogin: " << sqlite3_errmsg(db) << "\n";
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
