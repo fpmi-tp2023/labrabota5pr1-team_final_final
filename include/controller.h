@@ -33,6 +33,6 @@ public:
 
     // adds new login, password into database
     void newLogin(const std::string& login, const std::string& password) const;
-    
+
     ~Controller();
 };
