@@ -150,7 +150,7 @@ int main()
                 "6. Get the quantity of sold copies of the most popular artist\n"
                 "7. Insert new values into tables\n"
                 "8. Update tables\n"
-                "9. Delete tables\n"
+                "9. Delete from tables\n"
                 "10. Get information on delivered and sold copies of every record for given period\n"
                 "11. Get information on sales of given record for given period\n";
             std::string menuUserMessage =
@@ -186,7 +186,7 @@ int main()
                     {
                         // [admin menu] 2. Logout
                         authorized = false;
-                        continue;
+                        break;
                     }
                     else if (request == 3)
                     {
@@ -214,7 +214,7 @@ int main()
                     }
                     else if (request == 9)
                     {
-                        // [admin menu] 9. Delete tables
+                        // [admin menu] 9. Delete from tables
                     }
                     else if (request == 10)
                     {
@@ -244,7 +244,7 @@ int main()
                     if (request == 0)
                     {
                         // [user menu] 0. See this message
-                        std::cout << menuAdminMessage;
+                        std::cout << menuUserMessage;
                     }
                     else if (request == 1)
                     {
@@ -255,7 +255,7 @@ int main()
                     {
                         // [user menu] 2. Logout
                         authorized = false;
-                        continue;
+                        break;
                     }
                     else if (request == 3)
                     {
