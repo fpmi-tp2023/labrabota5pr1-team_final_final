@@ -162,125 +162,125 @@ int main()
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
+            int request = 0;
+
             role = ctrl.getRole(login);
-            if (role == "admin")
-            {
-                int request = 0;
+            std::string roleAdmin = "admin";
+            std::string roleUser = "user";
 
+            if (role == roleAdmin)
+            {
                 std::cout << menuAdminMessage;
-                while (true) // main admin menu cycle
-                {
-                    std::cout << requestPrompt;
-                    std::cin >> request;
-                    if (request == 0)
-                    {
-                        // [admin menu] 0. See this message
-                        std::cout << menuAdminMessage;
-                    }
-                    else if (request == 1)
-                    {
-                        // [admin menu] 1. Quit
-                        return 0;
-                    }
-                    else if (request == 2)
-                    {
-                        // [admin menu] 2. Logout
-                        authorized = false;
-                        break;
-                    }
-                    else if (request == 3)
-                    {
-                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
-                    }
-                    else if (request == 4)
-                    {
-                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    }
-                    else if (request == 5)
-                    {
-                        // [admin menu] 5. Get all the information of the most sold record
-                    }
-                    else if (request == 6)
-                    {
-                        // [admin menu] 6. Get the quantity of sold copies of the most popular artist
-                    }
-                    else if (request == 7)
-                    {
-                        // [admin menu] 7. Insert new values into tables
-                    }
-                    else if (request == 8)
-                    {
-                        // [admin menu] 8. Update tables
-                    }
-                    else if (request == 9)
-                    {
-                        // [admin menu] 9. Delete from tables
-                    }
-                    else if (request == 10)
-                    {
-                        // [admin menu] 10. Get information on delivered and sold copies of every record for given period
-                    }
-                    else if (request == 11)
-                    {
-                        // [admin menu] 11. Get information on sales of given record for given period
-                    }
-                    else
-                    {
-                        // [admin menu] unrecognized option, printing the menu
-                        std::cout << menuAdminMessage;
-                    }
-                    std::cout << "\n";
-                }
             }
-            else if (role == "user")
+            else if (role == roleUser)
             {
-                int request = 0;
-
                 std::cout << menuUserMessage;
-                while (true) // main user menu cycle
-                {
-                    std::cout << requestPrompt;
-                    std::cin >> request;
-                    if (request == 0)
-                    {
-                        // [user menu] 0. See this message
-                        std::cout << menuUserMessage;
-                    }
-                    else if (request == 1)
-                    {
-                        // [user menu] 1. Quit
-                        return 0;
-                    }
-                    else if (request == 2)
-                    {
-                        // [user menu] 2. Logout
-                        authorized = false;
-                        break;
-                    }
-                    else if (request == 3)
-                    {
-                        // [user menu] 3. Get all the information of the most sold record
-                    }
-                    else if (request == 4)
-                    {
-                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
-                    }
-                    else if (request == 5)
-                    {
-                        // [user menu] 5. Get information on sales of given record for given period
-                    }
-                    else
-                    {
-                        // unrecognized option, printing the menu
-                        std::cout << menuUserMessage;
-                    }
-                    std::cout << "\n";
-                }
             }
             else
             {
                 // undefined role = logout
                 authorized = false;
+                continue;
+            }
+
+            while (true) // main menu cycle
+            {
+                std::cout << requestPrompt;
+                std::cin >> request;
+                if (request == 0)
+                {
+                    // [admin menu/user menu]
+                    // 0. See this message
+                    if (role == roleAdmin)
+                    {
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (role == roleUser)
+                    {
+                        std::cout << menuUserMessage;
+                    }
+                }
+                else if (request == 1)
+                {
+                    // [admin menu/user menu] 1. Quit
+                    return 0;
+                }
+                else if (request == 2)
+                {
+                    // [admin menu/user menu] 2. Logout
+                    authorized = false;
+                    break;
+                }
+                else if (request == 3)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 3. Get all the information of the most sold record
+                    }
+                }
+                else if (request == 4)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
+                    }
+                }
+                else if (request == 5)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 5. Get all the information of the most sold record
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 5. Get information on sales of given record for given period
+                    }
+                }
+                else if (request == 6)
+                {
+                    // [admin menu] 6. Get the quantity of sold copies of the most popular artist
+                }
+                else if (request == 7)
+                {
+                    // [admin menu] 7. Insert new values into tables
+                }
+                else if (request == 8)
+                {
+                    // [admin menu] 8. Update tables
+                }
+                else if (request == 9)
+                {
+                    // [admin menu] 9. Delete from tables
+                }
+                else if (request == 10)
+                {
+                    // [admin menu] 10. Get information on delivered and sold copies of every record for given period
+                }
+                else if (request == 11)
+                {
+                    // [admin menu] 11. Get information on sales of given record for given period
+                }
+                else
+                {
+                    // [admin menu/user menu] unrecognized option, printing the menu
+                    if (role == roleAdmin)
+                    {
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (role == roleUser)
+                    {
+                        std::cout << menuUserMessage;
+                    }
+                }
+                std::cout << "\n";
             }
         }
     }
