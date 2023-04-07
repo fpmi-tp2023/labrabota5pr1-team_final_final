@@ -108,6 +108,11 @@ bool Controller::deleteLogin(const std::string& login, const std::string& passwo
     }
 }
 
+bool Controller::validUpdateRequestNumber(int requestNumber) const
+{   
+    return (requestNumber == 0 || requestNumber == 1);
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
