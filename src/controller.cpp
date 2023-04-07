@@ -113,6 +113,25 @@ bool Controller::validUpdateRequestNumber(int requestNumber) const
     return (requestNumber == 0 || requestNumber == 1);
 }
 
+std::vector<std::string> Controller::getTables() const
+{
+    //TODO
+}
+
+bool Controller::validTable(const std::string& table, const std::vector<std::string>& tableList) const
+{
+    bool ans = false;
+    for (const auto& tableFromList : tableList)
+    {
+        if (table == tableFromList)
+        {
+            ans = true;
+            break;
+        }
+    }
+    return ans;
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
