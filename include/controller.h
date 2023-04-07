@@ -56,5 +56,9 @@ public:
     // checks if column is present in columnList
     bool validColumn(const std::string& column, const std::vector<std::string>& columnList) const;
 
+    void createUpdateQuery(
+        const std::string& table, 
+        const std::vector<std::string>& columnsToUpdate, 
+        const std::vector<std::string> valuesForColumns) const;
     ~Controller();
 };
