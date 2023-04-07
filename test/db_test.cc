@@ -106,3 +106,14 @@ TEST(TestValidUpdateRequestNumber, TestAll)
     EXPECT_FALSE(ctrl.validUpdateRequestNumber(2));
     EXPECT_FALSE(ctrl.validUpdateRequestNumber(-1));
 }
+
+TEST(TestValidTable, TestAll)
+{
+    Controller ctrl;
+    std::vector<std::string> testVector = {"a", "ba", "ce", "asdfansdf"};
+    EXPECT_TRUE(ctrl.validTable("a", testVector));
+    EXPECT_TRUE(ctrl.validTable("ba", testVector));
+    EXPECT_FALSE(ctrl.validTable("ca", testVector));
+    EXPECT_FALSE(ctrl.validTable("lksdmfnkajg", testVector));
+
+}
