@@ -37,5 +37,8 @@ public:
     // deletes login with password from database, used only for tests!!!
     bool deleteLogin(const std::string& login, const std::string& password) const;
     
+    // checks if request number is valid. Valid numbers are 0 and 1
+    bool validUpdateRequestNumber(int requestNumber) const;
+
     ~Controller();
 };
