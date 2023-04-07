@@ -142,6 +142,20 @@ bool Controller::validColumnsCount(int columnsNumber, const std::vector<std::str
     return ((columnsNumber >=1 ) && (columnsNumber <= columns.size()));
 }
 
+bool Controller::validColumn(const std::string& column, const std::vector<std::string>& columnList) const
+{
+    bool ans = false;
+    for (const auto& columnFromList : columnList)
+    {
+        if (column == columnFromList)
+        {
+            ans = true;
+            break;
+        }
+    }
+    return ans;
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
