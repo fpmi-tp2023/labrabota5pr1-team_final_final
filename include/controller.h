@@ -43,5 +43,8 @@ public:
 
     std::vector<std::string> getTables() const;
 
+    // returns true if table is in tableList
+    bool validTable(const std::string& table, const std::vector<std::string>& tableList) const;
+
     ~Controller();
 };
