@@ -15,12 +15,12 @@ int main()
 
     while (true) // main authorization cycle
     {
-        std::string response = "";
         std::string role = "";
         std::string login = "";
 
         if (!authorized)
         {
+            std::string response = "";
             std::cout << "You are currently unauthorized. Enter sign-in or sign-up or quit\n";
             std::cin >> response;
             while (response != "quit" && !ctrl.validResponseAuth(response)) // waiting for valid response
@@ -255,6 +255,16 @@ int main()
                 else if (request == 8)
                 {
                     // [admin menu] 8. Update tables
+                    std::string response;
+                    int requestNumber = 0;
+                    
+                    std::cout << 
+                    "Enter corresponding request number:\n"
+                    "1: default sql insert query (with input prompts)\n"
+                    "2: custom sql query\n";
+
+                    std::cin >> requestNumber;
+                    
                 }
                 else if (request == 9)
                 {
