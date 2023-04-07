@@ -256,15 +256,29 @@ int main()
                 {
                     // [admin menu] 8. Update tables
                     std::string response;
-                    int requestNumber = 0;
-                    
-                    std::cout << 
-                    "Enter corresponding request number:\n"
-                    "1: default sql insert query (with input prompts)\n"
-                    "2: custom sql query\n";
+                    int requestNumber = -1;
+                    std::string requestPrompt =
+                        "Enter corresponding request number:\n"
+                        "0: return to menu\n"
+                        "1: default sql insert query (with input prompts)\n";
 
-                    std::cin >> requestNumber;
-                    
+                    std::cout << requestPrompt;
+                    while (!ctrl.validUpdateRequestNumber(requestNumber))
+                    {
+                        std::cin >> requestNumber;
+                    }
+
+                    // valid request number received
+
+                    if (requestNumber == 0)
+                    {
+                        // return to main admin menu
+                        continue;
+                    }
+                    else if (requestNumber == 1)
+                    {
+                        
+                    }
                 }
                 else if (request == 9)
                 {
