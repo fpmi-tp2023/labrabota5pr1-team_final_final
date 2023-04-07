@@ -293,7 +293,7 @@ int main()
                         std::cout << "Table: ";
                         std::cin >> tableToUpdate;
 
-                        while(tableToUpdate != "cancel" && ctrl.validTable(tableToUpdate, tables))
+                        while (tableToUpdate != "cancel" && ctrl.validTable(tableToUpdate, tables))
                         {
                             std::cout << "Unknown table. Try again or enter cancel\n";
                             std::cout << "Table: ";
@@ -311,7 +311,7 @@ int main()
                         std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
 
                         std::cout << "List of columns of " + tableToUpdate + ":\n";
-                        for (const auto& column: columns)
+                        for (const auto &column : columns)
                         {
                             std::cout << column << " ";
                         }
@@ -320,18 +320,18 @@ int main()
                         int columnsCount = 0;
                         std::string currentColumn;
                         std::string columnNumberPrompt = "Enter number of columns you want to change: ";
-                        
+
                         std::cout << columnNumberPrompt;
                         std::cin >> columnsCount;
 
-                        while(!ctrl.validColumnsCount(columnsCount, columns))
+                        while (!ctrl.validColumnsCount(columnsCount, columns))
                         {
                             std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
                             std::cout << columnNumberPrompt;
-                            std::cin >> columnsCount; 
+                            std::cin >> columnsCount;
                         }
 
-                        //valid columnsCount
+                        // valid columnsCount
 
                         std::vector<std::string> columnsToUpdate;
                         std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
@@ -349,7 +349,7 @@ int main()
                             std::cout << columnPrompt;
                             std::cin >> currentColumn;
 
-                            while(currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                            while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
                             {
                                 std::cout << "No such column. Try again or enter cancel\n";
                                 std::cout << columnPrompt;
@@ -373,6 +373,43 @@ int main()
                         }
 
                         // valid columnsToUpdate
+
+                        // now trying to fetch new values for selected columns
+
+                        std::vector<std::string> valuesForColumns;
+                        std::string valuePromptWithCancel = "Enter next value or cancel\n";
+                        std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
+                        std::string valuePrompt = "Value: ";
+                        std::string currentValue;
+
+                        std::cout << valuePromptWithCancel;
+                        std::cout << warningAboutQuotations;
+                        for (size_t i = 0; i < columnsCount; ++i)
+                        {
+                            if (canceled)
+                            {
+                                break;
+                            }
+                            std::cout << "Current column: " << columnsToUpdate[i] << "\n";
+                            std::cout << valuePrompt;
+                            std::cin >> currentValue;
+
+                            if (currentValue == "cancel")
+                            {
+                                canceled = true;
+                                continue;
+                            }
+
+                            valuesForColumns.push_back(currentValue);
+                        }
+
+                        if (canceled) // was canceled in previous cycle
+                        {
+                            // returning to main menu
+                            continue; 
+                        }
+
+                        // now we have valid values for corresponding columns
                         
                     }
                 }
