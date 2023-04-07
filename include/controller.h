@@ -53,6 +53,8 @@ public:
     // checks if columnsCount is valid. Valid values are in range (1, columns.size())
     bool validColumnsCount(int columnsCount, const std::vector<std::string>& columns) const;
 
+    // checks if column is present in columnList
     bool validColumn(const std::string& column, const std::vector<std::string>& columnList) const;
+
     ~Controller();
 };
