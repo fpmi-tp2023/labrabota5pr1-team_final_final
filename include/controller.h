@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "model.h"
 
 class Controller
@@ -39,6 +40,8 @@ public:
     
     // checks if request number is valid. Valid numbers are 0 and 1
     bool validUpdateRequestNumber(int requestNumber) const;
+
+    std::vector<std::string> getTables() const;
 
     ~Controller();
 };
