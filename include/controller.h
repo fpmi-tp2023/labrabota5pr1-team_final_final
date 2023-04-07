@@ -51,7 +51,8 @@ public:
     std::vector<std::string> getColumns(const std::string& table) const;
 
     // checks if columnsCount is valid. Valid values are in range (1, columns.size())
-    bool validColumnsCount(int columnCount, const std::vector<std::string>& columns) const;
+    bool validColumnsCount(int columnsCount, const std::vector<std::string>& columns) const;
 
+    bool validColumn(const std::string& column, const std::vector<std::string>& columnList) const;
     ~Controller();
 };
