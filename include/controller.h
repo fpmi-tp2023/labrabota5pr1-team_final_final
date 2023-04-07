@@ -41,10 +41,17 @@ public:
     // checks if request number is valid. Valid numbers are 0 and 1
     bool validUpdateRequestNumber(int requestNumber) const;
 
+    // returns vector of all tables from database
     std::vector<std::string> getTables() const;
 
     // returns true if table is in tableList
     bool validTable(const std::string& table, const std::vector<std::string>& tableList) const;
+
+    // return columns from given table
+    std::vector<std::string> getColumns(const std::string& table) const;
+
+    // checks if columnsCount is valid. Valid values are in range (1, columns.size())
+    bool validColumnsCount(int columnCount, const std::vector<std::string>& columns) const;
 
     ~Controller();
 };
