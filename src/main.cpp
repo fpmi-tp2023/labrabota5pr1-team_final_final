@@ -285,6 +285,7 @@ int main()
                         {
                             std::cout << table << ' ';
                         }
+                        std::cout << "\n";
 
                         std::string tableToUpdate;
 
@@ -299,8 +300,40 @@ int main()
                             std::cin >> tableToUpdate;
                         }
 
+                        if (tableToUpdate == "cancel")
+                        {
+                            // return to main admin menu
+                            continue;
+                        }
+
                         // valid table received
+
+                        std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
+
+                        std::cout << "List of columns of " + tableToUpdate + ":\n";
+                        for (const auto& column: columns)
+                        {
+                            std::cout << column << " ";
+                        }
+                        std::cout << "\n";
+
+                        int columnsCount = 0;
+                        std::string currentColumn;
+                        std::string columnPrompt = "Enter number of columns you want to change: ";
                         
+                        std::cout << columnPrompt;
+                        std::cin >> columnsCount;
+
+                        while(!ctrl.validColumnsCount(columnsCount, columns))
+                        {
+                            std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
+                            std::cout << columnPrompt;
+                            std::cin >> columnsCount; 
+                        }
+
+                        //valid columnsCount
+
+                        std::vector<std::string> columnsToUpdate;
                     }
                 }
                 else if (request == 9)
