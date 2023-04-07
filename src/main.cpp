@@ -406,12 +406,37 @@ int main()
                         if (canceled) // was canceled in previous cycle
                         {
                             // returning to main menu
-                            continue; 
+                            continue;
                         }
 
                         // now we have valid values for corresponding columns
-                        
-                    }
+
+                        // all we need is where clause
+
+                        std::cout << "List of all columns: \n";
+
+                        for (const auto& column: columns)
+                        {
+                            std::cout << column << ' ';
+                        }
+                        std::cout << "\n";
+
+                        std::string wherePrompt = "Now enter your where condition (without the word \"where\") or cancel\n";
+                        std::string whereCondition;
+
+                        std::cout << wherePrompt;
+                        std::cout << warningAboutQuotations;
+
+                        if (wherePrompt == "cancel")
+                        {
+                            // returning to main menu
+                            continue;
+                        }
+
+                        // we are all set, passing data to createUpdateQuery method in controller
+
+                        ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns);
+                    }   
                 }
                 else if (request == 9)
                 {
