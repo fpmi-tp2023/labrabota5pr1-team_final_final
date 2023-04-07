@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "controller.h"
 
 int main()
@@ -277,6 +278,28 @@ int main()
                     }
                     else if (requestNumber == 1)
                     {
+                        std::vector<std::string> tables = ctrl.getTables();
+
+                        std::cout << "List of all tables: \n";
+                        for (const auto &table : tables)
+                        {
+                            std::cout << table << ' ';
+                        }
+
+                        std::string tableToUpdate;
+
+                        std::cout << "Choose a table or enter cancel\n";
+                        std::cout << "Table: ";
+                        std::cin >> tableToUpdate;
+
+                        while(tableToUpdate != "cancel" && ctrl.validTable(tableToUpdate, tables))
+                        {
+                            std::cout << "Unknown table. Try again or enter cancel\n";
+                            std::cout << "Table: ";
+                            std::cin >> tableToUpdate;
+                        }
+
+                        // valid table received
                         
                     }
                 }
