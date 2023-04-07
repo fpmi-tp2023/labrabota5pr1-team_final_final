@@ -97,3 +97,12 @@ TEST(TestAddLogin, TestWithDeleteLogin)
     EXPECT_FALSE(ctrl.existingLogin(dummyLogin));
     EXPECT_FALSE(ctrl.deleteLogin(dummyLogin, dummyPassword));
 }
+
+TEST(TestValidUpdateRequestNumber, TestAll)
+{
+    Controller ctrl;
+    EXPECT_TRUE(ctrl.validUpdateRequestNumber(0));
+    EXPECT_TRUE(ctrl.validUpdateRequestNumber(1));
+    EXPECT_FALSE(ctrl.validUpdateRequestNumber(2));
+    EXPECT_FALSE(ctrl.validUpdateRequestNumber(-1));
+}
