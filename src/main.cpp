@@ -319,21 +319,61 @@ int main()
 
                         int columnsCount = 0;
                         std::string currentColumn;
-                        std::string columnPrompt = "Enter number of columns you want to change: ";
+                        std::string columnNumberPrompt = "Enter number of columns you want to change: ";
                         
-                        std::cout << columnPrompt;
+                        std::cout << columnNumberPrompt;
                         std::cin >> columnsCount;
 
                         while(!ctrl.validColumnsCount(columnsCount, columns))
                         {
                             std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
-                            std::cout << columnPrompt;
+                            std::cout << columnNumberPrompt;
                             std::cin >> columnsCount; 
                         }
 
                         //valid columnsCount
 
                         std::vector<std::string> columnsToUpdate;
+                        std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
+                        std::string columnPrompt = "Column: ";
+                        bool canceled = false;
+
+                        for (size_t i = 0; i < columnsCount; ++i)
+                        {
+                            if (canceled)
+                            {
+                                break;
+                            }
+
+                            std::cout << columnPromptWithCancel;
+                            std::cout << columnPrompt;
+                            std::cin >> currentColumn;
+
+                            while(currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                            {
+                                std::cout << "No such column. Try again or enter cancel\n";
+                                std::cout << columnPrompt;
+                                std::cin >> currentColumn;
+                            }
+
+                            if (currentColumn == "cancel") // cancel option
+                            {
+                                canceled = true;
+                                break;
+                            }
+
+                            // valid column received
+                            columnsToUpdate.push_back(currentColumn);
+                        }
+
+                        if (canceled) // was canceled inside a cycle
+                        {
+                            std::cout << "Canceled, returning to main menu\n";
+                            continue;
+                        }
+
+                        // valid columnsToUpdate
+                        
                     }
                 }
                 else if (request == 9)
