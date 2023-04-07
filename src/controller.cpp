@@ -132,6 +132,16 @@ bool Controller::validTable(const std::string& table, const std::vector<std::str
     return ans;
 }
 
+std::vector<std::string> Controller::getColumns(const std::string& table) const
+{
+    //TODO
+}
+
+bool Controller::validColumnsCount(int columnsNumber, const std::vector<std::string>& columns) const
+{
+    return ((columnsNumber >=1 ) && (columnsNumber <= columns.size()));
+}
+
 Controller::~Controller()
 {
     if (dbModel)  //check if pointer is not null
