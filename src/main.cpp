@@ -415,7 +415,7 @@ int main()
 
                         std::cout << "List of all columns: \n";
 
-                        for (const auto& column: columns)
+                        for (const auto &column : columns)
                         {
                             std::cout << column << ' ';
                         }
@@ -427,7 +427,8 @@ int main()
                         std::cout << wherePrompt;
                         std::cout << warningAboutQuotations;
 
-                        if (wherePrompt == "cancel")
+                        std::cin >> whereCondition;
+                         if (whereCondition == "cancel")
                         {
                             // returning to main menu
                             continue;
@@ -435,8 +436,8 @@ int main()
 
                         // we are all set, passing data to createUpdateQuery method in controller
 
-                        ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns);
-                    }   
+                        ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition);
+                    }
                 }
                 else if (request == 9)
                 {
