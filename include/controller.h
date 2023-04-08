@@ -60,7 +60,8 @@ public:
     void createUpdateQuery(
         const std::string& table, 
         const std::vector<std::string>& columnsToUpdate, 
-        const std::vector<std::string> valuesForColumns) const;
+        const std::vector<std::string>& valuesForColumns,
+        const std::string& whereCondition) const;
     
     ~Controller();
 };
