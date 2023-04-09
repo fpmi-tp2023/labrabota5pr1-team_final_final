@@ -181,3 +181,12 @@ TEST(TestDeleteQuery, TestAll)
     EXPECT_TRUE(ctrl.createDeleteQuery("artist", "artist_id = 1"));
     EXPECT_FALSE(ctrl.createDeleteQuery("artist", "artist_id = afsdag"));
 }
+
+TEST(TestInsertQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.createInsertQuery("artist", {"artist_id", "name"}, {{"17", "'vasya'"}, {"23", "'petya'"}}));
+    EXPECT_TRUE(ctrl.createDeleteQuery("artist", "artist_id = 17 OR artist_id = 23"));
+    EXPECT_FALSE(ctrl.createInsertQuery("artist", {"artist_id", "name"}, {{"17", "vasya"}, {"23", "petya"}}));
+}
