@@ -199,7 +199,12 @@ bool Model::updateQuery(
         sqlUpdateQuery += "SET " + columnsToUpdate[i] + " = " + valuesForColumns[i];
     }
     sqlUpdateQuery += "\nWHERE " + whereCondition + ";";
-    std::cout << sqlUpdateQuery << "\n";
+    int result = sqlite3_exec(db, sqlUpdateQuery.c_str(), 0, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Something went wrong on updating the database, fname = updateQuery: " << sqlite3_errmsg(db) << "\n";
+        return false;
+    }
     return true;
 }
 
