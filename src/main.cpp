@@ -264,7 +264,7 @@ int main()
                 else if (request == 7)
                 {
                     // [admin menu] 7. Get the quantity of sold copies of the records and overall sum of money for a given artist
-                } 
+                }
                 else if (request == 8)
                 {
                     // [admin menu] 8 . Insert new values into tables
@@ -272,243 +272,201 @@ int main()
                 else if (request == 9)
                 {
                     // [admin menu] 9. Update tables
-                    int requestNumber = -1;
+                    std::cout << separator;
+                    std::cout << "Update table:\n";
+
+                    std::vector<std::string> tables = ctrl.getTables();
+
+                    std::cout << separator;
+                    std::cout << "List of all tables: \n";
+                    for (const auto &table : tables)
                     {
-                        std::string requestPrompt =
-                            "Enter corresponding request number:\n"
-                            "0: return to menu\n"
-                            "1: default sql update query (with input prompts)\n";
-                        std::string requestInputPrompt =
-                            "Request: ";
+                        std::cout << table << ' ';
+                    }
+                    std::cout << "\n";
 
-                        std::cout << separator;
-                        std::cout << "Update table:\n";
-                        std::cout << requestPrompt << requestInputPrompt;
+                    std::string tableToUpdate;
 
-                        bool tried = false; // true if requestNumber was invalid once, false if it's first try
-                        while (!ctrl.validUpdateRequestNumber(requestNumber))
+                    std::cout << separator << "Choose a table or enter cancel\n";
+                    std::cout << "Table: ";
+                    std::cin >> tableToUpdate;
+
+                    while (tableToUpdate != "cancel" && !ctrl.validTable(tableToUpdate, tables))
+                    {
+                        std::cout << "Unknown table. Try again or enter cancel\n";
+                        std::cout << "Table: ";
+                        std::cin >> tableToUpdate;
+                    }
+
+                    if (tableToUpdate == "cancel")
+                    {
+                        // return to main admin menu
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
+                    }
+
+                    // valid table received
+
+                    std::cout << separator;
+                    std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
+
+                    std::cout << "List of columns of " + tableToUpdate + ":\n";
+                    for (const auto &column : columns)
+                    {
+                        std::cout << column << " ";
+                    }
+                    std::cout << "\n";
+
+                    int columnsCount = 0;
+                    std::string currentColumn;
+                    std::string columnNumberPrompt = "Enter number of columns you want to change: ";
+
+                    std::cout << separator;
+                    {
+                        bool tried = false; // true if already failed once to input columnsCount
+                        while (!ctrl.validColumnsCount(columnsCount, columns))
                         {
-                            if (tried) // already failed to input requestNumber
+                            if (tried)
                             {
-                                std::cout << "Invalid request number. Try again: ";
+                                std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
                             }
-                            else // first time trying to ente rrequestNumber
+                            else
                             {
                                 tried = true;
                             }
-                            std::cin >> requestNumber;
-                            if (!ctrl.intInputGuard(std::cin)) // false if something went wrong
+                            std::cout << columnNumberPrompt;
+                            std::cin >> columnsCount;
+                            if (!ctrl.intInputGuard(std::cin))
                             {
-                                requestNumber = -1;
+                                columnsCount = 0;
                                 std::cout << separator << intInputWarning << separator;
                                 continue;
                             }
                         }
                     }
 
-                    // valid request number received
+                    // valid columnsCount
 
-                    if (requestNumber == 0)
+                    std::vector<std::string> columnsToUpdate;
+                    std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
+                    std::string columnPrompt = "Column: ";
+                    bool canceled = false;
+
+                    std::cout << separator;
+                    for (size_t i = 0; i < columnsCount; ++i)
                     {
-                        // return to main admin menu
+                        if (canceled)
+                        {
+                            break;
+                        }
+
+                        std::cout << columnPromptWithCancel;
+                        std::cout << columnPrompt;
+                        std::cin >> currentColumn;
+
+                        while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                        {
+                            std::cout << "No such column. Try again or enter cancel\n";
+                            std::cout << columnPrompt;
+                            std::cin >> currentColumn;
+                        }
+
+                        if (currentColumn == "cancel") // cancel option
+                        {
+                            canceled = true;
+                            break;
+                        }
+
+                        // valid column received
+                        columnsToUpdate.push_back(currentColumn);
+                    }
+
+                    if (canceled) // was canceled inside a cycle
+                    {
                         std::cout << separator << mainMenuPrompt;
                         continue;
                     }
-                    else if (requestNumber == 1)
+
+                    // valid columnsToUpdate
+
+                    // now trying to fetch new values for selected columns
+
+                    std::vector<std::string> valuesForColumns;
+                    std::string valuePromptWithCancel = "Enter values for corresponding columns or cancel\n";
+                    std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
+                    std::string valuePrompt = "Value: ";
+                    std::string currentValue;
+
+                    std::cout << separator;
+                    std::cout << valuePromptWithCancel;
+                    std::cout << warningAboutQuotations;
+                    for (size_t i = 0; i < columnsCount; ++i)
                     {
-                        std::vector<std::string> tables = ctrl.getTables();
-
-                        std::cout << separator;
-                        std::cout << "List of all tables: \n";
-                        for (const auto &table : tables)
+                        if (canceled)
                         {
-                            std::cout << table << ' ';
-                        }
-                        std::cout << "\n";
-
-                        std::string tableToUpdate;
-
-                        std::cout << separator << "Choose a table or enter cancel\n";
-                        std::cout << "Table: ";
-                        std::cin >> tableToUpdate;
-
-                        while (tableToUpdate != "cancel" && !ctrl.validTable(tableToUpdate, tables))
-                        {
-                            std::cout << "Unknown table. Try again or enter cancel\n";
-                            std::cout << "Table: ";
-                            std::cin >> tableToUpdate;
-                        }
-
-                        if (tableToUpdate == "cancel")
-                        {
-                            // return to main admin menu
-                            std::cout << separator << mainMenuPrompt;
-                            continue;
-                        }
-
-                        // valid table received
-
-                        std::cout << separator;
-                        std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
-
-                        std::cout << "List of columns of " + tableToUpdate + ":\n";
-                        for (const auto &column : columns)
-                        {
-                            std::cout << column << " ";
-                        }
-                        std::cout << "\n";
-
-                        int columnsCount = 0;
-                        std::string currentColumn;
-                        std::string columnNumberPrompt = "Enter number of columns you want to change: ";
-
-                        std::cout << separator;
-                        {
-                            bool tried = false; // true if already failed once to input columnsCount
-                            while (!ctrl.validColumnsCount(columnsCount, columns))
-                            {
-                                if (tried)
-                                {
-                                    std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
-                                }
-                                else
-                                {
-                                    tried = true;
-                                }
-                                std::cout << columnNumberPrompt;
-                                std::cin >> columnsCount;
-                                if (!ctrl.intInputGuard(std::cin))
-                                {
-                                    columnsCount = 0;
-                                    std::cout << separator << intInputWarning << separator;
-                                    continue;
-                                }
-                            }
-                        }
-
-                        // valid columnsCount
-
-                        std::vector<std::string> columnsToUpdate;
-                        std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
-                        std::string columnPrompt = "Column: ";
-                        bool canceled = false;
-
-                        std::cout << separator;
-                        for (size_t i = 0; i < columnsCount; ++i)
-                        {
-                            if (canceled)
-                            {
-                                break;
-                            }
-
-                            std::cout << columnPromptWithCancel;
-                            std::cout << columnPrompt;
-                            std::cin >> currentColumn;
-
-                            while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
-                            {
-                                std::cout << "No such column. Try again or enter cancel\n";
-                                std::cout << columnPrompt;
-                                std::cin >> currentColumn;
-                            }
-
-                            if (currentColumn == "cancel") // cancel option
-                            {
-                                canceled = true;
-                                break;
-                            }
-
-                            // valid column received
-                            columnsToUpdate.push_back(currentColumn);
-                        }
-
-                        if (canceled) // was canceled inside a cycle
-                        {
-                            std::cout << separator << mainMenuPrompt;
-                            continue;
-                        }
-
-                        // valid columnsToUpdate
-
-                        // now trying to fetch new values for selected columns
-
-                        std::vector<std::string> valuesForColumns;
-                        std::string valuePromptWithCancel = "Enter values for corresponding columns or cancel\n";
-                        std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
-                        std::string valuePrompt = "Value: ";
-                        std::string currentValue;
-
-                        std::cout << separator;
-                        std::cout << valuePromptWithCancel;
-                        std::cout << warningAboutQuotations;
-                        for (size_t i = 0; i < columnsCount; ++i)
-                        {
-                            if (canceled)
-                            {
-                                break;
-                            }
-                            std::cout << "Current column: " << columnsToUpdate[i] << "\n";
-                            std::cout << valuePrompt;
-                            std::cin >> currentValue;
-
-                            if (currentValue == "cancel")
-                            {
-                                canceled = true;
-                                continue;
-                            }
-
-                            valuesForColumns.push_back(currentValue);
-                        }
-
-                        if (canceled) // was canceled in previous cycle
-                        {
-                            // returning to main menu
-                            std::cout << separator << mainMenuPrompt;
-                            continue;
-                        }
-
-                        // now we have valid values for corresponding columns
-
-                        // all we need is where clause
-
-                        std::cout << separator;
-                        std::cout << "List of all columns: \n";
-
-                        for (const auto &column : columns)
-                        {
-                            std::cout << column << ' ';
-                        }
-                        std::cout << "\n";
-
-                        std::string wherePrompt = "Now enter your where condition (without the word \"where\") or cancel\n";
-                        std::string whereCondition;
-
-                        std::cout << separator;
-                        std::cout << wherePrompt;
-                        std::cout << warningAboutQuotations;
-
-                        std::cin.ignore();
-                        std::getline(std::cin, whereCondition);
-                        if (whereCondition == "cancel")
-                        {
-                            // returning to main menu
-                            std::cout << separator << mainMenuPrompt;
-                            continue;
-                        }
-
-                        // we are all set, passing data to createUpdateQuery method in controller
-
-                        if (ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition))
-                        {
-                            std::cout << "Your request was successful\n"
-                                      << separator << mainMenuPrompt;
-                            continue;
-                        }
-                        else
-                        {
-                            std::cout << "Something went wrong during with your request. Aborting\n";
                             break;
                         }
+                        std::cout << "Current column: " << columnsToUpdate[i] << "\n";
+                        std::cout << valuePrompt;
+                        std::cin >> currentValue;
+
+                        if (currentValue == "cancel")
+                        {
+                            canceled = true;
+                            continue;
+                        }
+
+                        valuesForColumns.push_back(currentValue);
+                    }
+
+                    if (canceled) // was canceled in previous cycle
+                    {
+                        // returning to main menu
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
+                    }
+
+                    // now we have valid values for corresponding columns
+
+                    // all we need is where clause
+
+                    std::cout << separator;
+                    std::cout << "List of all columns: \n";
+
+                    for (const auto &column : columns)
+                    {
+                        std::cout << column << ' ';
+                    }
+                    std::cout << "\n";
+
+                    std::string wherePrompt = "Now enter your where condition (without the word \"where\") or cancel\n";
+                    std::string whereCondition;
+
+                    std::cout << separator;
+                    std::cout << wherePrompt;
+                    std::cout << warningAboutQuotations;
+
+                    std::cin.ignore();
+                    std::getline(std::cin, whereCondition);
+                    if (whereCondition == "cancel")
+                    {
+                        // returning to main menu
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
+                    }
+
+                    // we are all set, passing data to createUpdateQuery method in controller
+
+                    if (ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition))
+                    {
+                        std::cout << "Your request was successful\n"
+                                  << separator << mainMenuPrompt;
+                        continue;
+                    }
+                    else
+                    {
+                        std::cout << "Something went wrong during with your request. Aborting\n";
+                        break;
                     }
                 }
                 else if (request == 10)
@@ -517,8 +475,6 @@ int main()
 
                     std::cout << separator;
                     std::cout << "Delete from table:\n";
-                    
-                        
                 }
                 else if (request == 11)
                 {
