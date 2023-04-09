@@ -269,6 +269,7 @@ int main()
                         "*you have returned to the main menu. 0 to see menu*\n";
 
                     std::cout << separator;
+                    std::cout << "Update table:\n"; 
                     std::cout << requestPrompt << requestInputPrompt;
 
                     std::cin >> requestNumber;
@@ -334,6 +335,7 @@ int main()
                         std::string currentColumn;
                         std::string columnNumberPrompt = "Enter number of columns you want to change: ";
 
+                        std::cout << separator;
                         std::cout << columnNumberPrompt;
                         std::cin >> columnsCount;
 
@@ -345,12 +347,14 @@ int main()
                         }
 
                         // valid columnsCount
-
+                        
                         std::vector<std::string> columnsToUpdate;
                         std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
                         std::string columnPrompt = "Column: ";
                         bool canceled = false;
 
+
+                        std::cout << separator;
                         for (size_t i = 0; i < columnsCount; ++i)
                         {
                             if (canceled)
@@ -381,7 +385,7 @@ int main()
 
                         if (canceled) // was canceled inside a cycle
                         {
-                            std::cout << "Canceled, returning to main menu\n";
+                            std::cout << separator << mainMenuPrompt;
                             continue;
                         }
 
@@ -390,11 +394,12 @@ int main()
                         // now trying to fetch new values for selected columns
 
                         std::vector<std::string> valuesForColumns;
-                        std::string valuePromptWithCancel = "Enter next value or cancel\n";
+                        std::string valuePromptWithCancel = "Enter values for corresponding columns or cancel\n";
                         std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
                         std::string valuePrompt = "Value: ";
                         std::string currentValue;
 
+                        std::cout << separator;
                         std::cout << valuePromptWithCancel;
                         std::cout << warningAboutQuotations;
                         for (size_t i = 0; i < columnsCount; ++i)
@@ -419,6 +424,7 @@ int main()
                         if (canceled) // was canceled in previous cycle
                         {
                             // returning to main menu
+                            std::cout << separator << mainMenuPrompt;
                             continue;
                         }
 
@@ -426,6 +432,7 @@ int main()
 
                         // all we need is where clause
 
+                        std::cout << separator;
                         std::cout << "List of all columns: \n";
 
                         for (const auto &column : columns)
@@ -437,6 +444,7 @@ int main()
                         std::string wherePrompt = "Now enter your where condition (without the word \"where\") or cancel\n";
                         std::string whereCondition;
 
+                        std::cout << separator;
                         std::cout << wherePrompt;
                         std::cout << warningAboutQuotations;
 
@@ -444,6 +452,7 @@ int main()
                          if (whereCondition == "cancel")
                         {
                             // returning to main menu
+                            std::cout << separator << mainMenuPrompt;
                             continue;
                         }
 
