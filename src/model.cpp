@@ -145,6 +145,10 @@ bool Model::deleteLogin(const std::string& login) const
     }
 }
 
+int Model::getTables_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+{
+    ((std::vector<std::string>*)optional)->push_back(data[0]);
+}
 
 void Model::getTables(std::vector<std::string>& tables) const
 {
