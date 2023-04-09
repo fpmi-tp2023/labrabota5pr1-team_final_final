@@ -177,6 +177,14 @@ bool Controller::intInputGuard(std::istream& in) const
     return true;
 }
 
+bool Controller::createDeleteQuery(
+    const std::string& table,
+    const std::string& whereCondition
+) const
+{
+    return dbModel->deleteQuery(table, whereCondition);
+}
+
 Controller::~Controller()
 {
     if (dbModel) // check if pointer is not null
