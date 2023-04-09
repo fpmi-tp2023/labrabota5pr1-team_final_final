@@ -67,5 +67,11 @@ public:
         const std::string& whereCondition
     ) const;
 
+    // create and performs delete query with given params. Returns true when successful
+    bool deleteQuery(
+        const std::string& table,
+        const std::string& whereCondition
+    ) const;
+
     ~Model();
 };

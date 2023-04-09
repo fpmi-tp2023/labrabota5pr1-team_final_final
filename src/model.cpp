@@ -189,14 +189,14 @@ bool Model::updateQuery(
 ) const
 {
     std::string sqlUpdateQuery = 
-    "UPDATE " + table + "\n";
+    "UPDATE " + table + "\nSET ";
     for (size_t i = 0; i < columnsToUpdate.size(); ++i)
     {
         if (i != 0)
         {
-            sqlUpdateQuery += ",";
+            sqlUpdateQuery += ", ";
         }
-        sqlUpdateQuery += "SET " + columnsToUpdate[i] + " = " + valuesForColumns[i];
+        sqlUpdateQuery += columnsToUpdate[i] + " = " + valuesForColumns[i];
     }
     sqlUpdateQuery += "\nWHERE " + whereCondition + ";";
     int result = sqlite3_exec(db, sqlUpdateQuery.c_str(), 0, 0, 0);
@@ -208,6 +208,23 @@ bool Model::updateQuery(
     return true;
 }
 
+
+bool Model::deleteQuery(
+    const std::string& table,
+    const std::string& whereCondition
+) const
+{
+    std::string sqlDeleteQuery =
+    "DELETE FROM " + table + "\n"
+    "WHERE " + whereCondition + ";";
+    int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), 0, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Something went wrong in deleting from database, fname = deleteQuery: " << sqlite3_errmsg(db) << "\n";
+        return false;
+    }
+    return true;
+}
 
 Model::~Model()
 {
