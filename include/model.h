@@ -59,5 +59,13 @@ public:
     // retreives all columns from a given table and puts them into columns vector
     void getColumns(std::vector<std::string>* columns, const std::string& table) const;
 
+    // create and performs update query with given params
+    bool updateQuery(
+        const std::string& table,
+        const std::vector<std::string>& columnsToUpdate,
+        const std::vector<std::string>& valuesForColumns,
+        const std::string& whereCondition
+    ) const;
+
     ~Model();
 };
