@@ -67,10 +67,17 @@ public:
         const std::string& whereCondition
     ) const;
 
-    // create and performs delete query with given params. Returns true when successful
+    // creates and performs delete query with given params. Returns true when successful
     bool deleteQuery(
         const std::string& table,
         const std::string& whereCondition
+    ) const;
+
+    // creates and performs insert query with given params. Returns true when successful 
+    bool insertQuery(
+        const std::string& table,
+        const std::vector<std::string>& columns,
+        const std::vector<std::vector<std::string>>& values
     ) const;
 
     ~Model();
