@@ -28,7 +28,7 @@ private:
 
     // invoked by sqlite during getTables method
     static int getTables_Callback(void *optional, int numberOfColumns, char** data, char** headers);
-    
+
 public:
     Model(const std::string& dbFileName);
 
@@ -51,7 +51,7 @@ public:
     bool deleteLogin(const std::string& login) const;
 
     // retreives all table names from db and puts them into tables vector
-    void getTables(std::vector<std::string>& tables) const;
+    void getTables(std::vector<std::string>* tables) const;
 
     ~Model();
 };

@@ -261,7 +261,7 @@ int main()
                     std::string requestPrompt =
                         "Enter corresponding request number:\n"
                         "0: return to menu\n"
-                        "1: default sql insert query (with input prompts)\n";
+                        "1: default sql update query (with input prompts)\n";
 
                     std::cout << requestPrompt;
                     while (!ctrl.validUpdateRequestNumber(requestNumber))

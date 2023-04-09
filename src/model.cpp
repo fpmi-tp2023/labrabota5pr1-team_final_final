@@ -147,16 +147,21 @@ bool Model::deleteLogin(const std::string& login) const
 
 int Model::getTables_Callback(void* optional, int numberOfColumns, char** data, char** headers)
 {
-    ((std::vector<std::string>*)optional)->push_back(data[0]);
+    std::cout << "callback\n";
+    std::cout << numberOfColumns;
+    std::cout << data[0] << "\n";
+    std::cout << ((std::vector<std::string>*)optional)->size() << "\n";
+    ((std::vector<std::string>*)optional)->push_back(std::string(data[0]));
+    return 0;
 }
 
-void Model::getTables(std::vector<std::string>& tables) const
+void Model::getTables(std::vector<std::string>* tables) const
 {
     std::string sqlGetTablesQuery = 
     "SELECT name\n"
     "FROM sqlite_schema\n"
-    "WHERE type = 'table' AND name NOT LIKE 'sqlite_%";
-    int result = sqlite3_exec(db, sqlGetTablesQuery.c_str(), Model::getRole_Callback, &tables, 0);
+    "WHERE type = 'table' AND name NOT LIKE 'sqlite_%';";
+    int result = sqlite3_exec(db, sqlGetTablesQuery.c_str(), getTables_Callback, tables, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on retreiving tables from db, fname = getTables: " << sqlite3_errmsg(db) << "\n";

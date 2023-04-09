@@ -114,7 +114,7 @@ bool Controller::validUpdateRequestNumber(int requestNumber) const
 std::vector<std::string> Controller::getTables() const
 {
     std::vector<std::string> answer;
-    dbModel->getTables(answer);
+    dbModel->getTables(&answer);
     return answer;
 }
 bool Controller::validTable(const std::string &table, const std::vector<std::string> &tableList) const
