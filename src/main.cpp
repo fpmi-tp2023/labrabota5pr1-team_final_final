@@ -164,6 +164,9 @@ int main()
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
             std::string separator = "----------------------------\n";
+            std::string intInputWarning =
+                "A value of integer type must be entered\n";
+
             int request = 0;
 
             role = ctrl.getRole(login);
@@ -189,6 +192,12 @@ int main()
             {
                 std::cout << requestPrompt;
                 std::cin >> request;
+                if (!ctrl.intInputGuard(std::cin)) // false if something went wrong when reading int
+                {
+                    std::cout << separator << intInputWarning << separator;
+                    continue;
+                }
+
                 if (request == 0)
                 {
                     // [admin menu/user menu]
@@ -257,26 +266,40 @@ int main()
                 else if (request == 8)
                 {
                     // [admin menu] 8. Update tables
-                    std::string response;
-                    int requestNumber = -1;
-                    std::string requestPrompt =
-                        "Enter corresponding request number:\n"
-                        "0: return to menu\n"
-                        "1: default sql update query (with input prompts)\n";
-                    std::string requestInputPrompt = 
-                        "Request: ";
                     std::string mainMenuPrompt =
                         "*you have returned to the main menu. 0 to see menu*\n";
-
-                    std::cout << separator;
-                    std::cout << "Update table:\n"; 
-                    std::cout << requestPrompt << requestInputPrompt;
-
-                    std::cin >> requestNumber;
-                    while (!ctrl.validUpdateRequestNumber(requestNumber))
+                    int requestNumber = -1;
                     {
-                        std::cout << "invalid request number. Try again: ";
-                        std::cin >> requestNumber;
+                        std::string requestPrompt =
+                            "Enter corresponding request number:\n"
+                            "0: return to menu\n"
+                            "1: default sql update query (with input prompts)\n";
+                        std::string requestInputPrompt =
+                            "Request: ";
+
+                        std::cout << separator;
+                        std::cout << "Update table:\n";
+                        std::cout << requestPrompt << requestInputPrompt;
+
+                        bool tried = false; // true if requestNumber was invalid once, false if it's first try
+                        while (!ctrl.validUpdateRequestNumber(requestNumber))
+                        {
+                            if (tried) // already failed to input requestNumber
+                            {
+                                std::cout << "Invalid request number. Try again: ";
+                            }
+                            else // first time trying to ente rrequestNumber
+                            {
+                                tried = true;
+                            }
+                            std::cin >> requestNumber;
+                            if (!ctrl.intInputGuard(std::cin)) // false if something went wrong
+                            {
+                                requestNumber = -1;
+                                std::cout << separator << intInputWarning << separator;
+                                continue;
+                            }
+                        }
                     }
 
                     // valid request number received
@@ -336,23 +359,35 @@ int main()
                         std::string columnNumberPrompt = "Enter number of columns you want to change: ";
 
                         std::cout << separator;
-                        std::cout << columnNumberPrompt;
-                        std::cin >> columnsCount;
-
-                        while (!ctrl.validColumnsCount(columnsCount, columns))
                         {
-                            std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
-                            std::cout << columnNumberPrompt;
-                            std::cin >> columnsCount;
+                            bool tried = false; // true if already failed once to input columnsCount
+                            while (!ctrl.validColumnsCount(columnsCount, columns))
+                            {
+                                if (tried)
+                                {
+                                    std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
+                                }
+                                else
+                                {
+                                    tried = true;
+                                }
+                                std::cout << columnNumberPrompt;
+                                std::cin >> columnsCount;
+                                if (!ctrl.intInputGuard(std::cin))
+                                {
+                                    columnsCount = 0;
+                                    std::cout << separator << intInputWarning << separator;
+                                    continue;
+                                }
+                            }
                         }
 
                         // valid columnsCount
-                        
+
                         std::vector<std::string> columnsToUpdate;
                         std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
                         std::string columnPrompt = "Column: ";
                         bool canceled = false;
-
 
                         std::cout << separator;
                         for (size_t i = 0; i < columnsCount; ++i)
@@ -448,8 +483,9 @@ int main()
                         std::cout << wherePrompt;
                         std::cout << warningAboutQuotations;
 
-                        std::cin >> whereCondition;
-                         if (whereCondition == "cancel")
+                        std::cin.ignore();
+                        std::getline(std::cin, whereCondition);
+                        if (whereCondition == "cancel")
                         {
                             // returning to main menu
                             std::cout << separator << mainMenuPrompt;
@@ -460,7 +496,9 @@ int main()
 
                         if (ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition))
                         {
-                            std::cout << "Your request was successful\n" << separator << mainMenuPrompt;
+                            std::cout << "Your request was successful\n"
+                                      << separator << mainMenuPrompt;
+                            continue;
                         }
                         else
                         {
