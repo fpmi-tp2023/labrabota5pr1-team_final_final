@@ -458,7 +458,15 @@ int main()
 
                         // we are all set, passing data to createUpdateQuery method in controller
 
-                        ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition);
+                        if (ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition))
+                        {
+                            std::cout << "Your request was successful\n" << separator << mainMenuPrompt;
+                        }
+                        else
+                        {
+                            std::cout << "Something went wrong during with your request. Aborting\n.";
+                            break;
+                        }
                     }
                 }
                 else if (request == 9)
