@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "controller.h"
+#include <sstream>
 
 TEST(TestConnection, TestPositive)
 {
@@ -96,4 +97,96 @@ TEST(TestAddLogin, TestWithDeleteLogin)
     EXPECT_TRUE(ctrl.deleteLogin(dummyLogin, dummyPassword));
     EXPECT_FALSE(ctrl.existingLogin(dummyLogin));
     EXPECT_FALSE(ctrl.deleteLogin(dummyLogin, dummyPassword));
+}
+
+TEST(TestValidUpdateRequestNumber, TestAll)
+{
+    Controller ctrl;
+    EXPECT_TRUE(ctrl.validUpdateRequestNumber(0));
+    EXPECT_TRUE(ctrl.validUpdateRequestNumber(1));
+    EXPECT_FALSE(ctrl.validUpdateRequestNumber(2));
+    EXPECT_FALSE(ctrl.validUpdateRequestNumber(-1));
+}
+
+TEST(TestValidTable, TestAll)
+{
+    Controller ctrl;
+    std::vector<std::string> testVector = {"a", "ba", "ce", "asdfansdf"};
+    EXPECT_TRUE(ctrl.validTable("a", testVector));
+    EXPECT_TRUE(ctrl.validTable("ba", testVector));
+    EXPECT_FALSE(ctrl.validTable("ca", testVector));
+    EXPECT_FALSE(ctrl.validTable("lksdmfnkajg", testVector));
+}
+
+TEST(TestGetTables, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::vector<std::string> expectedAnswer = {
+        "artist", 
+        "discs", 
+        "login",
+        "operation", 
+        "operation_details", 
+        "operation_type", 
+        "role"};
+    EXPECT_EQ(expectedAnswer, ctrl.getTables());
+}
+
+TEST(TestColumnsMethods, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::vector<std::string> expectedAnswer = {
+        "artist_id",
+        "name"
+    };
+    std::vector<std::string> columns = ctrl.getColumns("artist");
+    ASSERT_EQ(expectedAnswer, columns);
+
+    EXPECT_TRUE(ctrl.validColumnsCount(1, columns));
+    EXPECT_TRUE(ctrl.validColumnsCount(2, columns));
+    EXPECT_FALSE(ctrl.validColumnsCount(3, columns));
+    EXPECT_FALSE(ctrl.validColumnsCount(0, columns));
+
+    EXPECT_TRUE(ctrl.validColumn("name", columns));
+    EXPECT_TRUE(ctrl.validColumn("artist_id", columns));
+    EXPECT_FALSE(ctrl.validColumn("asdgasdg", columns));
+}
+
+TEST(TestIntInputGuard, TestAll)
+{
+    Controller ctrl;
+    std::istringstream in("1 asdgsadgasd");
+    int value = 0;
+    in >> value;
+    EXPECT_TRUE(ctrl.intInputGuard(in));
+    in >> value;
+    EXPECT_FALSE(ctrl.intInputGuard(in));
+}
+
+TEST(TestUpdateQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.createUpdateQuery("artist", {"name"}, {"'petya'"}, "artist_id = 1"));
+    EXPECT_TRUE(ctrl.createUpdateQuery("artist", {"name", "artist_id"}, {"'vasya'", "25"}, "artist_id = 1"));
+    EXPECT_FALSE(ctrl.createUpdateQuery("artist", {"name"}, {"petya"}, "artist_id = 1"));
+}
+
+TEST(TestDeleteQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.createDeleteQuery("artist", "artist_id = 1"));
+    EXPECT_FALSE(ctrl.createDeleteQuery("artist", "artist_id = afsdag"));
+}
+
+TEST(TestInsertQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.createInsertQuery("artist", {"artist_id", "name"}, {{"17", "'vasya'"}, {"23", "'petya'"}}));
+    EXPECT_TRUE(ctrl.createDeleteQuery("artist", "artist_id = 17 OR artist_id = 23"));
+    EXPECT_FALSE(ctrl.createInsertQuery("artist", {"artist_id", "name"}, {{"17", "vasya"}, {"23", "petya"}}));
 }
