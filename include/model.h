@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 
 class Model
 {
@@ -25,6 +26,9 @@ private:
     // it appears it doesn't get invoked at all so it can be commented
     //static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
+    // invoked by sqlite during getTables method
+    static int getTables_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+    
 public:
     Model(const std::string& dbFileName);
 
@@ -45,6 +49,9 @@ public:
 
     // deletes login from database
     bool deleteLogin(const std::string& login) const;
+
+    // retreives all table names from db and puts them into tables vector
+    void getTables(std::vector<std::string>& tables) const;
 
     ~Model();
 };
