@@ -140,6 +140,7 @@ int main()
         if (authorized)
         {
             std::cout << "Welcome: " << login << "\n";
+            std::string mainMenuPrompt = "*you have returned to the main menu. 0 to see menu*\n";
             std::string menuAdminMessage =
                 "Main menu. To choose a command enter the corresponding number:\n"
                 "0. See this message\n"
@@ -271,8 +272,6 @@ int main()
                 else if (request == 9)
                 {
                     // [admin menu] 9. Update tables
-
-                    std::string mainMenuPrompt = "*you have returned to the main menu. 0 to see menu*\n";
                     int requestNumber = -1;
                     {
                         std::string requestPrompt =
@@ -515,6 +514,11 @@ int main()
                 else if (request == 10)
                 {
                     // [admin menu] 10. Delete from tables
+
+                    std::cout << separator;
+                    std::cout << "Delete from table:\n";
+                    
+                        
                 }
                 else if (request == 11)
                 {
