@@ -165,6 +165,18 @@ bool Controller::createUpdateQuery(
 {
     return dbModel->updateQuery(table, columnsToUpdate, valuesForColumns, whereCondition);
 }
+
+bool Controller::intInputGuard(std::istream& in) const
+{
+    if (in.fail()) // int can't be read as input is not integer
+    {
+        in.clear(); // reset in to the good state
+        in.ignore(Controller::maxStreamSize, '\n'); // discard all bad characters before a new \n
+        return false;
+    }
+    return true;
+}
+
 Controller::~Controller()
 {
     if (dbModel) // check if pointer is not null
