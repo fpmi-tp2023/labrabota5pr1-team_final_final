@@ -36,6 +36,18 @@ public:
 
     // deletes login with password from database, used only for tests!!!
     bool deleteLogin(const std::string& login, const std::string& password) const;
+
+    //get the most popular cd
+    std::string getTheMostPopularCD()const;
+
+    //get the most popular artist
+    std::string getTheMostPopularArtist()const;
+
+    //Get information on quantity of sold and left in stock records of every record
+    std::string getCurrentQuantityOfCD()const;
+
+    //Get information on quantity of sold copies and the cost of given record for given period
+    std::string getQuantityOfCDPeriod()const;
     
     ~Controller();
 };
