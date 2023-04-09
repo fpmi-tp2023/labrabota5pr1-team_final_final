@@ -502,7 +502,7 @@ int main()
                         }
                         else
                         {
-                            std::cout << "Something went wrong during with your request. Aborting\n.";
+                            std::cout << "Something went wrong during with your request. Aborting\n";
                             break;
                         }
                     }
