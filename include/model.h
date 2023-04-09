@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 
 class Model
 {
@@ -25,6 +26,12 @@ private:
     // it appears it doesn't get invoked at all so it can be commented
     //static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
+    // invoked by sqlite during getTables method
+    static int getTables_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+
+    // invoked by sqlite during getColumns method
+    static int getColumns_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 
@@ -45,6 +52,20 @@ public:
 
     // deletes login from database
     bool deleteLogin(const std::string& login) const;
+
+    // retreives all table names from db and puts them into tables vector
+    void getTables(std::vector<std::string>* tables) const;
+
+    // retreives all columns from a given table and puts them into columns vector
+    void getColumns(std::vector<std::string>* columns, const std::string& table) const;
+
+    // create and performs update query with given params. Returns true when successful
+    bool updateQuery(
+        const std::string& table,
+        const std::vector<std::string>& columnsToUpdate,
+        const std::vector<std::string>& valuesForColumns,
+        const std::string& whereCondition
+    ) const;
 
     ~Model();
 };

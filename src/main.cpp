@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "controller.h"
 
 int main()
@@ -15,12 +16,12 @@ int main()
 
     while (true) // main authorization cycle
     {
-        std::string response = "";
         std::string role = "";
         std::string login = "";
 
         if (!authorized)
         {
+            std::string response = "";
             std::cout << "You are currently unauthorized. Enter sign-in or sign-up or quit\n";
             std::cin >> response;
             while (response != "quit" && !ctrl.validResponseAuth(response)) // waiting for valid response
@@ -150,7 +151,7 @@ int main()
                 "6. Get the quantity of sold copies of the most popular artist\n"
                 "7. Insert new values into tables\n"
                 "8. Update tables\n"
-                "9. Delete tables\n"
+                "9. Delete from tables\n"
                 "10. Get information on delivered and sold copies of every record for given period\n"
                 "11. Get information on sales of given record for given period\n";
             std::string menuUserMessage =
@@ -162,125 +163,375 @@ int main()
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
+            std::string separator = "----------------------------\n";
+            std::string intInputWarning =
+                "A value of integer type must be entered\n";
+
+            int request = 0;
+
             role = ctrl.getRole(login);
-            if (role == "admin")
-            {
-                int request = 0;
+            std::string roleAdmin = "admin";
+            std::string roleUser = "user";
 
+            if (role == roleAdmin)
+            {
                 std::cout << menuAdminMessage;
-                while (true) // main admin menu cycle
-                {
-                    std::cout << requestPrompt;
-                    std::cin >> request;
-                    if (request == 0)
-                    {
-                        // [admin menu] 0. See this message
-                        std::cout << menuAdminMessage;
-                    }
-                    else if (request == 1)
-                    {
-                        // [admin menu] 1. Quit
-                        return 0;
-                    }
-                    else if (request == 2)
-                    {
-                        // [admin menu] 2. Logout
-                        authorized = false;
-                        continue;
-                    }
-                    else if (request == 3)
-                    {
-                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
-                    }
-                    else if (request == 4)
-                    {
-                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    }
-                    else if (request == 5)
-                    {
-                        // [admin menu] 5. Get all the information of the most sold record
-                    }
-                    else if (request == 6)
-                    {
-                        // [admin menu] 6. Get the quantity of sold copies of the most popular artist
-                    }
-                    else if (request == 7)
-                    {
-                        // [admin menu] 7. Insert new values into tables
-                    }
-                    else if (request == 8)
-                    {
-                        // [admin menu] 8. Update tables
-                    }
-                    else if (request == 9)
-                    {
-                        // [admin menu] 9. Delete tables
-                    }
-                    else if (request == 10)
-                    {
-                        // [admin menu] 10. Get information on delivered and sold copies of every record for given period
-                    }
-                    else if (request == 11)
-                    {
-                        // [admin menu] 11. Get information on sales of given record for given period
-                    }
-                    else
-                    {
-                        // [admin menu] unrecognized option, printing the menu
-                        std::cout << menuAdminMessage;
-                    }
-                    std::cout << "\n";
-                }
             }
-            else if (role == "user")
+            else if (role == roleUser)
             {
-                int request = 0;
-
                 std::cout << menuUserMessage;
-                while (true) // main user menu cycle
-                {
-                    std::cout << requestPrompt;
-                    std::cin >> request;
-                    if (request == 0)
-                    {
-                        // [user menu] 0. See this message
-                        std::cout << menuAdminMessage;
-                    }
-                    else if (request == 1)
-                    {
-                        // [user menu] 1. Quit
-                        return 0;
-                    }
-                    else if (request == 2)
-                    {
-                        // [user menu] 2. Logout
-                        authorized = false;
-                        continue;
-                    }
-                    else if (request == 3)
-                    {
-                        // [user menu] 3. Get all the information of the most sold record
-                    }
-                    else if (request == 4)
-                    {
-                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
-                    }
-                    else if (request == 5)
-                    {
-                        // [user menu] 5. Get information on sales of given record for given period
-                    }
-                    else
-                    {
-                        // unrecognized option, printing the menu
-                        std::cout << menuUserMessage;
-                    }
-                    std::cout << "\n";
-                }
             }
             else
             {
                 // undefined role = logout
                 authorized = false;
+                continue;
+            }
+
+            while (true) // main menu cycle
+            {
+                std::cout << requestPrompt;
+                std::cin >> request;
+                if (!ctrl.intInputGuard(std::cin)) // false if something went wrong when reading int
+                {
+                    std::cout << separator << intInputWarning << separator;
+                    continue;
+                }
+
+                if (request == 0)
+                {
+                    // [admin menu/user menu]
+                    // 0. See this message
+                    if (role == roleAdmin)
+                    {
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (role == roleUser)
+                    {
+                        std::cout << menuUserMessage;
+                    }
+                }
+                else if (request == 1)
+                {
+                    // [admin menu/user menu] 1. Quit
+                    return 0;
+                }
+                else if (request == 2)
+                {
+                    // [admin menu/user menu] 2. Logout
+                    authorized = false;
+                    break;
+                }
+                else if (request == 3)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 3. Get all the information of the most sold record
+                    }
+                }
+                else if (request == 4)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
+                    }
+                }
+                else if (request == 5)
+                {
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 5. Get all the information of the most sold record
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 5. Get information on sales of given record for given period
+                    }
+                }
+                else if (request == 6)
+                {
+                    // [admin menu] 6. Get the quantity of sold copies of the most popular artist
+                }
+                else if (request == 7)
+                {
+                    // [admin menu] 7. Insert new values into tables
+                }
+                else if (request == 8)
+                {
+                    // [admin menu] 8. Update tables
+                    std::string mainMenuPrompt =
+                        "*you have returned to the main menu. 0 to see menu*\n";
+                    int requestNumber = -1;
+                    {
+                        std::string requestPrompt =
+                            "Enter corresponding request number:\n"
+                            "0: return to menu\n"
+                            "1: default sql update query (with input prompts)\n";
+                        std::string requestInputPrompt =
+                            "Request: ";
+
+                        std::cout << separator;
+                        std::cout << "Update table:\n";
+                        std::cout << requestPrompt << requestInputPrompt;
+
+                        bool tried = false; // true if requestNumber was invalid once, false if it's first try
+                        while (!ctrl.validUpdateRequestNumber(requestNumber))
+                        {
+                            if (tried) // already failed to input requestNumber
+                            {
+                                std::cout << "Invalid request number. Try again: ";
+                            }
+                            else // first time trying to ente rrequestNumber
+                            {
+                                tried = true;
+                            }
+                            std::cin >> requestNumber;
+                            if (!ctrl.intInputGuard(std::cin)) // false if something went wrong
+                            {
+                                requestNumber = -1;
+                                std::cout << separator << intInputWarning << separator;
+                                continue;
+                            }
+                        }
+                    }
+
+                    // valid request number received
+
+                    if (requestNumber == 0)
+                    {
+                        // return to main admin menu
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
+                    }
+                    else if (requestNumber == 1)
+                    {
+                        std::vector<std::string> tables = ctrl.getTables();
+
+                        std::cout << separator;
+                        std::cout << "List of all tables: \n";
+                        for (const auto &table : tables)
+                        {
+                            std::cout << table << ' ';
+                        }
+                        std::cout << "\n";
+
+                        std::string tableToUpdate;
+
+                        std::cout << separator << "Choose a table or enter cancel\n";
+                        std::cout << "Table: ";
+                        std::cin >> tableToUpdate;
+
+                        while (tableToUpdate != "cancel" && !ctrl.validTable(tableToUpdate, tables))
+                        {
+                            std::cout << "Unknown table. Try again or enter cancel\n";
+                            std::cout << "Table: ";
+                            std::cin >> tableToUpdate;
+                        }
+
+                        if (tableToUpdate == "cancel")
+                        {
+                            // return to main admin menu
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        // valid table received
+
+                        std::cout << separator;
+                        std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
+
+                        std::cout << "List of columns of " + tableToUpdate + ":\n";
+                        for (const auto &column : columns)
+                        {
+                            std::cout << column << " ";
+                        }
+                        std::cout << "\n";
+
+                        int columnsCount = 0;
+                        std::string currentColumn;
+                        std::string columnNumberPrompt = "Enter number of columns you want to change: ";
+
+                        std::cout << separator;
+                        {
+                            bool tried = false; // true if already failed once to input columnsCount
+                            while (!ctrl.validColumnsCount(columnsCount, columns))
+                            {
+                                if (tried)
+                                {
+                                    std::cout << "Number of columns must be in range (1, " << columns.size() << "). Try again\n";
+                                }
+                                else
+                                {
+                                    tried = true;
+                                }
+                                std::cout << columnNumberPrompt;
+                                std::cin >> columnsCount;
+                                if (!ctrl.intInputGuard(std::cin))
+                                {
+                                    columnsCount = 0;
+                                    std::cout << separator << intInputWarning << separator;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // valid columnsCount
+
+                        std::vector<std::string> columnsToUpdate;
+                        std::string columnPromptWithCancel = "Enter column for processing or cancel\n";
+                        std::string columnPrompt = "Column: ";
+                        bool canceled = false;
+
+                        std::cout << separator;
+                        for (size_t i = 0; i < columnsCount; ++i)
+                        {
+                            if (canceled)
+                            {
+                                break;
+                            }
+
+                            std::cout << columnPromptWithCancel;
+                            std::cout << columnPrompt;
+                            std::cin >> currentColumn;
+
+                            while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                            {
+                                std::cout << "No such column. Try again or enter cancel\n";
+                                std::cout << columnPrompt;
+                                std::cin >> currentColumn;
+                            }
+
+                            if (currentColumn == "cancel") // cancel option
+                            {
+                                canceled = true;
+                                break;
+                            }
+
+                            // valid column received
+                            columnsToUpdate.push_back(currentColumn);
+                        }
+
+                        if (canceled) // was canceled inside a cycle
+                        {
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        // valid columnsToUpdate
+
+                        // now trying to fetch new values for selected columns
+
+                        std::vector<std::string> valuesForColumns;
+                        std::string valuePromptWithCancel = "Enter values for corresponding columns or cancel\n";
+                        std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
+                        std::string valuePrompt = "Value: ";
+                        std::string currentValue;
+
+                        std::cout << separator;
+                        std::cout << valuePromptWithCancel;
+                        std::cout << warningAboutQuotations;
+                        for (size_t i = 0; i < columnsCount; ++i)
+                        {
+                            if (canceled)
+                            {
+                                break;
+                            }
+                            std::cout << "Current column: " << columnsToUpdate[i] << "\n";
+                            std::cout << valuePrompt;
+                            std::cin >> currentValue;
+
+                            if (currentValue == "cancel")
+                            {
+                                canceled = true;
+                                continue;
+                            }
+
+                            valuesForColumns.push_back(currentValue);
+                        }
+
+                        if (canceled) // was canceled in previous cycle
+                        {
+                            // returning to main menu
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        // now we have valid values for corresponding columns
+
+                        // all we need is where clause
+
+                        std::cout << separator;
+                        std::cout << "List of all columns: \n";
+
+                        for (const auto &column : columns)
+                        {
+                            std::cout << column << ' ';
+                        }
+                        std::cout << "\n";
+
+                        std::string wherePrompt = "Now enter your where condition (without the word \"where\") or cancel\n";
+                        std::string whereCondition;
+
+                        std::cout << separator;
+                        std::cout << wherePrompt;
+                        std::cout << warningAboutQuotations;
+
+                        std::cin.ignore();
+                        std::getline(std::cin, whereCondition);
+                        if (whereCondition == "cancel")
+                        {
+                            // returning to main menu
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        // we are all set, passing data to createUpdateQuery method in controller
+
+                        if (ctrl.createUpdateQuery(tableToUpdate, columnsToUpdate, valuesForColumns, whereCondition))
+                        {
+                            std::cout << "Your request was successful\n"
+                                      << separator << mainMenuPrompt;
+                            continue;
+                        }
+                        else
+                        {
+                            std::cout << "Something went wrong during with your request. Aborting\n";
+                            break;
+                        }
+                    }
+                }
+                else if (request == 9)
+                {
+                    // [admin menu] 9. Delete from tables
+                }
+                else if (request == 10)
+                {
+                    // [admin menu] 10. Get information on delivered and sold copies of every record for given period
+                }
+                else if (request == 11)
+                {
+                    // [admin menu] 11. Get information on sales of given record for given period
+                }
+                else
+                {
+                    // [admin menu/user menu] unrecognized option, printing the menu
+                    if (role == roleAdmin)
+                    {
+                        std::cout << menuAdminMessage;
+                    }
+                    else if (role == roleUser)
+                    {
+                        std::cout << menuUserMessage;
+                    }
+                }
+                std::cout << "\n";
             }
         }
     }

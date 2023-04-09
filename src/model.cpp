@@ -145,6 +145,70 @@ bool Model::deleteLogin(const std::string& login) const
     }
 }
 
+int Model::getTables_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+{
+    ((std::vector<std::string>*)optional)->push_back(std::string(data[0]));
+    return 0;
+}
+
+void Model::getTables(std::vector<std::string>* tables) const
+{
+    std::string sqlGetTablesQuery = 
+    "SELECT name\n"
+    "FROM sqlite_schema\n"
+    "WHERE type = 'table' AND name NOT LIKE 'sqlite_%';";
+    int result = sqlite3_exec(db, sqlGetTablesQuery.c_str(), getTables_Callback, tables, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving tables from db, fname = getTables: " << sqlite3_errmsg(db) << "\n";
+    }
+}
+
+int Model::getColumns_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+{
+    ((std::vector<std::string> *)optional)->push_back(data[1]);
+    return 0;
+}
+
+void Model::getColumns(std::vector<std::string>* columns, const std::string& table) const
+{
+    std::string sqlGetColumnsQuery = 
+    "PRAGMA table_info(" + table + ");";
+    int result = sqlite3_exec(db, sqlGetColumnsQuery.c_str(), getColumns_Callback, columns, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving columns from db, fname = getColumns: " << sqlite3_errmsg(db) << "\n";
+    }
+}
+
+bool Model::updateQuery(
+    const std::string& table,
+    const std::vector<std::string>& columnsToUpdate,
+    const std::vector<std::string>& valuesForColumns,
+    const std::string& whereCondition
+) const
+{
+    std::string sqlUpdateQuery = 
+    "UPDATE " + table + "\n";
+    for (size_t i = 0; i < columnsToUpdate.size(); ++i)
+    {
+        if (i != 0)
+        {
+            sqlUpdateQuery += ",";
+        }
+        sqlUpdateQuery += "SET " + columnsToUpdate[i] + " = " + valuesForColumns[i];
+    }
+    sqlUpdateQuery += "\nWHERE " + whereCondition + ";";
+    int result = sqlite3_exec(db, sqlUpdateQuery.c_str(), 0, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Something went wrong on updating the database, fname = updateQuery: " << sqlite3_errmsg(db) << "\n";
+        return false;
+    }
+    return true;
+}
+
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
