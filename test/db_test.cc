@@ -170,6 +170,7 @@ TEST(TestUpdateQuery, TestAll)
     Controller ctrl;
     ctrl.connectDB("RecordStore.db");
     EXPECT_TRUE(ctrl.createUpdateQuery("artist", {"name"}, {"'petya'"}, "artist_id = 1"));
+    EXPECT_TRUE(ctrl.createUpdateQuery("artist", {"name", "artist_id"}, {"'vasya'", "25"}, "artist_id = 1"));
     EXPECT_FALSE(ctrl.createUpdateQuery("artist", {"name"}, {"petya"}, "artist_id = 1"));
 }
 
