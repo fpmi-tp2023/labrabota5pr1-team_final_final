@@ -24,7 +24,7 @@ build_test: dirs $(TESTEXEC)
 $(TESTEXEC): $(test_obj)
 	$(CC) $(test_obj) -o bin/test_main  $(TESTFLAGS)
 obj/%.o: test/%.cc
-	$(CC) -c $< -o $@ $(TESTFLAGS)
+	$(CC) -c $< -o $@ $(INCLUDE)
 obj/t%.o: src/%.cpp
 	$(CC) $(COVERAGE) -c $< -o $@ $(INCLUDE)
 $(EXEC): $(obj)
