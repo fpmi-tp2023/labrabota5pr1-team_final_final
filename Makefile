@@ -5,7 +5,7 @@ COVERAGE = -fprofile-arcs -ftest-coverage
 CC = g++
 test_obj = obj/db_test.o obj/tcontroller.o obj/tmodel.o
 obj = obj/main.o obj/controller.o obj/model.o
-CFLAGS = $(INCLUDE) $(LIB)
+CPPFLAGS = $(INCLUDE) $(LIB)
 TESTFLAGS = $(INCLUDE) $(LIB) $(LIBTEST)
 EXEC = bin/main
 TESTEXEC = bin/test_main
@@ -26,11 +26,11 @@ $(TESTEXEC): $(test_obj)
 obj/%.o: test/%.cc
 	$(CC) -c $< -o $@ $(TESTFLAGS)
 obj/t%.o: src/%.cpp
-	$(CC) $(COVERAGE) -c $< -o $@ $(TESTFLAGS)
+	$(CC) $(COVERAGE) -c $< -o $@ $(INCLUDE)
 $(EXEC): $(obj)
-	$(CC) $(obj) -o bin/main $(CFLAGS)
+	$(CC) $(obj) -o bin/main $(CPPFLAGS)
 obj/%.o: src/%.cpp
-	$(CC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $@ $(INCLUDE)
 dirs:
 	-mkdir -p obj bin
 clean:
