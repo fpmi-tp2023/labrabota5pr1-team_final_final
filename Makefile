@@ -6,8 +6,8 @@ CC = g++
 test_obj = obj/db_test.o obj/tcontroller.o obj/tmodel.o
 obj = obj/main.o obj/controller.o obj/model.o
 FLAGS = -std=c++17
-CPPFLAGS = $(FLAGS) $(INCLUDE) $(LIB)
-TESTFLAGS = $(FLAGS) $(INCLUDE) $(LIB) $(LIBTEST)
+CPPFLAGS = $(FLAGS) $(INCLUDE)
+TESTFLAGS = $(FLAGS) $(INCLUDE)
 EXEC = bin/main
 TESTEXEC = bin/test_main
 .PHONY: dirs clean run build test report build_test
@@ -23,15 +23,15 @@ test: dirs $(TESTEXEC)
 	./$(TESTEXEC)
 build_test: dirs $(TESTEXEC)
 $(TESTEXEC): $(test_obj)
-	$(CC) $(test_obj) -o bin/test_main  $(TESTFLAGS)
+	$(CC) $(TESTFLAGS) $(test_obj) -o bin/test_main  $(TESTLIB) $(LIB)
 obj/%.o: test/%.cc
-	$(CC) -c $< -o $@ $(INCLUDE)
+	$(CC) $(TESTFLAGS)-c $< -o $@
 obj/t%.o: src/%.cpp
-	$(CC) $(COVERAGE) -c $< -o $@ $(INCLUDE)
+	$(CC) $(COVERAGE) $(TESTFLAGS) -c $< -o $@ 
 $(EXEC): $(obj)
-	$(CC) $(obj) -o bin/main $(CPPFLAGS)
+	$(CC) $(CPPFLAGS) $(obj) -o bin/main $(LIB)
 obj/%.o: src/%.cpp
-	$(CC) -c $< -o $@ $(INCLUDE)
+	$(CC) $(CPPFLAGS) -c $< -o $@
 dirs:
 	-mkdir -p obj bin
 clean:
