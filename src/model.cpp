@@ -147,10 +147,6 @@ bool Model::deleteLogin(const std::string& login) const
 
 int Model::getTables_Callback(void* optional, int numberOfColumns, char** data, char** headers)
 {
-    std::cout << "callback\n";
-    std::cout << numberOfColumns;
-    std::cout << data[0] << "\n";
-    std::cout << ((std::vector<std::string>*)optional)->size() << "\n";
     ((std::vector<std::string>*)optional)->push_back(std::string(data[0]));
     return 0;
 }
