@@ -145,6 +145,20 @@ bool Model::deleteLogin(const std::string& login) const
     }
 }
 
+
+void Model::getTables(std::vector<std::string>& tables) const
+{
+    std::string sqlGetTablesQuery = 
+    "SELECT name\n"
+    "FROM sqlite_schema\n"
+    "WHERE type = 'table' AND name NOT LIKE 'sqlite_%";
+    int result = sqlite3_exec(db, sqlGetTablesQuery.c_str(), Model::getRole_Callback, &tables, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving tables from db, fname = getTables: " << sqlite3_errmsg(db) << "\n";
+    }
+}
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
