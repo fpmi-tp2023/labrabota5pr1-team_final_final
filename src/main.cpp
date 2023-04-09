@@ -475,6 +475,49 @@ int main()
 
                     std::cout << separator;
                     std::cout << "Delete from table:\n";
+                    std::string tableToDeleteFrom;
+                    std::string whereCondition;
+                    {
+                        std::string tableInputPrompt = "Table: ";
+                        std::string tableWrongInputPrompt = "Unknown table. Try again on enter cancel\n";
+                        std::string tableFirstPromt = "Enter table name or cancel\n";
+
+                        std::string allTables = "List of all tables\n";
+                        std::vector<std::string> tables = ctrl.getTables();
+
+                        std::string whereConditionPrompt = "Enter where condition(without the word \"where\")\n";
+                        std::string warningAboutQuotationMarks = "Don't forget to enclose string literals into single quotation marks('')\n";
+                        std::string whereConditionInputPrompt = "WHERE ";
+
+                        std::cout << separator;
+                        std::cout << allTables;
+                        for (const auto& table: tables)
+                        {
+                            std::cout << table << ' ';
+                        }
+                        std::cout << separator;
+
+                        std::cout << tableFirstPromt;
+                        std::cout << tableInputPrompt;
+                        std::cin >> tableToDeleteFrom;
+                        while(tableToDeleteFrom != "cancel" && !ctrl.validTable(tableToDeleteFrom, tables))
+                        {
+                            std::cout << tableWrongInputPrompt;
+                            std::cout << tableInputPrompt;
+                            std::cin >> tableToDeleteFrom;
+                        }
+
+                        if (tableToDeleteFrom == "cancel") // cancel option
+                        {
+                            std::cout << mainMenuPrompt;
+                            continue;
+                        }
+
+                        //now we have valid table, all we need is where condition
+
+
+
+                    }
                 }
                 else if (request == 11)
                 {
