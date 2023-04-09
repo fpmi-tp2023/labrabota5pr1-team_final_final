@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <limits>
 #include "model.h"
 
 class Controller
@@ -9,6 +10,8 @@ private:
     std::string dbName;
     Model *dbModel = nullptr;
 public:
+    static constexpr auto maxStreamSize = std::numeric_limits<std::streamsize>::max(); // constant for maximum stream size
+
     Controller();
 
     // connects a db by given dbName
@@ -63,5 +66,8 @@ public:
         const std::vector<std::string>& valuesForColumns,
         const std::string& whereCondition) const;
     
+    // protects stream in from blocking on wrong input. Returns true if everything ok
+    bool intInputGuard(std::istream& in) const;
+
     ~Controller();
 };
