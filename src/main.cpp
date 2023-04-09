@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "controller.h"
+#include <iomanip>
 
 int main()
 {
@@ -228,32 +229,26 @@ int main()
                 else if (request == 3 && role == roleAdmin)
                 {
                     // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
+                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getCurrentQuantityOfCD();
                 }
                 else if (request == 4 && role == roleAdmin)
                 {
                     // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
+                    std::cout << "Enter the beginning of time interval";
+                    std::string beginin;
+                    std::cin >> beginin;
+                    std::cout << "Enter the ending of time interval";
+                    std::string ending;
+                    std::cin >> ending;
+                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getQuantityOfCDPeriod();
                 }
                 else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
-                    if (role == roleAdmin)
-                    {
-                        // [admin menu] 5. Get all the information of the most sold record
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 3. Get all the information of the most sold record
-                    }
+                    std::cout << "The most popular cd:" << ctrl.getTheMostPopularCD();
                 }
                 else if ((request == 6 && role == roleAdmin) || (request == 4 && role == roleUser))
                 {
-                    if (role == roleAdmin)
-                    {
-                        // [admin menu] 6. Get the quantity of sold copies of the most popular artist
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
-                    }
+                    std::cout << "The most popular Artist:" << ctrl.getTheMostPopularArtist();
                 }
                 else if (request == 7 && role == roleAdmin)
                 {

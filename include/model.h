@@ -18,7 +18,7 @@ private:
     // invoked by sqlite during getRole method
     static int getRole_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
-    // invoked by sqlite during addLogin methid
+    // invoked by sqlite during addLogin method
     // it appears it doesn't get invoked at all so it can be commented
     //static int addLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
@@ -26,6 +26,14 @@ private:
     // it appears it doesn't get invoked at all so it can be commented
     //static int deleteLogin_Callback(void* optional, int numberOfColumns, char** data, char** headers);
 
+    //invoked by sqlite during getTheMostPopularCD method
+    static int TheMostPopularCD_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
+    //invoked by sqlite during getTheMostPopularArtist method
+    static int TheMostPopularArtist_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
+    //invoked by sqlite during getCurrentQuantityOfCD method
+    static int CurrentQuantityOfCD_Callback(void* optional, int numberOfColumns, char** data, char** headers);
     // invoked by sqlite during getTables method
     static int getTables_Callback(void *optional, int numberOfColumns, char** data, char** headers);
 
@@ -53,6 +61,17 @@ public:
     // deletes login from database
     bool deleteLogin(const std::string& login) const;
 
+    //get the most popular cd
+    std::string getTheMostPopularCD()const;
+
+    //get the most popular artist
+    std::string getTheMostPopularArtist()const;
+
+    //Get information on quantity of sold and left in stock records of every record
+    std::string getCurrentQuantityOfCD()const;
+
+    //Get information on quantity of sold copies and the cost of given record for given period
+    std::string getQuantityOfCDPeriod()const;
     // retreives all table names from db and puts them into tables vector
     void getTables(std::vector<std::string>* tables) const;
 

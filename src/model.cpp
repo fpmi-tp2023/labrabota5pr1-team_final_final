@@ -275,3 +275,113 @@ Model::~Model()
     sqlite3_close(db); // close db
     db = nullptr;
 }
+
+int Model::TheMostPopularCD_Callback(void* first_arg, int numberOfColumns, char** data, char** headers)
+{
+    std::string &TheMostPopularCD = *(std::string *)first_arg;
+    TheMostPopularCD = data[0];
+    TheMostPopularCD += ".\nCurrent amount of sold disks:";
+    TheMostPopularCD += data[1];
+    return 0;
+}
+
+int Model::TheMostPopularArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::string &TheMostPopularArtist = *(std::string *)first_arg;
+    TheMostPopularArtist = data[0];
+    TheMostPopularArtist += ".\nCurrent amount of sold disks:";
+    TheMostPopularArtist += data[1];
+    return 0;
+}
+
+int Model::CurrentQuantityOfCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::string &CurrentQuantityOfCD = *(std::string *)first_arg;
+    CurrentQuantityOfCD += data[0];
+    CurrentQuantityOfCD += " | ";
+    CurrentQuantityOfCD += data[1];
+    CurrentQuantityOfCD += " | ";
+    CurrentQuantityOfCD += data[2];
+    CurrentQuantityOfCD += "\n";
+    return 0;
+}
+
+std::string Model::getTheMostPopularCD()const
+{
+    std::string TheMostPopularCDQuery =
+    "SELECT discs.name,sum(operation_details.quantity)\n"
+    "FROM operation_details\n"
+    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+    "WHERE operation_type.operation_type = 'Sell'\n"
+    "GROUP BY operation_details.discs_id\n"
+    "ORDER BY operation_details.quantity DESC\n"
+    "LIMIT 1;";
+    std::string TheMostPopularCD;
+    int result = sqlite3_exec(db, TheMostPopularCDQuery.c_str(), TheMostPopularCD_Callback, &TheMostPopularCD, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularCD: " << sqlite3_errmsg(db) << "\n";
+        return std::string();
+    }
+    else
+    {
+        return TheMostPopularCD;
+    }
+}
+
+std::string Model::getTheMostPopularArtist() const
+{
+    std::string TheMostPopularArtistQuery =
+    "SELECT artist.name,sum(operation_details.quantity)\n"
+    "FROM operation_details\n"
+    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+    "INNER JOIN artist ON discs.artist_id=artist.artist_id\n"
+    "WHERE operation_type.operation_type = 'Sell'\n"
+    "GROUP BY discs.artist_id\n"
+    "ORDER BY operation_details.quantity DESC\n"
+    "LIMIT 1;";
+    std::string TheMostPopularArtist;
+    int result = sqlite3_exec(db, TheMostPopularArtistQuery.c_str(), TheMostPopularArtist_Callback, &TheMostPopularArtist, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularCD: " << sqlite3_errmsg(db) << "\n";
+        return std::string();
+    }
+    else
+    {
+        return TheMostPopularArtist;
+    }
+}
+
+std::string Model::getCurrentQuantityOfCD() const
+{
+    std::string CurrentQuantityOfCDQuery =
+    "SELECT discs.name,sum(operation_details.quantity),discs.amount_in_stock\n"
+    "FROM operation_details\n"
+    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+    "WHERE operation_type.operation_type = 'Sell'\n"
+    "GROUP BY discs.discs_id\n"
+    "ORDER BY discs.amount_in_stock DESC;";
+    std::string CurrentQuantityOfCD;
+    int result = sqlite3_exec(db, CurrentQuantityOfCDQuery.c_str(), CurrentQuantityOfCD_Callback, &CurrentQuantityOfCD, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularCD: " << sqlite3_errmsg(db) << "\n";
+        return std::string();
+    }
+    else
+    {
+        return CurrentQuantityOfCD;
+    }
+}
+
+std::string Model::getQuantityOfCDPeriod() const
+{
+    return "not ready yet";
+}

@@ -106,6 +106,26 @@ bool Controller::deleteLogin(const std::string &login, const std::string &passwo
     }
 }
 
+std::string Controller::getTheMostPopularCD()const
+{
+    return dbModel->getTheMostPopularCD();
+}
+
+std::string Controller::getTheMostPopularArtist() const
+{
+    return dbModel->getTheMostPopularArtist();
+}
+
+std::string Controller::getCurrentQuantityOfCD() const
+{
+    return dbModel->getCurrentQuantityOfCD();
+}
+
+std::string Controller::getQuantityOfCDPeriod() const
+{
+    return dbModel->getQuantityOfCDPeriod();
+}
+
 bool Controller::validUpdateRequestNumber(int requestNumber) const
 {
     return (requestNumber == 0 || requestNumber == 1);
@@ -193,6 +213,7 @@ bool Controller::createInsertQuery(
 {
     return dbModel->insertQuery(table, columns, values);
 }
+
 Controller::~Controller()
 {
     if (dbModel) // check if pointer is not null
@@ -201,3 +222,4 @@ Controller::~Controller()
         dbModel = nullptr;
     }
 }
+
