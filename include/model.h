@@ -29,6 +29,9 @@ private:
     // invoked by sqlite during getTables method
     static int getTables_Callback(void *optional, int numberOfColumns, char** data, char** headers);
 
+    // invoked by sqlite during getColumns method
+    static int getColumns_Callback(void* optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 
@@ -52,6 +55,9 @@ public:
 
     // retreives all table names from db and puts them into tables vector
     void getTables(std::vector<std::string>* tables) const;
+
+    // retreives all columns from a given table and puts them into columns vector
+    void getColumns(std::vector<std::string>* columns, const std::string& table) const;
 
     ~Model();
 };
