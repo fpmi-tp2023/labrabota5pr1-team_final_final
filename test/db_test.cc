@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "controller.h"
+#include <sstream>
 
 TEST(TestConnection, TestPositive)
 {
@@ -132,7 +133,7 @@ TEST(TestGetTables, TestAll)
     EXPECT_EQ(expectedAnswer, ctrl.getTables());
 }
 
-TEST(TestGetColumns, TestAll)
+TEST(TestColumnsMethods, TestAll)
 {
     Controller ctrl;
     ctrl.connectDB("RecordStore.db");
@@ -140,5 +141,26 @@ TEST(TestGetColumns, TestAll)
         "artist_id",
         "name"
     };
-    EXPECT_EQ(expectedAnswer, ctrl.getColumns("artist"));
+    std::vector<std::string> columns = ctrl.getColumns("artist");
+    ASSERT_EQ(expectedAnswer, columns);
+
+    EXPECT_TRUE(ctrl.validColumnsCount(1, columns));
+    EXPECT_TRUE(ctrl.validColumnsCount(2, columns));
+    EXPECT_FALSE(ctrl.validColumnsCount(3, columns));
+    EXPECT_FALSE(ctrl.validColumnsCount(0, columns));
+
+    EXPECT_TRUE(ctrl.validColumn("name", columns));
+    EXPECT_TRUE(ctrl.validColumn("artist_id", columns));
+    EXPECT_FALSE(ctrl.validColumn("asdgasdg", columns));
+}
+
+TEST(TestIntInputGuard, TestAll)
+{
+    Controller ctrl;
+    std::istringstream in("1 asdgsadgasd");
+    int value = 0;
+    in >> value;
+    EXPECT_TRUE(ctrl.intInputGuard(in));
+    in >> value;
+    EXPECT_FALSE(ctrl.intInputGuard(in));
 }
