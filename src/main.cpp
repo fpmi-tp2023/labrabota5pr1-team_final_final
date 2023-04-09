@@ -282,6 +282,8 @@ int main()
                         {
                             std::cout << table << ' ';
                         }
+                        std::cout << "\n";
+                        std::cout << separator;
 
                         std::cout << tableFirstInputPrompt;
                         std::cout << tableInputPrompt;
@@ -320,8 +322,9 @@ int main()
                         {
                             std::cout << column << ' ';
                         }
+                        std::cout << "\n";
 
-                        std::cout << separator << columnsNumberPrompt;
+                        std::cout << separator;
                         {
                             bool tried = false;
                             std::cout << columnsNumberPrompt;
@@ -366,7 +369,7 @@ int main()
                                 while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
                                 {
                                     std::cout << columnWrongInputPrompt;
-                                    std::cout << columnPrompt;
+                                    std::cout << columnInputPrompt;
                                     std::cin >> currentColumn;
                                 }
 
@@ -392,7 +395,7 @@ int main()
                         // fetching values for columnsToInsert
                         int recordNumber = -1;
                         std::string recordPrompt = "Enter values for record ";
-                        std::string columnValueInputPrompt = "Enter value for column";
+                        std::string columnValueInputPrompt = "Enter value for column ";
                         std::string columnValuePrompt = "Enter values for corresponging columns or cancel\n";
                         std::string recordNumberPrompt = "Record number: \n";
                         std::string recordNumberInputPrompt = "Enter number of records\n";
@@ -400,6 +403,7 @@ int main()
 
                         {
                             bool tried = false;
+                            std::cout << separator;
                             std::cout << recordNumberInputPrompt;
                             while (recordNumber <= 0)
                             {
@@ -424,6 +428,7 @@ int main()
 
                         // now we have valid recordNumber
                         valuesToInsert.resize(recordNumber);
+                        std::cout << separator;
                         std::cout << columnValuePrompt;
                         std::cout << warningAboutQuotations;
                         {
@@ -434,11 +439,11 @@ int main()
                                 {
                                     break;
                                 }
-                                std::cout << recordPrompt << i << "\n";
+                                std::cout << recordPrompt << i << ":\n";
                                 for (size_t j = 0; j < columnsToInsert.size(); ++j)
                                 {
                                     std::string currentValue;
-                                    std::cout << columnValueInputPrompt << columnsToInsert[i] << ": ";
+                                    std::cout << "\t" << columnValueInputPrompt << columnsToInsert[j] << ": ";
                                     std::cin >> currentValue;
 
                                     if (currentValue == "cancel")
@@ -461,6 +466,7 @@ int main()
                         // now we have valuesToInsert
                     }
 
+                    std::cout << separator;
                     if (!ctrl.createInsertQuery(tableToInsert, columnsToInsert, valuesToInsert))
                     {
                         std::cout << "Your request failed\n";
