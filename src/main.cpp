@@ -260,7 +260,45 @@ int main()
                 }
                 else if (request == 8 && role == roleAdmin)
                 {
-                    // [admin menu] 8 . Insert new values into tables
+                    // [admin menu] 8. Insert new values into tables
+
+                    std::string tableToInsert;
+                    std::vector<std::string> columns;
+                    std::vector<std::vector<std::string>> valuesToInsert;
+
+                    std::cout << separator << "Insert values into table: \n" << separator;
+                    {
+                        std::string allTables = "List of all tables:\n";
+                        std::string tableFirstInputPrompt = "Enter table where to insert values or enter cancel\n";
+                        std::string tableNoSuchTablePrompt = "Unknown table. Try again or enter cancel\n";
+                        std::string tableInputPrompt = "Table: ";
+
+                        std::vector<std::string> tables = ctrl.getTables();
+
+                        std::cout << allTables;
+                        for (const auto& table: tables)
+                        {
+                            std::cout << table << ' ';
+                        }
+
+                        std::cout << tableFirstInputPrompt;
+                        std::cout << tableInputPrompt;
+                        std::cin >> tableToInsert;
+                        while(tableToInsert != "cancel" && !ctrl.validTable(tableToInsert, tables))
+                        {
+                            std::cout << tableNoSuchTablePrompt;
+                            std::cout << tableInputPrompt;
+                            std::cin >> tableToInsert;
+                        }
+
+                        if (tableToInsert == "cancel") // cancel option
+                        {
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        //now we have valid table
+                    }
                 }
                 else if (request == 9 && role == roleAdmin)
                 {
