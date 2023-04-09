@@ -69,10 +69,17 @@ public:
     // protects stream in from blocking on wrong input. Returns true if everything ok
     bool intInputGuard(std::istream& in) const;
 
-    // creates delete query and perfomrs it. Returns true when successful
+    // creates delete query and performs it. Returns true when successful
     bool createDeleteQuery(
         const std::string& table,
         const std::string& whereCondition
+    ) const;
+
+    // creates insert query and performs it. Returns true when successful
+    bool createInsertQuery(
+        const std::string& table,
+        const std::vector<std::string>& columns,
+        const std::vector<std::vector<std::string>>& values
     ) const;
 
     ~Controller();

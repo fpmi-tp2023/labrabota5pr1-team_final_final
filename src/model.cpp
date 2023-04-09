@@ -54,7 +54,7 @@ bool Model::existingLogin(const std::string &login) const
 
 int Model::getPasswordHash_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
-    std::string &passwordHash = *(std::string*)first_arg; // by assigning this variable c-style string we can pass it outside
+    std::string &passwordHash = *(std::string *)first_arg; // by assigning this variable c-style string we can pass it outside
     passwordHash = data[0];
     return 0;
 }
@@ -79,7 +79,7 @@ std::string Model::getPasswordHash(const std::string &login) const
     }
 }
 
-int Model::getRole_Callback(void* first_arg, int numberOfColumns, char** data, char** headers)
+int Model::getRole_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &role = *(std::string *)first_arg; // by assigning this variable some value we can pass it outside
     role = data[0];
@@ -110,12 +110,13 @@ std::string Model::getRole(const std::string &login) const
     return 0;
 }*/
 
-void Model::addLogin(const std::string& login, const std::string& hashedPassword) const
+void Model::addLogin(const std::string &login, const std::string &hashedPassword) const
 {
-    std::string sqlAddLoginQuery = 
-    "INSERT INTO login(login, hash, role_id) VALUES\n"
-    "('" + login + "', '" + hashedPassword + "', 1);";
-    //int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), addLogin_Callback, 0, 0);
+    std::string sqlAddLoginQuery =
+        "INSERT INTO login(login, hash, role_id) VALUES\n"
+        "('" +
+        login + "', '" + hashedPassword + "', 1);";
+    // int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), addLogin_Callback, 0, 0);
     int result = sqlite3_exec(db, sqlAddLoginQuery.c_str(), 0, 0, 0);
     if (result != SQLITE_OK)
     {
@@ -127,12 +128,13 @@ void Model::addLogin(const std::string& login, const std::string& hashedPassword
 {
     return 0;
 }*/
-bool Model::deleteLogin(const std::string& login) const
+bool Model::deleteLogin(const std::string &login) const
 {
-    std::string sqlDeleteQuery = 
-    "DELETE FROM login\n"
-    "WHERE login = '" + login + "';";
-    //int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), deleteLogin_Callback, 0, 0);
+    std::string sqlDeleteQuery =
+        "DELETE FROM login\n"
+        "WHERE login = '" +
+        login + "';";
+    // int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), deleteLogin_Callback, 0, 0);
     int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), 0, 0, 0);
     if (result != SQLITE_OK)
     {
@@ -145,18 +147,18 @@ bool Model::deleteLogin(const std::string& login) const
     }
 }
 
-int Model::getTables_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+int Model::getTables_Callback(void *optional, int numberOfColumns, char **data, char **headers)
 {
-    ((std::vector<std::string>*)optional)->push_back(std::string(data[0]));
+    ((std::vector<std::string> *)optional)->push_back(std::string(data[0]));
     return 0;
 }
 
-void Model::getTables(std::vector<std::string>* tables) const
+void Model::getTables(std::vector<std::string> *tables) const
 {
-    std::string sqlGetTablesQuery = 
-    "SELECT name\n"
-    "FROM sqlite_schema\n"
-    "WHERE type = 'table' AND name NOT LIKE 'sqlite_%';";
+    std::string sqlGetTablesQuery =
+        "SELECT name\n"
+        "FROM sqlite_schema\n"
+        "WHERE type = 'table' AND name NOT LIKE 'sqlite_%';";
     int result = sqlite3_exec(db, sqlGetTablesQuery.c_str(), getTables_Callback, tables, 0);
     if (result != SQLITE_OK)
     {
@@ -164,16 +166,16 @@ void Model::getTables(std::vector<std::string>* tables) const
     }
 }
 
-int Model::getColumns_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+int Model::getColumns_Callback(void *optional, int numberOfColumns, char **data, char **headers)
 {
     ((std::vector<std::string> *)optional)->push_back(data[1]);
     return 0;
 }
 
-void Model::getColumns(std::vector<std::string>* columns, const std::string& table) const
+void Model::getColumns(std::vector<std::string> *columns, const std::string &table) const
 {
-    std::string sqlGetColumnsQuery = 
-    "PRAGMA table_info(" + table + ");";
+    std::string sqlGetColumnsQuery =
+        "PRAGMA table_info(" + table + ");";
     int result = sqlite3_exec(db, sqlGetColumnsQuery.c_str(), getColumns_Callback, columns, 0);
     if (result != SQLITE_OK)
     {
@@ -182,14 +184,13 @@ void Model::getColumns(std::vector<std::string>* columns, const std::string& tab
 }
 
 bool Model::updateQuery(
-    const std::string& table,
-    const std::vector<std::string>& columnsToUpdate,
-    const std::vector<std::string>& valuesForColumns,
-    const std::string& whereCondition
-) const
+    const std::string &table,
+    const std::vector<std::string> &columnsToUpdate,
+    const std::vector<std::string> &valuesForColumns,
+    const std::string &whereCondition) const
 {
-    std::string sqlUpdateQuery = 
-    "UPDATE " + table + "\nSET ";
+    std::string sqlUpdateQuery =
+        "UPDATE " + table + "\nSET ";
     for (size_t i = 0; i < columnsToUpdate.size(); ++i)
     {
         if (i != 0)
@@ -208,19 +209,62 @@ bool Model::updateQuery(
     return true;
 }
 
-
 bool Model::deleteQuery(
-    const std::string& table,
-    const std::string& whereCondition
-) const
+    const std::string &table,
+    const std::string &whereCondition) const
 {
     std::string sqlDeleteQuery =
-    "DELETE FROM " + table + "\n"
-    "WHERE " + whereCondition + ";";
+        "DELETE FROM " + table + "\n"
+                                 "WHERE " +
+        whereCondition + ";";
     int result = sqlite3_exec(db, sqlDeleteQuery.c_str(), 0, 0, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Something went wrong in deleting from database, fname = deleteQuery: " << sqlite3_errmsg(db) << "\n";
+        return false;
+    }
+    return true;
+}
+
+bool Model::insertQuery(
+    const std::string &table,
+    const std::vector<std::string> &columns,
+    const std::vector<std::vector<std::string>> &values) const
+{
+    std::string sqlInsertQuery = "INSERT INTO " + table + "(";
+    for (size_t i = 0; i < columns.size(); ++i)
+    {
+        if (i != 0)
+        {
+            sqlInsertQuery += ", ";
+        }
+        sqlInsertQuery += columns[i];
+    }
+
+    sqlInsertQuery += ") VALUES\n";
+
+    for (size_t i = 0; i < values.size(); ++i)
+    {
+        if (i != 0)
+        {
+            sqlInsertQuery += ",\n";
+        }
+        sqlInsertQuery += "(";
+        for (size_t j = 0; j < values[i].size(); ++j)
+        {
+            if (j != 0)
+            {
+                sqlInsertQuery += ", ";
+            }
+            sqlInsertQuery += values[i][j];
+        }
+        sqlInsertQuery += ")";
+    }
+    sqlInsertQuery += ";";
+    int result = sqlite3_exec(db, sqlInsertQuery.c_str(), 0, 0, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Something went wrong on inserting into database, fname = insertQuery: " << sqlite3_errmsg(db) << "\n";
         return false;
     }
     return true;

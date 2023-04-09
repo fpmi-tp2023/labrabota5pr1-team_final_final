@@ -168,6 +168,7 @@ int main()
             std::string separator = "----------------------------\n";
             std::string intInputWarning =
                 "A value of integer type must be entered\n";
+            std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
 
             int request = 0;
 
@@ -260,7 +261,223 @@ int main()
                 }
                 else if (request == 8 && role == roleAdmin)
                 {
-                    // [admin menu] 8 . Insert new values into tables
+                    // [admin menu] 8. Insert new values into tables
+
+                    std::string tableToInsert;
+                    std::vector<std::string> columnsToInsert;
+                    std::vector<std::vector<std::string>> valuesToInsert;
+
+                    std::cout << separator << "Insert values into table: \n"
+                              << separator;
+                    {
+                        std::string allTables = "List of all tables:\n";
+                        std::string tableFirstInputPrompt = "Enter table where to insert values or enter cancel\n";
+                        std::string tableNoSuchTablePrompt = "Unknown table. Try again or enter cancel\n";
+                        std::string tableInputPrompt = "Table: ";
+
+                        std::vector<std::string> tables = ctrl.getTables();
+
+                        std::cout << allTables;
+                        for (const auto &table : tables)
+                        {
+                            std::cout << table << ' ';
+                        }
+                        std::cout << "\n";
+                        std::cout << separator;
+
+                        std::cout << tableFirstInputPrompt;
+                        std::cout << tableInputPrompt;
+                        std::cin >> tableToInsert;
+                        while (tableToInsert != "cancel" && !ctrl.validTable(tableToInsert, tables))
+                        {
+                            std::cout << tableNoSuchTablePrompt;
+                            std::cout << tableInputPrompt;
+                            std::cin >> tableToInsert;
+                        }
+
+                        if (tableToInsert == "cancel") // cancel option
+                        {
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
+
+                        // now we have valid table
+                    }
+                    {
+                        // fetching columns
+
+                        int columnsNumber = -1;
+                        std::string columnsNumberPrompt = "Enter number of columns you want to use. 0 stands for all of them except id column\n";
+                        std::string columnsNumberInputPrompt = "Columns number: ";
+                        std::string columnsNumberWrongInputPrompt = "Invalid columns number. Try again\n";
+                        std::string columnPrompt = "Enter columns where to insert new values\n";
+                        std::string columnInputPrompt = "Column: ";
+                        std::string columnWrongInputPrompt = "Invalid column. Try again or enter cancel\n";
+                        std::string allColumns = "List of all columns:\n";
+
+                        std::vector<std::string> columns = ctrl.getColumns(tableToInsert);
+
+                        std::cout << separator << allColumns;
+                        for (const auto &column : columns)
+                        {
+                            std::cout << column << ' ';
+                        }
+                        std::cout << "\n";
+
+                        std::cout << separator;
+                        {
+                            bool tried = false;
+                            std::cout << columnsNumberPrompt;
+                            while (columnsNumber != 0 && !ctrl.validColumnsCount(columnsNumber, columns))
+                            {
+                                if (tried)
+                                {
+                                    std::cout << columnsNumberWrongInputPrompt;
+                                }
+                                else
+                                {
+                                    tried = true;
+                                }
+                                std::cout << columnsNumberInputPrompt;
+                                std::cin >> columnsNumber;
+                                if (!ctrl.intInputGuard(std::cin))
+                                {
+                                    std::cout << separator << intInputWarning << separator;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if (columnsNumber == 0)
+                        {
+                            for (size_t i = 1; i < columns.size(); ++i)
+                            {
+                                columnsToInsert.push_back(columns[i]);
+                            }
+                        }
+                        else
+                        {
+                            std::string currentColumn;
+                            bool canceled = false;
+
+                            std::cout << separator;
+                            std::cout << columnPrompt;
+                            for (size_t i = 0; i < columnsNumber; ++i)
+                            {
+                                std::cout << columnInputPrompt;
+                                std::cin >> currentColumn;
+                                while (currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                                {
+                                    std::cout << columnWrongInputPrompt;
+                                    std::cout << columnInputPrompt;
+                                    std::cin >> currentColumn;
+                                }
+
+                                if (currentColumn == "cancel") // cancel option
+                                {
+                                    canceled = true;
+                                    break;
+                                }
+
+                                // now we have valid column
+                                columnsToInsert.push_back(currentColumn);
+                            }
+
+                            if (canceled) // cancel option
+                            {
+                                std::cout << separator << mainMenuPrompt;
+                                continue;
+                            }
+                        }
+                        // now we have valid columns to insert
+                    }
+                    {
+                        // fetching values for columnsToInsert
+                        int recordNumber = -1;
+                        std::string recordPrompt = "Enter values for record ";
+                        std::string columnValueInputPrompt = "Enter value for column ";
+                        std::string columnValuePrompt = "Enter values for corresponging columns or cancel\n";
+                        std::string recordNumberPrompt = "Record number: \n";
+                        std::string recordNumberInputPrompt = "Enter number of records\n";
+                        std::string recordNumberWrongInput = "Invalid number of records. Try again\n";
+
+                        {
+                            bool tried = false;
+                            std::cout << separator;
+                            std::cout << recordNumberInputPrompt;
+                            while (recordNumber <= 0)
+                            {
+                                if (tried)
+                                {
+                                    std::cout << recordNumberWrongInput;
+                                }
+                                else
+                                {
+                                    tried = true;
+                                }
+
+                                std::cout << recordNumberPrompt;
+                                std::cin >> recordNumber;
+                                if (!ctrl.intInputGuard(std::cin))
+                                {
+                                    std::cout << separator << intInputWarning << separator;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // now we have valid recordNumber
+                        valuesToInsert.resize(recordNumber);
+                        std::cout << separator;
+                        std::cout << columnValuePrompt;
+                        std::cout << warningAboutQuotations;
+                        {
+                            bool canceled = false;
+                            for (size_t i = 0; i < recordNumber; ++i)
+                            {
+                                if (canceled)
+                                {
+                                    break;
+                                }
+                                std::cout << recordPrompt << i << ":\n";
+                                for (size_t j = 0; j < columnsToInsert.size(); ++j)
+                                {
+                                    std::string currentValue;
+                                    std::cout << "\t" << columnValueInputPrompt << columnsToInsert[j] << ": ";
+                                    std::cin >> currentValue;
+
+                                    if (currentValue == "cancel")
+                                    {
+                                        canceled = true;
+                                        break;
+                                    }
+
+                                    valuesToInsert[i].push_back(currentValue);
+                                }
+                            }
+
+                            if (canceled)
+                            {
+                                std::cout << separator << mainMenuPrompt;
+                                continue;
+                            }
+                        }
+
+                        // now we have valuesToInsert
+                    }
+
+                    std::cout << separator;
+                    if (!ctrl.createInsertQuery(tableToInsert, columnsToInsert, valuesToInsert))
+                    {
+                        std::cout << "Your request failed\n";
+                    }
+                    else
+                    {
+                        std::cout << "Your request was successful\n";
+                    }
+
+                    std::cout << "Returning to main menu\n";
+                    std::cout << separator << mainMenuPrompt;
                 }
                 else if (request == 9 && role == roleAdmin)
                 {
@@ -386,7 +603,6 @@ int main()
 
                     std::vector<std::string> valuesForColumns;
                     std::string valuePromptWithCancel = "Enter values for corresponding columns or cancel\n";
-                    std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
                     std::string valuePrompt = "Value: ";
                     std::string currentValue;
 

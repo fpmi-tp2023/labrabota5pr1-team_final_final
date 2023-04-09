@@ -185,6 +185,14 @@ bool Controller::createDeleteQuery(
     return dbModel->deleteQuery(table, whereCondition);
 }
 
+bool Controller::createInsertQuery(
+    const std::string& table,
+    const std::vector<std::string>& columns,
+    const std::vector<std::vector<std::string>>& values
+) const
+{
+    return dbModel->insertQuery(table, columns, values);
+}
 Controller::~Controller()
 {
     if (dbModel) // check if pointer is not null
