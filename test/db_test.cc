@@ -115,5 +115,19 @@ TEST(TestValidTable, TestAll)
     EXPECT_TRUE(ctrl.validTable("ba", testVector));
     EXPECT_FALSE(ctrl.validTable("ca", testVector));
     EXPECT_FALSE(ctrl.validTable("lksdmfnkajg", testVector));
+}
 
+TEST(TestGetTables, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::vector<std::string> expectedAnswer = {
+        "artist", 
+        "discs", 
+        "login",
+        "operation", 
+        "operation_details", 
+        "operation_type", 
+        "role"};
+    EXPECT_EQ(expectedAnswer, ctrl.getTables());
 }
