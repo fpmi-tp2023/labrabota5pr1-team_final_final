@@ -180,6 +180,30 @@ void Model::getColumns(std::vector<std::string>* columns, const std::string& tab
         std::cerr << "Error on retreiving columns from db, fname = getColumns: " << sqlite3_errmsg(db) << "\n";
     }
 }
+
+bool Model::updateQuery(
+    const std::string& table,
+    const std::vector<std::string>& columnsToUpdate,
+    const std::vector<std::string>& valuesForColumns,
+    const std::string& whereCondition
+) const
+{
+    std::string sqlUpdateQuery = 
+    "UPDATE " + table + "\n";
+    for (size_t i = 0; i < columnsToUpdate.size(); ++i)
+    {
+        if (i != 0)
+        {
+            sqlUpdateQuery += ",";
+        }
+        sqlUpdateQuery += "SET " + columnsToUpdate[i] + " = " + valuesForColumns[i];
+    }
+    sqlUpdateQuery += "\nWHERE " + whereCondition + ";";
+    std::cout << sqlUpdateQuery << "\n";
+    return true;
+}
+
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
