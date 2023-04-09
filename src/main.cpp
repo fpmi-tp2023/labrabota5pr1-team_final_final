@@ -515,12 +515,13 @@ int main()
                     {
                         std::string whereConditionPrompt = "Enter where condition(without the word \"where\") or cancel\n";
                         std::string warningAboutQuotationMarks = "Don't forget to enclose string literals into single quotation marks('')\n";
-                        std::string whereConditionInputPrompt = "Where condition";
+                        std::string whereConditionInputPrompt = "Where condition: ";
 
                         std::cout << whereConditionPrompt;
                         std::cout << warningAboutQuotationMarks;
                         std::cout << whereConditionInputPrompt;
-                        std::cin >> whereCondition;
+                        std::cin.ignore();
+                        getline(std::cin, whereCondition);
 
                         if (whereCondition == "cancel") // cancel option
                         {
