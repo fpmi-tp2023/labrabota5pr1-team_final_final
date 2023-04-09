@@ -157,13 +157,13 @@ bool Controller::validColumn(const std::string &column, const std::vector<std::s
     return ans;
 }
 
-void Controller::createUpdateQuery(
+bool Controller::createUpdateQuery(
     const std::string &table,
     const std::vector<std::string> &columnsToUpdate,
     const std::vector<std::string> &valuesForColumns,
     const std::string &whereCondition) const
 {
-    //TODO
+    return dbModel->updateQuery(table, columnsToUpdate, valuesForColumns, whereCondition);
 }
 Controller::~Controller()
 {
