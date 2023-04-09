@@ -150,7 +150,7 @@ int main()
                 "4. Get information on quantity of sold copies and the cost of given record for given period\n"
                 "5. Get all the information of the most sold record\n"
                 "6. Get the quantity of sold copies of the most popular artist\n"
-                "7. Get the quantity of sold copies of the records and overall sum of money for a given artist\n"
+                "7. Get the quantity of sold copies of the records and overall sum of money earned for a given artist\n"
                 "8. Insert new values into tables\n"
                 "9. Update tables\n"
                 "10. Delete from tables\n"
@@ -224,29 +224,15 @@ int main()
                     authorized = false;
                     break;
                 }
-                else if (request == 3)
+                else if (request == 3 && role == roleAdmin)
                 {
-                    if (role == roleAdmin)
-                    {
-                        // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 3. Get all the information of the most sold record
-                    }
+                    // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
                 }
-                else if (request == 4)
+                else if (request == 4 && role == roleAdmin)
                 {
-                    if (role == roleAdmin)
-                    {
-                        // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
-                    }
+                    // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
                 }
-                else if (request == 5)
+                else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
                     if (role == roleAdmin)
                     {
@@ -254,22 +240,29 @@ int main()
                     }
                     else if (role == roleUser)
                     {
-                        // [user menu] 5. Get information on sales of given record for given period
+                        // [user menu] 3. Get all the information of the most sold record
                     }
                 }
-                else if (request == 6)
+                else if ((request == 6 && role == roleAdmin) || (request == 4 && role == roleUser))
                 {
-                    // [admin menu] 6. Get the quantity of sold copies of the most popular artist
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 6. Get the quantity of sold copies of the most popular artist
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 4. Get the quantity of sold copies of the most popular artist
+                    }
                 }
-                else if (request == 7)
+                else if (request == 7 && role == roleAdmin)
                 {
                     // [admin menu] 7. Get the quantity of sold copies of the records and overall sum of money for a given artist
                 }
-                else if (request == 8)
+                else if (request == 8 && role == roleAdmin)
                 {
                     // [admin menu] 8 . Insert new values into tables
                 }
-                else if (request == 9)
+                else if (request == 9 && role == roleAdmin)
                 {
                     // [admin menu] 9. Update tables
                     std::cout << separator;
@@ -469,7 +462,7 @@ int main()
                         break;
                     }
                 }
-                else if (request == 10)
+                else if (request == 10 && role == roleAdmin)
                 {
                     // [admin menu] 10. Delete from tables
 
@@ -545,13 +538,20 @@ int main()
                         continue;
                     }
                 }
-                else if (request == 11)
+                else if (request == 11 && role == roleAdmin)
                 {
                     // [admin menu] 11. Get information on delivered and sold copies of every record for given period
                 }
-                else if (request == 12)
+                else if ((request == 12 && role == roleAdmin) || (request == 5 && role == roleUser))
                 {
-                    // [admin menu] 12. Get information on sales of given record for given period
+                    if (role == roleAdmin)
+                    {
+                        // [admin menu] 12. Get information on sales of given record for given period
+                    }
+                    else if (role == roleUser)
+                    {
+                        // [user menu] 5. Get information on sales of given record for given period
+                    }
                 }
                 else
                 {
