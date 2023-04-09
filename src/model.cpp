@@ -164,6 +164,22 @@ void Model::getTables(std::vector<std::string>* tables) const
     }
 }
 
+int Model::getColumns_Callback(void* optional, int numberOfColumns, char** data, char** headers)
+{
+    ((std::vector<std::string> *)optional)->push_back(data[1]);
+    return 0;
+}
+
+void Model::getColumns(std::vector<std::string>* columns, const std::string& table) const
+{
+    std::string sqlGetColumnsQuery = 
+    "PRAGMA table_info(" + table + ");";
+    int result = sqlite3_exec(db, sqlGetColumnsQuery.c_str(), getColumns_Callback, columns, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving columns from db, fname = getColumns: " << sqlite3_errmsg(db) << "\n";
+    }
+}
 Model::~Model()
 {
     sqlite3_close(db); // close db
