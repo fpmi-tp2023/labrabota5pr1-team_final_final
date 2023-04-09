@@ -59,7 +59,7 @@ public:
     // checks if column is present in columnList
     bool validColumn(const std::string& column, const std::vector<std::string>& columnList) const;
 
-    // creates update query and performs it
+    // creates update query and performs it. Returns true when successful
     bool createUpdateQuery(
         const std::string& table, 
         const std::vector<std::string>& columnsToUpdate, 
@@ -68,6 +68,12 @@ public:
     
     // protects stream in from blocking on wrong input. Returns true if everything ok
     bool intInputGuard(std::istream& in) const;
+
+    // creates delete query and perfomrs it. Returns true when successful
+    bool createDeleteQuery(
+        const std::string& table,
+        const std::string& whereCondition
+    );
 
     ~Controller();
 };
