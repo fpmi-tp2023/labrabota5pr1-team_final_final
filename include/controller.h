@@ -73,7 +73,7 @@ public:
     bool createDeleteQuery(
         const std::string& table,
         const std::string& whereCondition
-    );
+    ) const;
 
     ~Controller();
 };
