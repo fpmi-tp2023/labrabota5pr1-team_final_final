@@ -189,14 +189,14 @@ bool Model::updateQuery(
 ) const
 {
     std::string sqlUpdateQuery = 
-    "UPDATE " + table + "\n";
+    "UPDATE " + table + "\nSET ";
     for (size_t i = 0; i < columnsToUpdate.size(); ++i)
     {
         if (i != 0)
         {
-            sqlUpdateQuery += ",";
+            sqlUpdateQuery += ", ";
         }
-        sqlUpdateQuery += "SET " + columnsToUpdate[i] + " = " + valuesForColumns[i];
+        sqlUpdateQuery += columnsToUpdate[i] + " = " + valuesForColumns[i];
     }
     sqlUpdateQuery += "\nWHERE " + whereCondition + ";";
     int result = sqlite3_exec(db, sqlUpdateQuery.c_str(), 0, 0, 0);
