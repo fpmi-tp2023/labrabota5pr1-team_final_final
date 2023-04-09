@@ -113,9 +113,9 @@ bool Controller::validUpdateRequestNumber(int requestNumber) const
 
 std::vector<std::string> Controller::getTables() const
 {
-    std::vector<std::string> answer;
-    dbModel->getTables(&answer);
-    return answer;
+    std::vector<std::string> tables;
+    dbModel->getTables(&tables);
+    return tables;
 }
 bool Controller::validTable(const std::string &table, const std::vector<std::string> &tableList) const
 {
@@ -133,7 +133,9 @@ bool Controller::validTable(const std::string &table, const std::vector<std::str
 
 std::vector<std::string> Controller::getColumns(const std::string &table) const
 {
-    // TODO
+    std::vector<std::string> columns;
+    dbModel.getColumns(&columns, table);
+    return columns;
 }
 
 bool Controller::validColumnsCount(int columnsNumber, const std::vector<std::string> &columns) const

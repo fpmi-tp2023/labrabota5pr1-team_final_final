@@ -163,6 +163,7 @@ int main()
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
+            std::string separator = "----------------------------\n";
             int request = 0;
 
             role = ctrl.getRole(login);
@@ -262,10 +263,18 @@ int main()
                         "Enter corresponding request number:\n"
                         "0: return to menu\n"
                         "1: default sql update query (with input prompts)\n";
+                    std::string requestInputPrompt = 
+                        "Request: ";
+                    std::string mainMenuPrompt =
+                        "*you have returned to the main menu. 0 to see menu*\n";
 
-                    std::cout << requestPrompt;
+                    std::cout << separator;
+                    std::cout << requestPrompt << requestInputPrompt;
+
+                    std::cin >> requestNumber;
                     while (!ctrl.validUpdateRequestNumber(requestNumber))
                     {
+                        std::cout << "invalid request number. Try again: ";
                         std::cin >> requestNumber;
                     }
 
@@ -274,12 +283,14 @@ int main()
                     if (requestNumber == 0)
                     {
                         // return to main admin menu
+                        std::cout << separator << mainMenuPrompt;
                         continue;
                     }
                     else if (requestNumber == 1)
                     {
                         std::vector<std::string> tables = ctrl.getTables();
 
+                        std::cout << separator;
                         std::cout << "List of all tables: \n";
                         for (const auto &table : tables)
                         {
@@ -289,11 +300,11 @@ int main()
 
                         std::string tableToUpdate;
 
-                        std::cout << "Choose a table or enter cancel\n";
+                        std::cout << separator << "Choose a table or enter cancel\n";
                         std::cout << "Table: ";
                         std::cin >> tableToUpdate;
 
-                        while (tableToUpdate != "cancel" && ctrl.validTable(tableToUpdate, tables))
+                        while (tableToUpdate != "cancel" && !ctrl.validTable(tableToUpdate, tables))
                         {
                             std::cout << "Unknown table. Try again or enter cancel\n";
                             std::cout << "Table: ";
@@ -303,11 +314,13 @@ int main()
                         if (tableToUpdate == "cancel")
                         {
                             // return to main admin menu
+                            std::cout << separator << mainMenuPrompt;
                             continue;
                         }
 
                         // valid table received
 
+                        std::cout << separator;
                         std::vector<std::string> columns = ctrl.getColumns(tableToUpdate);
 
                         std::cout << "List of columns of " + tableToUpdate + ":\n";
