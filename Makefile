@@ -5,8 +5,9 @@ COVERAGE = -fprofile-arcs -ftest-coverage
 CC = g++
 test_obj = obj/db_test.o obj/tcontroller.o obj/tmodel.o
 obj = obj/main.o obj/controller.o obj/model.o
-CPPFLAGS = $(INCLUDE) $(LIB)
-TESTFLAGS = $(INCLUDE) $(LIB) $(LIBTEST)
+FLAGS = -std=c++17
+CPPFLAGS = $(FLAGS) $(INCLUDE) $(LIB)
+TESTFLAGS = $(FLAGS) $(INCLUDE) $(LIB) $(LIBTEST)
 EXEC = bin/main
 TESTEXEC = bin/test_main
 .PHONY: dirs clean run build test report build_test
