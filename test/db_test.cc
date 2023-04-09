@@ -131,3 +131,14 @@ TEST(TestGetTables, TestAll)
         "role"};
     EXPECT_EQ(expectedAnswer, ctrl.getTables());
 }
+
+TEST(TestGetColumns, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::vector<std::string> expectedAnswer = {
+        "artist_id",
+        "name"
+    };
+    EXPECT_EQ(expectedAnswer, ctrl.getColumns("artist"));
+}
