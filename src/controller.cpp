@@ -134,7 +134,7 @@ bool Controller::validTable(const std::string &table, const std::vector<std::str
 std::vector<std::string> Controller::getColumns(const std::string &table) const
 {
     std::vector<std::string> columns;
-    dbModel.getColumns(&columns, table);
+    dbModel->getColumns(&columns, table);
     return columns;
 }
 
