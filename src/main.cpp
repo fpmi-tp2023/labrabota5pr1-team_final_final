@@ -485,13 +485,9 @@ int main()
                         std::string allTables = "List of all tables\n";
                         std::vector<std::string> tables = ctrl.getTables();
 
-                        std::string whereConditionPrompt = "Enter where condition(without the word \"where\")\n";
-                        std::string warningAboutQuotationMarks = "Don't forget to enclose string literals into single quotation marks('')\n";
-                        std::string whereConditionInputPrompt = "WHERE ";
-
                         std::cout << separator;
                         std::cout << allTables;
-                        for (const auto& table: tables)
+                        for (const auto &table : tables)
                         {
                             std::cout << table << ' ';
                         }
@@ -500,7 +496,7 @@ int main()
                         std::cout << tableFirstPromt;
                         std::cout << tableInputPrompt;
                         std::cin >> tableToDeleteFrom;
-                        while(tableToDeleteFrom != "cancel" && !ctrl.validTable(tableToDeleteFrom, tables))
+                        while (tableToDeleteFrom != "cancel" && !ctrl.validTable(tableToDeleteFrom, tables))
                         {
                             std::cout << tableWrongInputPrompt;
                             std::cout << tableInputPrompt;
@@ -509,14 +505,43 @@ int main()
 
                         if (tableToDeleteFrom == "cancel") // cancel option
                         {
-                            std::cout << mainMenuPrompt;
+                            std::cout << separator << mainMenuPrompt;
                             continue;
                         }
 
-                        //now we have valid table, all we need is where condition
+                        // we have valid table name
+                    }
+                    // as we have valid table, all we need is where condition
+                    {
+                        std::string whereConditionPrompt = "Enter where condition(without the word \"where\") or cancel\n";
+                        std::string warningAboutQuotationMarks = "Don't forget to enclose string literals into single quotation marks('')\n";
+                        std::string whereConditionInputPrompt = "Where condition";
 
+                        std::cout << whereConditionPrompt;
+                        std::cout << warningAboutQuotationMarks;
+                        std::cout << whereConditionInputPrompt;
+                        std::cin >> whereCondition;
 
+                        if (whereCondition == "cancel") // cancel option
+                        {
+                            std::cout << separator << mainMenuPrompt;
+                            continue;
+                        }
 
+                        // we are left with valid where condition
+                    }
+
+                    if (ctrl.createDeleteQuery(tableToDeleteFrom, whereCondition))
+                    {
+                        std::cout << "Your query was successful. Returning to main menu\n";
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
+                    }
+                    else
+                    {
+                        std::cout << "Your query failed. Returning to main menu\n";
+                        std::cout << separator << mainMenuPrompt;
+                        continue;
                     }
                 }
                 else if (request == 11)
