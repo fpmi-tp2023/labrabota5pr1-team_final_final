@@ -8,7 +8,7 @@
 
 ### Админ
 
-![Диаграмма последовательности](pages_info/diagrams/sequence_diagram/admin/Screenshot%202023-04-07%20at%2018.36.59.png)
+![Диаграмма последовательности](pages_info/diagrams/sequence_diagram/admin/photo_2023-04-07_18-01-03.jpg)
 
 
 ## Диаграмма классов
