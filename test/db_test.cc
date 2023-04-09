@@ -164,3 +164,11 @@ TEST(TestIntInputGuard, TestAll)
     in >> value;
     EXPECT_FALSE(ctrl.intInputGuard(in));
 }
+
+TEST(TestUpdateQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    EXPECT_TRUE(ctrl.createUpdateQuery("artist", {"name"}, {"'petya'"}, "artist_id = 1"));
+    EXPECT_FALSE(ctrl.createUpdateQuery("artist", {"name"}, {"petya"}, "artist_id = 1"));
+}
