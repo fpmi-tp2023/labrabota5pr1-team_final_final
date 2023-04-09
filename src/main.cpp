@@ -263,7 +263,7 @@ int main()
                     // [admin menu] 8. Insert new values into tables
 
                     std::string tableToInsert;
-                    std::vector<std::string> columns;
+                    std::vector<std::string> columnsToInsert;
                     std::vector<std::vector<std::string>> valuesToInsert;
 
                     std::cout << separator << "Insert values into table: \n" << separator;
@@ -298,6 +298,96 @@ int main()
                         }
 
                         //now we have valid table
+                    }
+                    {
+                        // fetching columns
+
+                        int columnsNumber = -1;
+                        std::string columnsNumberPrompt = "Enter number of columns you want to use. 0 stands for all of them except id column\n";
+                        std::string columnsNumberInputPrompt = "Columns number: ";
+                        std::string columnsNumberWrongInputPrompt = "Invalid columns number. Try again\n";
+                        std::string columnPrompt = "Enter columns where to insert new values\n";
+                        std::string columnInputPrompt = "Column: ";
+                        std::string columnWrongInputPrompt = "Invalid column. Try again or enter cancel\n";
+                        std::string allColumns = "List of all columns:\n";
+
+                        std::vector<std::string> columns = ctrl.getColumns(tableToInsert);
+
+                        std::cout << separator << allColumns;
+                        for (const auto& column: columns)
+                        {
+                            std::cout << column << ' ';
+                        }
+                        
+                        std::cout << separator << columnsNumberPrompt;
+                        {
+                            bool tried = false;
+                            std::cout << columnsNumberPrompt;
+                            while(columnsNumber != 0 && !ctrl.validColumnsCount(columnsNumber, columns))
+                            {
+                                if (tried)
+                                {
+                                    std::cout << columnsNumberWrongInputPrompt;
+                                }
+                                else
+                                {
+                                    tried = true;
+                                }
+                                std::cout << columnsNumberInputPrompt;
+                                std::cin >> columnsNumber;
+                                if (!ctrl.intInputGuard(std::cin))
+                                {
+                                    std::cout << separator << intInputWarning << separator;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if (columnsNumber == 0)
+                        {
+                            for (size_t i = 1; i < columns.size(); ++i)
+                            {
+                                columnsToInsert.push_back(columns[i]);
+                            }
+                        }
+                        else
+                        {
+                            std::string currentColumn;
+                            bool canceled = false;
+
+                            std::cout << separator;
+                            std::cout << columnPrompt;
+                            for (size_t i = 0; i < columnsNumber; ++i)
+                            {
+                                std::cout << columnInputPrompt;
+                                std::cin >> currentColumn;
+                                while(currentColumn != "cancel" && !ctrl.validColumn(currentColumn, columns))
+                                {
+                                    std::cout << columnWrongInputPrompt;
+                                    std::cout << columnPrompt;
+                                    std::cin >> currentColumn;
+                                }
+
+                                if (currentColumn == "cancel") // cancel option
+                                {
+                                    canceled = true;
+                                    break;
+                                }
+
+                                //now we have valid column
+                                columnsToInsert.push_back(currentColumn);
+                            }
+
+                            if (canceled) // cancel option
+                            {
+                                std::cout << separator << mainMenuPrompt;
+                                continue;
+                            }
+                        }
+                        // now we have valid columns to insert
+                    }
+                    {
+                        // fetching values for columnsToInsert
                     }
                 }
                 else if (request == 9 && role == roleAdmin)
