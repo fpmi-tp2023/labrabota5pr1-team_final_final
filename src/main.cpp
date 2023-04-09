@@ -149,11 +149,12 @@ int main()
                 "4. Get information on quantity of sold copies and the cost of given record for given period\n"
                 "5. Get all the information of the most sold record\n"
                 "6. Get the quantity of sold copies of the most popular artist\n"
-                "7. Insert new values into tables\n"
-                "8. Update tables\n"
-                "9. Delete from tables\n"
-                "10. Get information on delivered and sold copies of every record for given period\n"
-                "11. Get information on sales of given record for given period\n";
+                "7. Get the quantity of sold copies of the records and overall sum of money for a given artist\n"
+                "8. Insert new values into tables\n"
+                "9. Update tables\n"
+                "10. Delete from tables\n"
+                "11. Get information on delivered and sold copies of every record for given period\n"
+                "12. Get information on sales of given record for given period\n";
             std::string menuUserMessage =
                 "Main menu. To choose a command enter the corresponding number:\n"
                 "0. See this message\n"
@@ -261,13 +262,17 @@ int main()
                 }
                 else if (request == 7)
                 {
-                    // [admin menu] 7. Insert new values into tables
-                }
+                    // [admin menu] 7. Get the quantity of sold copies of the records and overall sum of money for a given artist
+                } 
                 else if (request == 8)
                 {
-                    // [admin menu] 8. Update tables
-                    std::string mainMenuPrompt =
-                        "*you have returned to the main menu. 0 to see menu*\n";
+                    // [admin menu] 8 . Insert new values into tables
+                }
+                else if (request == 9)
+                {
+                    // [admin menu] 9. Update tables
+
+                    std::string mainMenuPrompt = "*you have returned to the main menu. 0 to see menu*\n";
                     int requestNumber = -1;
                     {
                         std::string requestPrompt =
@@ -507,29 +512,30 @@ int main()
                         }
                     }
                 }
-                else if (request == 9)
-                {
-                    // [admin menu] 9. Delete from tables
-                }
                 else if (request == 10)
                 {
-                    // [admin menu] 10. Get information on delivered and sold copies of every record for given period
+                    // [admin menu] 10. Delete from tables
                 }
                 else if (request == 11)
                 {
-                    // [admin menu] 11. Get information on sales of given record for given period
+                    // [admin menu] 11. Get information on delivered and sold copies of every record for given period
+                }
+                else if (request == 12)
+                {
+                    // [admin menu] 12. Get information on sales of given record for given period
                 }
                 else
                 {
                     // [admin menu/user menu] unrecognized option, printing the menu
-                    if (role == roleAdmin)
-                    {
-                        std::cout << menuAdminMessage;
-                    }
-                    else if (role == roleUser)
-                    {
-                        std::cout << menuUserMessage;
-                    }
+                    std::cout << "Unrecognized option. Enter 0 to see menu\n";
+                    // if (role == roleAdmin)
+                    // {
+                    //     std::cout << menuAdminMessage;
+                    // }
+                    // else if (role == roleUser)
+                    // {
+                    //     std::cout << menuUserMessage;
+                    // }
                 }
                 std::cout << "\n";
             }
