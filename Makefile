@@ -14,10 +14,10 @@ run: dirs $(EXEC)
 	./$(EXEC)
 build: dirs $(EXEC)
 report: test
-	lcov -c --directory obj --output-file coverage.info
+	lcov -c --directory src --directory obj --output-file coverage.info --no-external
 	genhtml coverage.info -o cov
 	rm coverage.info
-	firefox cov/index.html
+	open cov/index.html
 test: dirs $(TESTEXEC)
 	./$(TESTEXEC)
 build_test: dirs $(TESTEXEC)
