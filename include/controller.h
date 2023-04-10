@@ -48,13 +48,16 @@ public:
     std::string getTheMostPopularArtist()const;
 
     //Get information on quantity of sold and left in stock records of every record
-    std::string getCurrentQuantityOfCD()const;
+    std::vector<std::vector<std::string>> getCurrentQuantityOfCD()const;
 
     //Get information on quantity of sold copies and the cost of given record for given period
-    std::string getQuantityOfCDPeriod(std::string beginin,std::string ending)const;
+    std::vector<std::vector<std::string>> getQuantityOfCDPeriod(std::string beginin,std::string ending)const;
     
     //Get the quantity of sold copies of the records and overall sum of money for a given artist
-    std::string getInfoArtist(std::string name)const;
+    std::vector<std::string> getInfoArtist(std::string name)const;
+
+    //Get information on sales of given record for given period
+    std::vector<std::string> getInfoCDPeriod(std::string beginin,std::string ending,std::string disk_id)const;
 
     // checks if request number is valid. Valid numbers are 0 and 1
     bool validUpdateRequestNumber(int requestNumber) const;

@@ -1,6 +1,6 @@
 INCLUDE = -Iinclude
 LIB = -lsqlite3 -lssl -lcrypto
-LIBTEST = -lgtest -lgtest_main -lgcov
+LIBTEST = -lgtest -lgtest_main
 COVERAGE = -fprofile-arcs -ftest-coverage
 CC = g++
 test_obj = obj/db_test.o obj/tcontroller.o obj/tmodel.o

@@ -116,19 +116,24 @@ std::string Controller::getTheMostPopularArtist() const
     return dbModel->getTheMostPopularArtist();
 }
 
-std::string Controller::getCurrentQuantityOfCD() const
+std::vector<std::vector<std::string>> Controller::getCurrentQuantityOfCD() const
 {
     return dbModel->getCurrentQuantityOfCD();
 }
 
-std::string Controller::getQuantityOfCDPeriod(std::string beginin,std::string ending) const
+std::vector<std::vector<std::string>> Controller::getQuantityOfCDPeriod(std::string beginin,std::string ending) const
 {
     return dbModel->getQuantityOfCDPeriod(beginin,ending);
 }
 
-std::string Controller::getInfoArtist(std::string name) const
+std::vector<std::string> Controller::getInfoArtist(std::string name) const
 {
     return dbModel->getInfoArtist(name);
+}
+
+std::vector<std::string> Controller::getInfoCDPeriod(std::string beginin, std::string ending, std::string disk_id) const
+{
+    return dbModel->getInfoCDPeriod(beginin,ending,disk_id);
 }
 
 bool Controller::validUpdateRequestNumber(int requestNumber) const
@@ -142,6 +147,7 @@ std::vector<std::string> Controller::getTables() const
     dbModel->getTables(&tables);
     return tables;
 }
+
 bool Controller::validTable(const std::string &table, const std::vector<std::string> &tableList) const
 {
     bool ans = false;

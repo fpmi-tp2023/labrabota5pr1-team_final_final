@@ -47,6 +47,9 @@ private:
     // invoked by sqlite during getInfoArtist method
     static int InfoArtist_Callback(void *optional, int numberOfColumns, char** data, char** headers);
 
+    // invoked by sqlite during getInfoCDPeriod method
+    static int InfoCDPeriod_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 
@@ -75,13 +78,16 @@ public:
     std::string getTheMostPopularArtist()const;
 
     //Get information on quantity of sold and left in stock records of every record
-    std::string getCurrentQuantityOfCD()const;
+    std::vector<std::vector<std::string>> getCurrentQuantityOfCD()const;
 
     //Get information on quantity of sold copies and the cost of given record for given period
-    std::string getQuantityOfCDPeriod(std::string beginin,std::string ending)const;
+    std::vector<std::vector<std::string>> getQuantityOfCDPeriod(std::string beginin,std::string ending)const;
 
     //Get the quantity of sold copies of the records and overall sum of money for a given artist
-    std::string getInfoArtist(std::string name);
+    std::vector<std::string> getInfoArtist(std::string name)const;
+
+    //Get information on sales of given record for given period
+    std::vector<std::string> getInfoCDPeriod(std::string beginin,std::string ending,std::string disk_id)const;
 
     // retreives all table names from db and puts them into tables vector
     void getTables(std::vector<std::string>* tables) const;

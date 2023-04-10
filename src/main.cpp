@@ -229,18 +229,37 @@ int main()
                 else if (request == 3 && role == roleAdmin)
                 {
                     // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getCurrentQuantityOfCD();
+                    std::cout<< separator<< std::setw(40) << std::internal << "Name"<<"|Sold"<<"|Left\n";
+                    std::vector<std::vector<std::string>> CurrentQuantityOfCD = ctrl.getCurrentQuantityOfCD();
+                    for (int i = 0; i < CurrentQuantityOfCD.size(); i++)
+                    {
+                        std::cout<< std::setw(40) << std::internal 
+                        <<CurrentQuantityOfCD[i][0]<< "|"
+                        <<std::setw(4) <<CurrentQuantityOfCD[i][1]<< "|"
+                        <<std::setw(4) <<CurrentQuantityOfCD[i][2] << "\n";
+                    }
+                    std::cout<< separator;
                 }
                 else if (request == 4 && role == roleAdmin)
                 {
                     // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
                     std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
-                    std::string beginin;
-                    std::cin >> beginin;
+                    std::string begining;
+                    std::cin >> begining;
                     std::cout << "Enter the ending of time interval: ";
                     std::string ending;
                     std::cin >> ending;
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Profit\n" << ctrl.getQuantityOfCDPeriod(beginin,ending);
+                    std::cout<< separator<< std::setw(40) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    std::vector<std::vector<std::string>> QuantityOfCDPeriod = ctrl.getQuantityOfCDPeriod(begining,ending);
+                    for (int i = 0; i < QuantityOfCDPeriod.size(); i++)
+                    {
+                        std::cout<< std::setw(40) << std::internal 
+                        <<QuantityOfCDPeriod[i][0]<< "|"
+                        <<std::setw(4) <<QuantityOfCDPeriod[i][1]<< "|"
+                        <<std::setw(4) <<QuantityOfCDPeriod[i][2]<< "\n";
+                    }
+                    std::cout<< separator;
+                    
                 }
                 else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
@@ -257,7 +276,13 @@ int main()
                     std::string ArtistName;
                     std::cin.ignore();
                     getline(std::cin,ArtistName);
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Profit\n" << ctrl.getInfoArtist(ArtistName);
+                    std::cout<< separator<< std::setw(15) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    std::vector<std::string>InfoArtist = ctrl.getInfoArtist(ArtistName);
+                    std::cout<< std::setw(15) << std::internal 
+                        <<InfoArtist[0]<< "|"
+                        <<std::setw(4) <<InfoArtist[1]<< "|"
+                        <<std::setw(4) <<InfoArtist[2]<< "\n";
+                    std::cout<< separator;
                 }
                 else if (request == 8 && role == roleAdmin)
                 {
@@ -757,17 +782,29 @@ int main()
                 else if (request == 11 && role == roleAdmin)
                 {
                     // [admin menu] 11. Get information on delivered and sold copies of every record for given period
+
+                    
                 }
                 else if ((request == 12 && role == roleAdmin) || (request == 5 && role == roleUser))
                 {
-                    if (role == roleAdmin)
-                    {
-                        // [admin menu] 12. Get information on sales of given record for given period
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 5. Get information on sales of given record for given period
-                    }
+                    // [admin menu] 12.|[user menu] 5. Get information on sales of given record for given period
+                    std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                    std::string begining;
+                    std::cin >> begining;
+                    std::cout << "Enter the ending of time interval: ";
+                    std::string ending;
+                    std::cin >> ending;
+                    std::cout << "Enter the disk_id ";
+                    std::string disk_id;
+                    std::cin.ignore();
+                    getline(std::cin,disk_id);
+                    std::cout<< separator<< std::setw(15) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    std::vector InfoCDPeriod = ctrl.getInfoCDPeriod(begining,ending,disk_id);
+                    std::cout<< std::setw(15) << std::internal 
+                        <<InfoCDPeriod[0]<< "|"
+                        <<std::setw(4) <<InfoCDPeriod[1]<< "|"
+                        <<std::setw(4) <<InfoCDPeriod[2]<< "\n";
+                    std::cout<< separator;
                 }
                 else
                 {

@@ -124,7 +124,7 @@ void Model::addLogin(const std::string &login, const std::string &hashedPassword
     }
 }
 
-/*int Model::deleteLogin_Callback(void *optional, int numberOfColumns, char** data, char** headers)
+/*int Model::deleteLogin_Callback(void *optional, int numberOfColumns, char** data, char** headers
 {
     return 0;
 }*/
@@ -151,6 +151,31 @@ int Model::getTables_Callback(void *optional, int numberOfColumns, char **data, 
 {
     ((std::vector<std::string> *)optional)->push_back(std::string(data[0]));
     return 0;
+}
+
+std::vector<std::string> Model::getInfoCDPeriod(std::string beginin, std::string ending, std::string disk_id) const
+{
+    std::string InfoCDPeriodQuery =
+        "SELECT discs.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "WHERE operation_type.operation_type = 'Sell' and '" +
+        beginin + "' < operation.date and operation.date < '" + ending + "' and discs.discs_id = " + disk_id + "\n"
+        "GROUP BY operation_details.discs_id\n"
+        "ORDER BY operation_details.quantity DESC\n";
+    std::vector<std::string> InfoCDPeriod;
+    int result = sqlite3_exec(db, InfoCDPeriodQuery.c_str(),InfoCDPeriod_Callback, &InfoCDPeriod, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getQuantityOfCDPeriod: " << sqlite3_errmsg(db) << "\n";
+        return std::vector<std::string>();
+    }
+    else
+    {
+        return InfoCDPeriod;
+    }
 }
 
 void Model::getTables(std::vector<std::string> *tables) const
@@ -297,37 +322,39 @@ int Model::TheMostPopularArtist_Callback(void *first_arg, int numberOfColumns, c
 
 int Model::CurrentQuantityOfCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
-    std::string &CurrentQuantityOfCD = *(std::string *)first_arg;
-    CurrentQuantityOfCD += data[0];
-    CurrentQuantityOfCD += " | ";
-    CurrentQuantityOfCD += data[1];
-    CurrentQuantityOfCD += " | ";
-    CurrentQuantityOfCD += data[2];
-    CurrentQuantityOfCD += "\n";
+    std::vector<std::vector<std::string>> &CurrentQuantityOfCD = *(std::vector<std::vector<std::string>> *)first_arg;
+    CurrentQuantityOfCD.push_back(std::vector<std::string>());
+    CurrentQuantityOfCD[CurrentQuantityOfCD.size() - 1].push_back(data[0]);
+    CurrentQuantityOfCD[CurrentQuantityOfCD.size() - 1].push_back(data[1]);
+    CurrentQuantityOfCD[CurrentQuantityOfCD.size() - 1].push_back(data[2]);
     return 0;
 }
 
 int Model::QuantityOfCDPeriod_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
-    std::string &CurrentQuantityOfCD = *(std::string *)first_arg;
-    CurrentQuantityOfCD += data[0];
-    CurrentQuantityOfCD += " | ";
-    CurrentQuantityOfCD += data[1];
-    CurrentQuantityOfCD += " | ";
-    CurrentQuantityOfCD += data[2];
-    CurrentQuantityOfCD += "\n";
+    std::vector<std::vector<std::string>> &QuantityOfCDPeriod = *(std::vector<std::vector<std::string>> *)first_arg;
+    QuantityOfCDPeriod.push_back(std::vector<std::string>());
+    QuantityOfCDPeriod[QuantityOfCDPeriod.size() - 1].push_back(data[0]);
+    QuantityOfCDPeriod[QuantityOfCDPeriod.size() - 1].push_back(data[1]);
+    QuantityOfCDPeriod[QuantityOfCDPeriod.size() - 1].push_back(data[2]);
     return 0;
 }
 
 int Model::InfoArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
-    std::string &InfoArtist = *(std::string *)first_arg;
-    InfoArtist += data[0];
-    InfoArtist += " | ";
-    InfoArtist += data[1];
-    InfoArtist += " | ";
-    InfoArtist += data[2];
-    InfoArtist += "\n";
+    std::vector<std::string> &InfoArtist = *(std::vector<std::string> *)first_arg;
+    InfoArtist.push_back(data[0]);
+    InfoArtist.push_back(data[1]);
+    InfoArtist.push_back(data[2]);
+    return 0;
+}
+
+int Model::InfoCDPeriod_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::vector<std::string> &InfoCDPeriod = *(std::vector<std::string> *)first_arg;
+    InfoCDPeriod.push_back(data[0]);
+    InfoCDPeriod.push_back(data[1]);
+    InfoCDPeriod.push_back(data[2]);
     return 0;
 }
 
@@ -382,7 +409,7 @@ std::string Model::getTheMostPopularArtist() const
     }
 }
 
-std::string Model::getCurrentQuantityOfCD() const
+std::vector<std::vector<std::string>> Model::getCurrentQuantityOfCD() const
 {
     std::string CurrentQuantityOfCDQuery =
         "SELECT discs.name,sum(operation_details.quantity),discs.amount_in_stock\n"
@@ -393,12 +420,12 @@ std::string Model::getCurrentQuantityOfCD() const
         "WHERE operation_type.operation_type = 'Sell'\n"
         "GROUP BY discs.discs_id\n"
         "ORDER BY discs.amount_in_stock DESC;";
-    std::string CurrentQuantityOfCD;
+    std::vector<std::vector<std::string>> CurrentQuantityOfCD;
     int result = sqlite3_exec(db, CurrentQuantityOfCDQuery.c_str(), CurrentQuantityOfCD_Callback, &CurrentQuantityOfCD, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on retreiving data from db, fname = getCurrentQuantityOfCD: " << sqlite3_errmsg(db) << "\n";
-        return std::string();
+        return std::vector<std::vector<std::string>>();
     }
     else
     {
@@ -406,7 +433,7 @@ std::string Model::getCurrentQuantityOfCD() const
     }
 }
 
-std::string Model::getQuantityOfCDPeriod(std::string beginin, std::string ending) const
+std::vector<std::vector<std::string>> Model::getQuantityOfCDPeriod(std::string beginin, std::string ending) const
 {
     std::string QuantityOfCDPeriodQuery =
         "SELECT discs.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
@@ -418,12 +445,12 @@ std::string Model::getQuantityOfCDPeriod(std::string beginin, std::string ending
         beginin + "' < operation.date and operation.date < '" + ending + "'\n"
         "GROUP BY operation_details.discs_id\n"
         "ORDER BY operation_details.quantity DESC\n";
-    std::string QuantityOfCDPeriod;
+    std::vector<std::vector<std::string>> QuantityOfCDPeriod;
     int result = sqlite3_exec(db, QuantityOfCDPeriodQuery.c_str(),QuantityOfCDPeriod_Callback, &QuantityOfCDPeriod, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on retreiving data from db, fname = getQuantityOfCDPeriod: " << sqlite3_errmsg(db) << "\n";
-        return std::string();
+        return std::vector<std::vector<std::string>>();
     }
     else
     {
@@ -431,7 +458,7 @@ std::string Model::getQuantityOfCDPeriod(std::string beginin, std::string ending
     }
 }
 
-std::string Model::getInfoArtist(std::string name)
+std::vector<std::string> Model::getInfoArtist(std::string name)const
 {
     std::string InfoArtistQuery =
         "SELECT artist.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
@@ -443,12 +470,12 @@ std::string Model::getInfoArtist(std::string name)
         "WHERE operation_type.operation_type = 'Sell' and artist.name = '" + name + "'\n"
         "GROUP BY discs.artist_id\n"
         "ORDER BY operation_details.quantity DESC\n";
-    std::string InfoArtist;
+    std::vector<std::string> InfoArtist;
     int result = sqlite3_exec(db, InfoArtistQuery.c_str(),InfoArtist_Callback, &InfoArtist, 0);
     if (result != SQLITE_OK)
     {
         std::cerr << "Error on retreiving data from db, fname = getInfoArtist: " << sqlite3_errmsg(db) << "\n";
-        return std::string();
+        return std::vector<std::string>();
     }
     else
     {
