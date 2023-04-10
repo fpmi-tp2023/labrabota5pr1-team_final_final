@@ -121,9 +121,9 @@ std::vector<std::vector<std::string>> Controller::getCurrentQuantityOfCD() const
     return dbModel->getCurrentQuantityOfCD();
 }
 
-std::vector<std::vector<std::string>> Controller::getQuantityOfCDPeriod(std::string beginin,std::string ending) const
+std::vector<std::vector<std::string>> Controller::getQuantityOfCDPeriod(std::string begining,std::string ending) const
 {
-    return dbModel->getQuantityOfCDPeriod(beginin,ending);
+    return dbModel->getQuantityOfCDPeriod(begining,ending);
 }
 
 std::vector<std::string> Controller::getInfoArtist(std::string name) const
@@ -131,14 +131,14 @@ std::vector<std::string> Controller::getInfoArtist(std::string name) const
     return dbModel->getInfoArtist(name);
 }
 
-std::vector<std::string> Controller::getInfoCDPeriod(std::string beginin, std::string ending, std::string disk_id) const
+std::vector<std::string> Controller::getInfoCDPeriod(std::string begining, std::string ending, std::string disk_id) const
 {
-    return dbModel->getInfoCDPeriod(beginin,ending,disk_id);
+    return dbModel->getInfoCDPeriod(begining,ending,disk_id);
 }
 
-std::vector<std::vector<std::string>> Controller::getQuantityDeliveredSoldCDPeriod(std::string beginin, std::string ending) const
+std::vector<std::vector<std::string>> Controller::getQuantityDeliveredSoldCDPeriod(std::string begining, std::string ending) const
 {
-    return dbModel->getQuantityDeliveredSoldCDPeriod(beginin,ending);
+    return dbModel->getQuantityDeliveredSoldCDPeriod(begining,ending);
 }
 
 bool Controller::validUpdateRequestNumber(int requestNumber) const

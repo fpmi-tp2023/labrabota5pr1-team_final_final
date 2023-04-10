@@ -153,7 +153,7 @@ int Model::getTables_Callback(void *optional, int numberOfColumns, char **data, 
     return 0;
 }
 
-std::vector<std::string> Model::getInfoCDPeriod(std::string beginin, std::string ending, std::string disk_id) const
+std::vector<std::string> Model::getInfoCDPeriod(std::string begining, std::string ending, std::string disk_id) const
 {
     std::string InfoCDPeriodQuery =
         "SELECT discs.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
@@ -162,7 +162,7 @@ std::vector<std::string> Model::getInfoCDPeriod(std::string beginin, std::string
         "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
         "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
         "WHERE operation_type.operation_type = 'Sell' and '" +
-        beginin + "' < operation.date and operation.date < '" + ending + "' and discs.discs_id = " + disk_id + "\n"
+        begining + "' < operation.date and operation.date < '" + ending + "' and discs.discs_id = " + disk_id + "\n"
         "GROUP BY operation_details.discs_id\n"
         "ORDER BY operation_details.quantity DESC\n";
     std::vector<std::string> InfoCDPeriod;
@@ -178,7 +178,7 @@ std::vector<std::string> Model::getInfoCDPeriod(std::string beginin, std::string
     }
 }
 
-std::vector<std::vector<std::string>> Model::getQuantityDeliveredSoldCDPeriod(std::string beginin, std::string ending) const
+std::vector<std::vector<std::string>> Model::getQuantityDeliveredSoldCDPeriod(std::string begining, std::string ending) const
 {
     std::string QuantityDeliveredSoldCDPeriodQuery =
         "DROP TABLE IF EXISTS temp_table;\n" \
@@ -191,7 +191,7 @@ std::vector<std::vector<std::string>> Model::getQuantityDeliveredSoldCDPeriod(st
         "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
         "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
         "WHERE'" +
-        beginin + "' < operation.date and operation.date < '" + ending + "'\n"
+        begining + "' < operation.date and operation.date < '" + ending + "'\n"
         "GROUP BY operation_details.discs_id;\n"\
         "SELECT * from temp_table;";
     std::vector<std::vector<std::string>> QuantityDeliveredSoldCDPeriod;
@@ -334,7 +334,8 @@ Model::~Model()
 int Model::TheMostPopularCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &TheMostPopularCD = *(std::string *)first_arg;
-    TheMostPopularCD = data[0];
+    TheMostPopularCD = "The most popular cd:";
+    TheMostPopularCD += data[0];
     TheMostPopularCD += ".\nCurrent amount of sold disks:";
     TheMostPopularCD += data[1];
     return 0;
@@ -343,7 +344,8 @@ int Model::TheMostPopularCD_Callback(void *first_arg, int numberOfColumns, char 
 int Model::TheMostPopularArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &TheMostPopularArtist = *(std::string *)first_arg;
-    TheMostPopularArtist = data[0];
+    TheMostPopularArtist = "The most popular Artist:";
+    TheMostPopularArtist += data[0];
     TheMostPopularArtist += ".\nCurrent amount of sold disks:";
     TheMostPopularArtist += data[1];
     return 0;
@@ -472,7 +474,7 @@ std::vector<std::vector<std::string>> Model::getCurrentQuantityOfCD() const
     }
 }
 
-std::vector<std::vector<std::string>> Model::getQuantityOfCDPeriod(std::string beginin, std::string ending) const
+std::vector<std::vector<std::string>> Model::getQuantityOfCDPeriod(std::string begining, std::string ending) const
 {
     std::string QuantityOfCDPeriodQuery =
         "SELECT discs.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
@@ -481,7 +483,7 @@ std::vector<std::vector<std::string>> Model::getQuantityOfCDPeriod(std::string b
         "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
         "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
         "WHERE operation_type.operation_type = 'Sell' and '" +
-        beginin + "' < operation.date and operation.date < '" + ending + "'\n"
+        begining + "' < operation.date and operation.date < '" + ending + "'\n"
         "GROUP BY operation_details.discs_id\n"
         "ORDER BY operation_details.quantity DESC\n";
     std::vector<std::vector<std::string>> QuantityOfCDPeriod;

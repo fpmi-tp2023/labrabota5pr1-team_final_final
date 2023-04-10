@@ -190,3 +190,31 @@ TEST(TestInsertQuery, TestAll)
     EXPECT_TRUE(ctrl.createDeleteQuery("artist", "artist_id = 17 OR artist_id = 23"));
     EXPECT_FALSE(ctrl.createInsertQuery("artist", {"artist_id", "name"}, {{"17", "vasya"}, {"23", "petya"}}));
 }
+
+TEST(TestMostPopularCDQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::string expectedAnswer = "The most popular cd:Sgt. Pepper's Lonely Hearts Club Band.\nCurrent amount of sold disks:5";
+    EXPECT_EQ(expectedAnswer,ctrl.getTheMostPopularCD());
+}
+
+TEST(TestMostPopularArtistQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::string expectedAnswer = "The most popular Artist:The Beatles.\nCurrent amount of sold disks:5";
+    EXPECT_EQ(expectedAnswer,ctrl.getTheMostPopularArtist());
+}
+
+TEST(TestCurrentQuantityOfCDQuery, TestAll)
+{
+    Controller ctrl;
+    ctrl.connectDB("RecordStore.db");
+    std::vector<std::vector<std::string>> expectedAnswer = 
+        {{"Goodbye Yellow Brick Road","1","10"},
+        {"Sticky Fingers","4","10"},
+        {"Led Zeppelin IV","3","10"},
+        {"Sgt. Pepper's Lonely Hearts Club Band","5","10"}};
+    EXPECT_EQ(expectedAnswer,ctrl.getCurrentQuantityOfCD());
+}

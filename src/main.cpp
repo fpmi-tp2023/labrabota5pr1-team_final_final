@@ -289,11 +289,11 @@ int main()
                 }
                 else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
-                    std::cout << "The most popular cd:" << ctrl.getTheMostPopularCD();
+                    std::cout << ctrl.getTheMostPopularCD();
                 }
                 else if ((request == 6 && role == roleAdmin) || (request == 4 && role == roleUser))
                 {
-                    std::cout << "The most popular Artist:" << ctrl.getTheMostPopularArtist();
+                    std::cout << ctrl.getTheMostPopularArtist();
                 }
                 else if (request == 7 && role == roleAdmin)
                 {
