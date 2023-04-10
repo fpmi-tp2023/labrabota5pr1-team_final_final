@@ -234,13 +234,13 @@ int main()
                 else if (request == 4 && role == roleAdmin)
                 {
                     // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    std::cout << "Enter the beginning of time interval";
+                    std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
                     std::string beginin;
                     std::cin >> beginin;
-                    std::cout << "Enter the ending of time interval";
+                    std::cout << "Enter the ending of time interval: ";
                     std::string ending;
                     std::cin >> ending;
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getQuantityOfCDPeriod();
+                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Profit\n" << ctrl.getQuantityOfCDPeriod(beginin,ending);
                 }
                 else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
@@ -253,6 +253,11 @@ int main()
                 else if (request == 7 && role == roleAdmin)
                 {
                     // [admin menu] 7. Get the quantity of sold copies of the records and overall sum of money for a given artist
+                    std::cout << "Enter the artist name ";
+                    std::string ArtistName;
+                    std::cin.ignore();
+                    getline(std::cin,ArtistName);
+                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Profit\n" << ctrl.getInfoArtist(ArtistName);
                 }
                 else if (request == 8 && role == roleAdmin)
                 {

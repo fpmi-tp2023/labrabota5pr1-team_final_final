@@ -172,6 +172,7 @@ int Model::getColumns_Callback(void *optional, int numberOfColumns, char **data,
     return 0;
 }
 
+
 void Model::getColumns(std::vector<std::string> *columns, const std::string &table) const
 {
     std::string sqlGetColumnsQuery =
@@ -276,7 +277,7 @@ Model::~Model()
     db = nullptr;
 }
 
-int Model::TheMostPopularCD_Callback(void* first_arg, int numberOfColumns, char** data, char** headers)
+int Model::TheMostPopularCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &TheMostPopularCD = *(std::string *)first_arg;
     TheMostPopularCD = data[0];
@@ -306,18 +307,42 @@ int Model::CurrentQuantityOfCD_Callback(void *first_arg, int numberOfColumns, ch
     return 0;
 }
 
-std::string Model::getTheMostPopularCD()const
+int Model::QuantityOfCDPeriod_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::string &CurrentQuantityOfCD = *(std::string *)first_arg;
+    CurrentQuantityOfCD += data[0];
+    CurrentQuantityOfCD += " | ";
+    CurrentQuantityOfCD += data[1];
+    CurrentQuantityOfCD += " | ";
+    CurrentQuantityOfCD += data[2];
+    CurrentQuantityOfCD += "\n";
+    return 0;
+}
+
+int Model::InfoArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::string &InfoArtist = *(std::string *)first_arg;
+    InfoArtist += data[0];
+    InfoArtist += " | ";
+    InfoArtist += data[1];
+    InfoArtist += " | ";
+    InfoArtist += data[2];
+    InfoArtist += "\n";
+    return 0;
+}
+
+std::string Model::getTheMostPopularCD() const
 {
     std::string TheMostPopularCDQuery =
-    "SELECT discs.name,sum(operation_details.quantity)\n"
-    "FROM operation_details\n"
-    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
-    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
-    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
-    "WHERE operation_type.operation_type = 'Sell'\n"
-    "GROUP BY operation_details.discs_id\n"
-    "ORDER BY operation_details.quantity DESC\n"
-    "LIMIT 1;";
+        "SELECT discs.name,sum(operation_details.quantity)\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "WHERE operation_type.operation_type = 'Sell'\n"
+        "GROUP BY operation_details.discs_id\n"
+        "ORDER BY operation_details.quantity DESC\n"
+        "LIMIT 1;";
     std::string TheMostPopularCD;
     int result = sqlite3_exec(db, TheMostPopularCDQuery.c_str(), TheMostPopularCD_Callback, &TheMostPopularCD, 0);
     if (result != SQLITE_OK)
@@ -334,21 +359,21 @@ std::string Model::getTheMostPopularCD()const
 std::string Model::getTheMostPopularArtist() const
 {
     std::string TheMostPopularArtistQuery =
-    "SELECT artist.name,sum(operation_details.quantity)\n"
-    "FROM operation_details\n"
-    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
-    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
-    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
-    "INNER JOIN artist ON discs.artist_id=artist.artist_id\n"
-    "WHERE operation_type.operation_type = 'Sell'\n"
-    "GROUP BY discs.artist_id\n"
-    "ORDER BY operation_details.quantity DESC\n"
-    "LIMIT 1;";
+        "SELECT artist.name,sum(operation_details.quantity)\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "INNER JOIN artist ON discs.artist_id=artist.artist_id\n"
+        "WHERE operation_type.operation_type = 'Sell'\n"
+        "GROUP BY discs.artist_id\n"
+        "ORDER BY operation_details.quantity DESC\n"
+        "LIMIT 1;";
     std::string TheMostPopularArtist;
     int result = sqlite3_exec(db, TheMostPopularArtistQuery.c_str(), TheMostPopularArtist_Callback, &TheMostPopularArtist, 0);
     if (result != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularCD: " << sqlite3_errmsg(db) << "\n";
+        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularArtist: " << sqlite3_errmsg(db) << "\n";
         return std::string();
     }
     else
@@ -360,19 +385,19 @@ std::string Model::getTheMostPopularArtist() const
 std::string Model::getCurrentQuantityOfCD() const
 {
     std::string CurrentQuantityOfCDQuery =
-    "SELECT discs.name,sum(operation_details.quantity),discs.amount_in_stock\n"
-    "FROM operation_details\n"
-    "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
-    "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
-    "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
-    "WHERE operation_type.operation_type = 'Sell'\n"
-    "GROUP BY discs.discs_id\n"
-    "ORDER BY discs.amount_in_stock DESC;";
+        "SELECT discs.name,sum(operation_details.quantity),discs.amount_in_stock\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "WHERE operation_type.operation_type = 'Sell'\n"
+        "GROUP BY discs.discs_id\n"
+        "ORDER BY discs.amount_in_stock DESC;";
     std::string CurrentQuantityOfCD;
     int result = sqlite3_exec(db, CurrentQuantityOfCDQuery.c_str(), CurrentQuantityOfCD_Callback, &CurrentQuantityOfCD, 0);
     if (result != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = getTheMostPopularCD: " << sqlite3_errmsg(db) << "\n";
+        std::cerr << "Error on retreiving data from db, fname = getCurrentQuantityOfCD: " << sqlite3_errmsg(db) << "\n";
         return std::string();
     }
     else
@@ -381,7 +406,52 @@ std::string Model::getCurrentQuantityOfCD() const
     }
 }
 
-std::string Model::getQuantityOfCDPeriod() const
+std::string Model::getQuantityOfCDPeriod(std::string beginin, std::string ending) const
 {
-    return "not ready yet";
+    std::string QuantityOfCDPeriodQuery =
+        "SELECT discs.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "WHERE operation_type.operation_type = 'Sell' and '" +
+        beginin + "' < operation.date and operation.date < '" + ending + "'\n"
+        "GROUP BY operation_details.discs_id\n"
+        "ORDER BY operation_details.quantity DESC\n";
+    std::string QuantityOfCDPeriod;
+    int result = sqlite3_exec(db, QuantityOfCDPeriodQuery.c_str(),QuantityOfCDPeriod_Callback, &QuantityOfCDPeriod, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getQuantityOfCDPeriod: " << sqlite3_errmsg(db) << "\n";
+        return std::string();
+    }
+    else
+    {
+        return QuantityOfCDPeriod;
+    }
+}
+
+std::string Model::getInfoArtist(std::string name)
+{
+    std::string InfoArtistQuery =
+        "SELECT artist.name,sum(operation_details.quantity),discs.price * sum(operation_details.quantity)\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "INNER JOIN artist ON discs.artist_id=artist.artist_id\n"
+        "WHERE operation_type.operation_type = 'Sell' and artist.name = '" + name + "'\n"
+        "GROUP BY discs.artist_id\n"
+        "ORDER BY operation_details.quantity DESC\n";
+    std::string InfoArtist;
+    int result = sqlite3_exec(db, InfoArtistQuery.c_str(),InfoArtist_Callback, &InfoArtist, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getInfoArtist: " << sqlite3_errmsg(db) << "\n";
+        return std::string();
+    }
+    else
+    {
+        return InfoArtist;
+    }
 }

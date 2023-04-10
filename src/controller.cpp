@@ -121,9 +121,14 @@ std::string Controller::getCurrentQuantityOfCD() const
     return dbModel->getCurrentQuantityOfCD();
 }
 
-std::string Controller::getQuantityOfCDPeriod() const
+std::string Controller::getQuantityOfCDPeriod(std::string beginin,std::string ending) const
 {
-    return dbModel->getQuantityOfCDPeriod();
+    return dbModel->getQuantityOfCDPeriod(beginin,ending);
+}
+
+std::string Controller::getInfoArtist(std::string name) const
+{
+    return dbModel->getInfoArtist(name);
 }
 
 bool Controller::validUpdateRequestNumber(int requestNumber) const

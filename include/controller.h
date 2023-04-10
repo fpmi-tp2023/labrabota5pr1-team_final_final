@@ -51,8 +51,11 @@ public:
     std::string getCurrentQuantityOfCD()const;
 
     //Get information on quantity of sold copies and the cost of given record for given period
-    std::string getQuantityOfCDPeriod()const;
+    std::string getQuantityOfCDPeriod(std::string beginin,std::string ending)const;
     
+    //Get the quantity of sold copies of the records and overall sum of money for a given artist
+    std::string getInfoArtist(std::string name)const;
+
     // checks if request number is valid. Valid numbers are 0 and 1
     bool validUpdateRequestNumber(int requestNumber) const;
 
