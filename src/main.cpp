@@ -2,6 +2,7 @@
 #include <vector>
 #include "controller.h"
 #include <iomanip>
+#include <regex>
 
 int main()
 {
@@ -166,10 +167,11 @@ int main()
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
-            std::string separator = "----------------------------\n";
+            std::string separator = "------------------------------------------------------------------------------------\n";
             std::string intInputWarning =
                 "A value of integer type must be entered\n";
             std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
+            std::regex checkDate("\\d\\d\\d\\d-\\d\\d-\\d\\d");
 
             int request = 0;
 
@@ -243,13 +245,37 @@ int main()
                 else if (request == 4 && role == roleAdmin)
                 {
                     // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                    bool data_checked = false;
                     std::string begining;
-                    std::cin >> begining;
-                    std::cout << "Enter the ending of time interval: ";
                     std::string ending;
-                    std::cin >> ending;
-                    std::cout<< separator<< std::setw(40) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                        std::cin >> begining;
+                        if(std::regex_match(begining.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
+                    data_checked = false;
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the ending of time interval: ";
+                        std::cin >> ending;
+                        if(std::regex_match(ending.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
+                    std::cout<< separator<< std::setw(40) << std::internal << "Name"<<"|Sold"<<"|Profit\n";
                     std::vector<std::vector<std::string>> QuantityOfCDPeriod = ctrl.getQuantityOfCDPeriod(begining,ending);
                     for (int i = 0; i < QuantityOfCDPeriod.size(); i++)
                     {
@@ -276,13 +302,20 @@ int main()
                     std::string ArtistName;
                     std::cin.ignore();
                     getline(std::cin,ArtistName);
-                    std::cout<< separator<< std::setw(15) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    std::cout<< separator<< std::setw(15) << std::internal << "Name"<<"|Sold"<<"|Profit\n";
                     std::vector<std::string>InfoArtist = ctrl.getInfoArtist(ArtistName);
+                    if(InfoArtist.size() > 0)
+                    {
                     std::cout<< std::setw(15) << std::internal 
                         <<InfoArtist[0]<< "|"
                         <<std::setw(4) <<InfoArtist[1]<< "|"
                         <<std::setw(4) <<InfoArtist[2]<< "\n";
                     std::cout<< separator;
+                    }
+                    else
+                    {
+                        std::cout << "No info";
+                    }
                 }
                 else if (request == 8 && role == roleAdmin)
                 {
@@ -782,29 +815,99 @@ int main()
                 else if (request == 11 && role == roleAdmin)
                 {
                     // [admin menu] 11. Get information on delivered and sold copies of every record for given period
-
-                    
+                    bool data_checked = false;
+                    std::string begining;
+                    std::string ending;
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                        std::cin >> begining;
+                        if(std::regex_match(begining.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
+                    data_checked = false;
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the ending of time interval: ";
+                        std::cin >> ending;
+                        if(std::regex_match(ending.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
+                    std::cout<< separator<< std::setw(61) << std::internal << "Name"<<"|Sold"<<"|Delivered\n";
+                    std::vector<std::vector<std::string>> QuantityDeliveredSoldCDPeriod = ctrl.getQuantityDeliveredSoldCDPeriod(begining,ending);
+                    for (int i = 0; i < QuantityDeliveredSoldCDPeriod.size(); i++)
+                    {
+                        std::cout<< std::setw(61) << std::internal 
+                        <<QuantityDeliveredSoldCDPeriod[i][0]<< "|"
+                        <<std::setw(4) <<QuantityDeliveredSoldCDPeriod[i][1]<< "|"
+                        <<std::setw(4) <<QuantityDeliveredSoldCDPeriod[i][2]<< "\n";
+                    }
+                    std::cout<< separator;
                 }
                 else if ((request == 12 && role == roleAdmin) || (request == 5 && role == roleUser))
                 {
                     // [admin menu] 12.|[user menu] 5. Get information on sales of given record for given period
-                    std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                    bool data_checked = false;
                     std::string begining;
-                    std::cin >> begining;
-                    std::cout << "Enter the ending of time interval: ";
                     std::string ending;
-                    std::cin >> ending;
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the beginning of time interval in format YYYY-MM-DD: ";
+                        std::cin >> begining;
+                        if(std::regex_match(begining.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
+                    data_checked = false;
+                    while(!data_checked)
+                    {
+                        std::cout << "Enter the ending of time interval: ";
+                        std::cin >> ending;
+                        if(std::regex_match(ending.c_str(),checkDate))
+                        {
+                            data_checked = true;
+                        }
+                        else
+                        {
+                            std::cout << "\nSomethig wrong,try again\n";
+                        }
+                    }
                     std::cout << "Enter the disk_id ";
                     std::string disk_id;
                     std::cin.ignore();
                     getline(std::cin,disk_id);
-                    std::cout<< separator<< std::setw(15) << std::internal << "Name "<<"|Sold"<<"|Profit\n";
+                    std::cout<< separator<< std::setw(15) << std::internal << "Name"<<"|Sold"<<"|Profit\n";
                     std::vector InfoCDPeriod = ctrl.getInfoCDPeriod(begining,ending,disk_id);
+                    if(InfoCDPeriod.size() > 0)
+                    {
                     std::cout<< std::setw(15) << std::internal 
                         <<InfoCDPeriod[0]<< "|"
                         <<std::setw(4) <<InfoCDPeriod[1]<< "|"
                         <<std::setw(4) <<InfoCDPeriod[2]<< "\n";
                     std::cout<< separator;
+                    }
+                    else
+                    {
+                        std::cout << "no info";
+                    }
+                    
                 }
                 else
                 {

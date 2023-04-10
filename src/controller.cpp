@@ -136,6 +136,11 @@ std::vector<std::string> Controller::getInfoCDPeriod(std::string beginin, std::s
     return dbModel->getInfoCDPeriod(beginin,ending,disk_id);
 }
 
+std::vector<std::vector<std::string>> Controller::getQuantityDeliveredSoldCDPeriod(std::string beginin, std::string ending) const
+{
+    return dbModel->getQuantityDeliveredSoldCDPeriod(beginin,ending);
+}
+
 bool Controller::validUpdateRequestNumber(int requestNumber) const
 {
     return (requestNumber == 0 || requestNumber == 1);

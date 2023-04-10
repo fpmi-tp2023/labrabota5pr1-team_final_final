@@ -50,6 +50,9 @@ private:
     // invoked by sqlite during getInfoCDPeriod method
     static int InfoCDPeriod_Callback(void *optional, int numberOfColumns, char** data, char** headers);
 
+    // invoked by sqlite during getQuantityDeliveredSoldCDPeriod method
+    static int QuantityDeliveredSoldCDPeriod_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 
@@ -88,6 +91,9 @@ public:
 
     //Get information on sales of given record for given period
     std::vector<std::string> getInfoCDPeriod(std::string beginin,std::string ending,std::string disk_id)const;
+
+    //Get information on delivered and sold copies of every record for given period
+    std::vector<std::vector<std::string>> getQuantityDeliveredSoldCDPeriod(std::string beginin,std::string ending)const;
 
     // retreives all table names from db and puts them into tables vector
     void getTables(std::vector<std::string>* tables) const;

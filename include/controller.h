@@ -59,6 +59,9 @@ public:
     //Get information on sales of given record for given period
     std::vector<std::string> getInfoCDPeriod(std::string beginin,std::string ending,std::string disk_id)const;
 
+    //Get information on delivered and sold copies of every record for given period
+    std::vector<std::vector<std::string>>getQuantityDeliveredSoldCDPeriod(std::string beginin,std::string ending)const;
+
     // checks if request number is valid. Valid numbers are 0 and 1
     bool validUpdateRequestNumber(int requestNumber) const;
 

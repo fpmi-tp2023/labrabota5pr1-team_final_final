@@ -169,12 +169,41 @@ std::vector<std::string> Model::getInfoCDPeriod(std::string beginin, std::string
     int result = sqlite3_exec(db, InfoCDPeriodQuery.c_str(),InfoCDPeriod_Callback, &InfoCDPeriod, 0);
     if (result != SQLITE_OK)
     {
-        std::cerr << "Error on retreiving data from db, fname = getQuantityOfCDPeriod: " << sqlite3_errmsg(db) << "\n";
+        std::cerr << "Error on retreiving data from db, fname = getInfoCDPeriod: " << sqlite3_errmsg(db) << "\n";
         return std::vector<std::string>();
     }
     else
     {
         return InfoCDPeriod;
+    }
+}
+
+std::vector<std::vector<std::string>> Model::getQuantityDeliveredSoldCDPeriod(std::string beginin, std::string ending) const
+{
+    std::string QuantityDeliveredSoldCDPeriodQuery =
+        "DROP TABLE IF EXISTS temp_table;\n" \
+        "CREATE TEMPORARY TABLE temp_table as\n"
+        "SELECT discs.name,\n"
+        "SUM(CASE WHEN operation_type.operation_type = 'Sell' THEN quantity ELSE 0 END) AS sold_quantity,\n" 
+        "SUM(CASE WHEN operation_type.operation_type = 'Buy' THEN quantity ELSE 0 END) AS bought_quantity\n"
+        "FROM operation_details\n"
+        "INNER JOIN discs ON discs.discs_id=operation_details.discs_id\n"
+        "INNER JOIN operation ON operation.operation_id=operation_details.operation_id\n"
+        "INNER JOIN operation_type ON operation_type.operation_type_id=operation.operation_type_id\n"
+        "WHERE'" +
+        beginin + "' < operation.date and operation.date < '" + ending + "'\n"
+        "GROUP BY operation_details.discs_id;\n"\
+        "SELECT * from temp_table;";
+    std::vector<std::vector<std::string>> QuantityDeliveredSoldCDPeriod;
+    int result = sqlite3_exec(db, QuantityDeliveredSoldCDPeriodQuery.c_str(),QuantityDeliveredSoldCDPeriod_Callback, &QuantityDeliveredSoldCDPeriod, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getQuantityDeliveredSoldCDPeriod: " << sqlite3_errmsg(db) << "\n";
+        return std::vector<std::vector<std::string>>();
+    }
+    else
+    {
+        return QuantityDeliveredSoldCDPeriod;
     }
 }
 
@@ -355,6 +384,16 @@ int Model::InfoCDPeriod_Callback(void *first_arg, int numberOfColumns, char **da
     InfoCDPeriod.push_back(data[0]);
     InfoCDPeriod.push_back(data[1]);
     InfoCDPeriod.push_back(data[2]);
+    return 0;
+}
+
+int Model::QuantityDeliveredSoldCDPeriod_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::vector<std::vector<std::string>> &QuantityDeliveredSoldCDPeriod = *(std::vector<std::vector<std::string>> *)first_arg;
+    QuantityDeliveredSoldCDPeriod.push_back(std::vector<std::string>());
+    QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[0]);
+    QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[1]);
+    QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[2]);
     return 0;
 }
 
