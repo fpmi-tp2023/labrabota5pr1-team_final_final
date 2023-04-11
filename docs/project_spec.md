@@ -18,3 +18,11 @@
 ## Диаграмма компонентов
 
 ![Диаграмма компонентов](pages_info/diagrams/component_diagram/photo_2023-04-09_21-52-48.jpg)
+
+## Диаграмма деятельности
+
+![Диаграмма деятельности](pages_info/diagrams/activity_diagram/activity.drawio.png)
+
+## Диаграмма размещения
+
+![Диаграмма размещения](pages_info/diagrams/deployment_diagram/photo_2023-04-11_17-41-03.jpg)
