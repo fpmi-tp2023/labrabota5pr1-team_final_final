@@ -25,4 +25,4 @@
 
 ## Диаграмма размещения
 
-![Диаграмма размещения](pages_info/diagrams/deployment_diagram/photo_2023-04-11_17-41-03.jpg)
+![Диаграмма размещения](pages_info\diagrams\deployment_diagram\photo_2023-04-11_17-41-04.jpg)

@@ -32,4 +32,4 @@
 
 #### Таблица Role
 
-![Структура таблицы Role](pages_info\diagrams\deployment_diagram\photo_2023-04-11_17-41-04.jpg)
+![Структура таблицы Role](pages_info\db_info\tables\role\photo_2023-04-01_23-25-32.jpg)
