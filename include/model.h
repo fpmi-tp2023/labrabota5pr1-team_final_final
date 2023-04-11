@@ -53,6 +53,12 @@ private:
     // invoked by sqlite during getQuantityDeliveredSoldCDPeriod method
     static int QuantityDeliveredSoldCDPeriod_Callback(void *optional, int numberOfColumns, char** data, char** headers);
 
+    //invoked by sqlite during GetAllCD method
+    static int AllCD_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+
+    //invoked by sqlite during GetAllArtist method
+    static int AllArtist_Callback(void *optional, int numberOfColumns, char** data, char** headers);
+
 public:
     Model(const std::string& dbFileName);
 
@@ -121,6 +127,13 @@ public:
         const std::vector<std::string>& columns,
         const std::vector<std::vector<std::string>>& values
     ) const;
+
+
+    //get all artists
+    std::vector<std::vector<std::string>> getAllArtist()const;
+
+    //get all cd
+    std::vector<std::vector<std::string>> getAllCd()const;
 
     ~Model();
 };

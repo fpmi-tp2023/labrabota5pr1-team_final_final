@@ -103,5 +103,12 @@ public:
         const std::vector<std::vector<std::string>>& values
     ) const;
 
+    //get all artists
+    std::vector<std::vector<std::string>> getAllArtist()const;
+
+    //get all cd
+    std::vector<std::vector<std::string>> getAllCd()const;
+
+
     ~Controller();
 };

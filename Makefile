@@ -14,13 +14,13 @@ TESTEXEC = bin/test_main
 run: dirs $(EXEC)
 	./$(EXEC)
 build: dirs $(EXEC)
-report: test
+report: clean test
 	lcov -c --directory src --directory obj --output-file coverage.info --no-external
 	genhtml coverage.info -o cov
 	rm coverage.info
 	open cov/index.html
 test: dirs $(TESTEXEC)
-	./$(TESTEXEC)
+	./$(TESTEXEC); git restore RecordStore.db
 build_test: dirs $(TESTEXEC)
 $(TESTEXEC): $(test_obj)
 	$(CC) $(TESTFLAGS) $(test_obj) -o bin/test_main  $(LIBTEST) $(LIB)

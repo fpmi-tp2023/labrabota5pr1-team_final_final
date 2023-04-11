@@ -1,6 +1,15 @@
 #include <iostream>
 #include "model.h"
 
+int Model::AllArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::vector<std::vector<std::string>> &AllArtist = *(std::vector<std::vector<std::string>> *)first_arg;
+    AllArtist.push_back(std::vector<std::string>());
+    AllArtist[AllArtist.size() - 1].push_back(data[0]);
+    AllArtist[AllArtist.size() - 1].push_back(data[1]);
+    return 0;
+}
+
 Model::Model(const std::string &dbFileName)
 {
     this->dbFileName = dbFileName;
@@ -325,6 +334,42 @@ bool Model::insertQuery(
     return true;
 }
 
+std::vector<std::vector<std::string>> Model::getAllArtist() const
+{
+    std::string getAllArtistQuery =
+        "SELECT artist_id,name\n"
+        "FROM artist\n";
+    std::vector<std::vector<std::string>> AllArtist;
+    int result = sqlite3_exec(db, getAllArtistQuery.c_str(), AllArtist_Callback, &AllArtist, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getAllArtist: " << sqlite3_errmsg(db) << "\n";
+        return std::vector<std::vector<std::string>>();
+    }
+    else
+    {
+        return AllArtist;
+    }
+}
+
+std::vector<std::vector<std::string>> Model::getAllCd() const
+{
+    std::string getAllCDQuery =
+        "SELECT discs_id,name\n"
+        "FROM discs\n";
+    std::vector<std::vector<std::string>> AllCD;
+    int result = sqlite3_exec(db, getAllCDQuery.c_str(), AllCD_Callback, &AllCD, 0);
+    if (result != SQLITE_OK)
+    {
+        std::cerr << "Error on retreiving data from db, fname = getAllCd: " << sqlite3_errmsg(db) << "\n";
+        return std::vector<std::vector<std::string>>();
+    }
+    else
+    {
+        return AllCD;
+    }
+}
+
 Model::~Model()
 {
     sqlite3_close(db); // close db
@@ -334,9 +379,9 @@ Model::~Model()
 int Model::TheMostPopularCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &TheMostPopularCD = *(std::string *)first_arg;
-    TheMostPopularCD = "The most popular cd:";
+    TheMostPopularCD = "The most popular cd: ";
     TheMostPopularCD += data[0];
-    TheMostPopularCD += ".\nCurrent amount of sold disks:";
+    TheMostPopularCD += ".\nCurrent amount of sold disks: ";
     TheMostPopularCD += data[1];
     return 0;
 }
@@ -344,9 +389,9 @@ int Model::TheMostPopularCD_Callback(void *first_arg, int numberOfColumns, char 
 int Model::TheMostPopularArtist_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
 {
     std::string &TheMostPopularArtist = *(std::string *)first_arg;
-    TheMostPopularArtist = "The most popular Artist:";
+    TheMostPopularArtist = "The most popular Artist: ";
     TheMostPopularArtist += data[0];
-    TheMostPopularArtist += ".\nCurrent amount of sold disks:";
+    TheMostPopularArtist += ".\nCurrent amount of sold disks: ";
     TheMostPopularArtist += data[1];
     return 0;
 }
@@ -396,6 +441,15 @@ int Model::QuantityDeliveredSoldCDPeriod_Callback(void *first_arg, int numberOfC
     QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[0]);
     QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[1]);
     QuantityDeliveredSoldCDPeriod[QuantityDeliveredSoldCDPeriod.size() - 1].push_back(data[2]);
+    return 0;
+}
+
+int Model::AllCD_Callback(void *first_arg, int numberOfColumns, char **data, char **headers)
+{
+    std::vector<std::vector<std::string>> &AllCD = *(std::vector<std::vector<std::string>> *)first_arg;
+    AllCD.push_back(std::vector<std::string>());
+    AllCD[AllCD.size() - 1].push_back(data[0]);
+    AllCD[AllCD.size() - 1].push_back(data[1]);
     return 0;
 }
 

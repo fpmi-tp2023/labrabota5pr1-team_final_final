@@ -230,6 +230,16 @@ bool Controller::createInsertQuery(
     return dbModel->insertQuery(table, columns, values);
 }
 
+std::vector<std::vector<std::string>>Controller::getAllArtist() const
+{
+    return dbModel->getAllArtist();
+}
+
+std::vector<std::vector<std::string>> Controller::getAllCd() const
+{
+    return dbModel->getAllCd();
+}
+
 Controller::~Controller()
 {
     if (dbModel) // check if pointer is not null
