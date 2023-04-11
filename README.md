@@ -12,6 +12,19 @@
 
 ## Установка
 
+### Для Windows
+
+Установите [архив](https://github.com/fpmi-tp2023/labrabota5pr1-team_final_final/releases/download/v1.0/microsoft-deploy-app.rar) для Windows.
+Перейдите в консоль и перейдите в корневую папку проекта microsofor-deploy-app. 
+Затем пропишите команду
+```
+./bin/main.exe
+```
+
+### Для Linux Ubuntu
+
+### Для macOS
+
 ## Использование
 
 ## Дополнительная информация
