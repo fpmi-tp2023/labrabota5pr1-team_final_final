@@ -1,6 +1,6 @@
 INCLUDE = -Iinclude
 LIB = -lsqlite3 -lssl -lcrypto
-LIBTEST = -lgtest -lgtest_main -lgcov
+LIBTEST = -lgtest -lgtest_main
 COVERAGE = -fprofile-arcs -ftest-coverage
 CC = g++
 test_obj = obj/db_test.o obj/tcontroller.o obj/tmodel.o
@@ -14,13 +14,13 @@ TESTEXEC = bin/test_main
 run: dirs $(EXEC)
 	./$(EXEC)
 build: dirs $(EXEC)
-report: test
+report: clean test
 	lcov -c --directory src --directory obj --output-file coverage.info --no-external
 	genhtml coverage.info -o cov
 	rm coverage.info
 	open cov/index.html
 test: dirs $(TESTEXEC)
-	./$(TESTEXEC)
+	./$(TESTEXEC); git restore RecordStore.db
 build_test: dirs $(TESTEXEC)
 $(TESTEXEC): $(test_obj)
 	$(CC) $(TESTFLAGS) $(test_obj) -o bin/test_main  $(LIBTEST) $(LIB)

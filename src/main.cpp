@@ -2,6 +2,60 @@
 #include <vector>
 #include "controller.h"
 #include <iomanip>
+#include <regex>
+
+std::vector<std::string> inputDate()
+{
+    std::regex checkDate("\\d\\d\\d\\d-\\d\\d-\\d\\d");
+    bool data_checked = false;
+    std::string begining;
+    std::string ending;
+    while (!data_checked)
+    {
+        std::cout << "Enter the beginning of time interval in format YYYY-MM-DD or cancel \nDate: ";
+        std::cin >> begining;
+        if (std::regex_match(begining.c_str(), checkDate))
+        {
+            data_checked = true;
+        }
+        else
+        {
+            if (begining == "cancel")
+                data_checked = true;
+            else
+            {
+                std::cout << "\nSomethig wrong,try again\n";
+            }
+        }
+    }
+    if (begining != "cancel")
+    {
+        data_checked = false;
+        while (!data_checked)
+        {
+            std::cout << "Enter the ending of time interval or cancel \nDate: ";
+            std::cin >> ending;
+            if (std::regex_match(ending.c_str(), checkDate))
+            {
+                data_checked = true;
+            }
+            else
+            {
+                if (ending == "cancel")
+                    data_checked = true;
+                else
+                {
+                    std::cout << "\nSomethig wrong,try again\n";
+                }
+            }
+        }
+        if (ending != "cancel")
+        {
+            return std::vector<std::string>{begining, ending};
+        }
+    }
+    return std::vector<std::string>();
+}
 
 int main()
 {
@@ -166,7 +220,7 @@ int main()
                 "4. Get the quantity of sold copies of the most popular artist\n"
                 "5. Get information on sales of given record for given period\n";
             std::string requestPrompt = "Enter your request number: ";
-            std::string separator = "----------------------------\n";
+            std::string separator = "------------------------------------------------------------------------------------\n";
             std::string intInputWarning =
                 "A value of integer type must be entered\n";
             std::string warningAboutQuotations = "Don't forget to enclose string literals into single quotation marks('')\n";
@@ -229,30 +283,85 @@ int main()
                 else if (request == 3 && role == roleAdmin)
                 {
                     // [admin menu] 3. Get information on quantity of sold and left in stock records of every record
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getCurrentQuantityOfCD();
+                    std::cout << separator << std::setw(40) << std::internal << "Name"
+                              << "|Sold"
+                              << "|Left\n";
+                    std::vector<std::vector<std::string>> CurrentQuantityOfCD = ctrl.getCurrentQuantityOfCD();
+                    for (int i = 0; i < CurrentQuantityOfCD.size(); i++)
+                    {
+                        std::cout << std::setw(40) << std::internal
+                                  << CurrentQuantityOfCD[i][0] << "|"
+                                  << std::setw(4) << CurrentQuantityOfCD[i][1] << "|"
+                                  << std::setw(4) << CurrentQuantityOfCD[i][2] << "\n";
+                    }
+                    std::cout << separator;
                 }
                 else if (request == 4 && role == roleAdmin)
                 {
                     // [admin menu] 4. Get information on quantity of sold copies and the cost of given record for given period
-                    std::cout << "Enter the beginning of time interval";
-                    std::string beginin;
-                    std::cin >> beginin;
-                    std::cout << "Enter the ending of time interval";
-                    std::string ending;
-                    std::cin >> ending;
-                    std::cout << "\nName "<< std::setw(20)<<"| Sold"<< std::setw(20)<<"| Left\n" << ctrl.getQuantityOfCDPeriod();
+                    std::vector<std::string> date = inputDate();
+                    if(date.size() > 0)
+                    {
+                    std::cout << separator << std::setw(40) << std::internal << "Name"
+                              << "|Sold"
+                              << "|Profit\n";
+                    std::vector<std::vector<std::string>> QuantityOfCDPeriod = ctrl.getQuantityOfCDPeriod(date[0], date[1]);
+                    for (int i = 0; i < QuantityOfCDPeriod.size(); i++)
+                    {
+                        std::cout << std::setw(40) << std::internal
+                                  << QuantityOfCDPeriod[i][0] << "|"
+                                  << std::setw(4) << QuantityOfCDPeriod[i][1] << "|"
+                                  << std::setw(4) << QuantityOfCDPeriod[i][2] << "\n";
+                    }
+                    std::cout << separator;
+                    }
                 }
                 else if ((request == 5 && role == roleAdmin) || (request == 3 && role == roleUser))
                 {
-                    std::cout << "The most popular cd:" << ctrl.getTheMostPopularCD();
+                    std::cout << separator;
+                    std::cout << ctrl.getTheMostPopularCD() << "\n";
+                    std::cout << separator;
                 }
                 else if ((request == 6 && role == roleAdmin) || (request == 4 && role == roleUser))
                 {
-                    std::cout << "The most popular Artist:" << ctrl.getTheMostPopularArtist();
+                    std::cout << separator;
+                    std::cout << ctrl.getTheMostPopularArtist() << "\n";
+                    std::cout << separator;
                 }
                 else if (request == 7 && role == roleAdmin)
                 {
                     // [admin menu] 7. Get the quantity of sold copies of the records and overall sum of money for a given artist
+                    std::vector<std::vector<std::string>> AllArtist = ctrl.getAllArtist();
+                        std::cout << separator;
+                        std::cout << "List of all artists:\n";
+                        for(int i = 0; i < AllArtist.size();i++)
+                        {
+                            std::cout <<std::setw(4) << AllArtist[i][0] << "|" << AllArtist[i][1] << "\n";
+                        }
+                    std::cout << separator;
+                    std::cout << "Enter the artist name or cancel ";
+                    std::string ArtistName;
+                    std::cin.ignore();
+                    getline(std::cin, ArtistName);
+                    if (ArtistName != "cancel")
+                    {
+                        std::cout << separator << std::setw(15) << std::internal << "Name"
+                                  << "|Sold"
+                                  << "|Profit\n";
+                        std::vector<std::string> InfoArtist = ctrl.getInfoArtist(ArtistName);
+                        if (InfoArtist.size() > 0)
+                        {
+                            std::cout << std::setw(15) << std::internal
+                                      << InfoArtist[0] << "|"
+                                      << std::setw(4) << InfoArtist[1] << "|"
+                                      << std::setw(4) << InfoArtist[2] << "\n";
+                            std::cout << separator;
+                        }
+                        else
+                        {
+                            std::cout << "No info";
+                        }
+                    }
                 }
                 else if (request == 8 && role == roleAdmin)
                 {
@@ -752,16 +861,59 @@ int main()
                 else if (request == 11 && role == roleAdmin)
                 {
                     // [admin menu] 11. Get information on delivered and sold copies of every record for given period
+                    std::vector<std::string> date = inputDate();
+                    if(date.size() > 0)
+                    {
+                    std::cout << separator << std::setw(61) << std::internal << "Name"
+                              << "|Sold"
+                              << "|Delivered\n";
+                    std::vector<std::vector<std::string>> QuantityDeliveredSoldCDPeriod = ctrl.getQuantityDeliveredSoldCDPeriod(date[0], date[1]);
+                    for (int i = 0; i < QuantityDeliveredSoldCDPeriod.size(); i++)
+                    {
+                        std::cout << std::setw(61) << std::internal
+                                  << QuantityDeliveredSoldCDPeriod[i][0] << "|"
+                                  << std::setw(4) << QuantityDeliveredSoldCDPeriod[i][1] << "|"
+                                  << std::setw(4) << QuantityDeliveredSoldCDPeriod[i][2] << "\n";
+                    }
+                    std::cout << separator;
+                    }
                 }
                 else if ((request == 12 && role == roleAdmin) || (request == 5 && role == roleUser))
                 {
-                    if (role == roleAdmin)
+                    // [admin menu] 12.|[user menu] 5. Get information on sales of given record for given period
+                    std::vector<std::string> date = inputDate();
+                    if (date.size() > 0)
                     {
-                        // [admin menu] 12. Get information on sales of given record for given period
-                    }
-                    else if (role == roleUser)
-                    {
-                        // [user menu] 5. Get information on sales of given record for given period
+                        std::vector<std::vector<std::string>> AllCD = ctrl.getAllCd();
+                        std::cout << separator;
+                        std::cout << "List of all discs:\n";
+                        for(int i = 0; i < AllCD.size();i++)
+                        {
+                            std::cout <<std::setw(4) << AllCD[i][0] << "|" << AllCD[i][1] << "\n";
+                        }
+                        std::cout << separator;
+                        std::cout << "Enter the disk_id ";
+                        std::string disk_id;
+                        std::cin >> disk_id;
+                        if (disk_id != "cancel")
+                        {
+                            std::cout << separator << std::setw(44) << std::internal << "Name"
+                                      << "|Sold"
+                                      << "|Profit\n";
+                            std::vector InfoCDPeriod = ctrl.getInfoCDPeriod(date[0], date[1], disk_id);
+                            if (InfoCDPeriod.size() > 0)
+                            {
+                                std::cout << std::setw(44) << std::internal
+                                          << InfoCDPeriod[0] << "|"
+                                          << std::setw(4) << InfoCDPeriod[1] << "|"
+                                          << std::setw(4) << InfoCDPeriod[2] << "\n";
+                                std::cout << separator;
+                            }
+                            else
+                            {
+                                std::cout << "no info";
+                            }
+                        }
                     }
                 }
                 else

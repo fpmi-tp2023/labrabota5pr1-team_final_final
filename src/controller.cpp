@@ -116,14 +116,29 @@ std::string Controller::getTheMostPopularArtist() const
     return dbModel->getTheMostPopularArtist();
 }
 
-std::string Controller::getCurrentQuantityOfCD() const
+std::vector<std::vector<std::string>> Controller::getCurrentQuantityOfCD() const
 {
     return dbModel->getCurrentQuantityOfCD();
 }
 
-std::string Controller::getQuantityOfCDPeriod() const
+std::vector<std::vector<std::string>> Controller::getQuantityOfCDPeriod(std::string begining,std::string ending) const
 {
-    return dbModel->getQuantityOfCDPeriod();
+    return dbModel->getQuantityOfCDPeriod(begining,ending);
+}
+
+std::vector<std::string> Controller::getInfoArtist(std::string name) const
+{
+    return dbModel->getInfoArtist(name);
+}
+
+std::vector<std::string> Controller::getInfoCDPeriod(std::string begining, std::string ending, std::string disk_id) const
+{
+    return dbModel->getInfoCDPeriod(begining,ending,disk_id);
+}
+
+std::vector<std::vector<std::string>> Controller::getQuantityDeliveredSoldCDPeriod(std::string begining, std::string ending) const
+{
+    return dbModel->getQuantityDeliveredSoldCDPeriod(begining,ending);
 }
 
 bool Controller::validUpdateRequestNumber(int requestNumber) const
@@ -137,6 +152,7 @@ std::vector<std::string> Controller::getTables() const
     dbModel->getTables(&tables);
     return tables;
 }
+
 bool Controller::validTable(const std::string &table, const std::vector<std::string> &tableList) const
 {
     bool ans = false;
@@ -212,6 +228,16 @@ bool Controller::createInsertQuery(
 ) const
 {
     return dbModel->insertQuery(table, columns, values);
+}
+
+std::vector<std::vector<std::string>>Controller::getAllArtist() const
+{
+    return dbModel->getAllArtist();
+}
+
+std::vector<std::vector<std::string>> Controller::getAllCd() const
+{
+    return dbModel->getAllCd();
 }
 
 Controller::~Controller()
