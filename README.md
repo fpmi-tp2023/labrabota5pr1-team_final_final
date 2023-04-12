@@ -23,6 +23,13 @@
 
 ### Для Linux Ubuntu
 
+Установите [архив](https://github.com/fpmi-tp2023/labrabota5pr1-team_final_final/releases/download/v1.0/ubuntu-deploy-app.tar.xz) для Ubunntu Linux.
+Перейдите в консоль и перейдите в корневую папку проекта microsofor-deploy-app. 
+Затем пропишите команду
+```
+./bin/main
+```
+
 ### Для macOS
 
 ## Использование
